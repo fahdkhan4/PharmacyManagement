@@ -1,4 +1,4 @@
-package Vieww;
+package View;
 
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;

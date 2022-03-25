@@ -1,6 +1,6 @@
-package Vieww.Admin;
+package View.Admin;
 
-import Vieww.ViewSales;
+import View.ViewSales;
 
 import javax.swing.*;
 

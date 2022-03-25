@@ -1,6 +1,6 @@
-package Vieww.Admin;
+package View.Admin;
 
-import Vieww.View_Medicines;
+import View.View_Medicines;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
-package Vieww.Admin;
+package View.Admin;
 
-import Vieww.Home;
+import View.Home;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,4 +1,4 @@
-package Vieww;
+package View;
 
 
 import javax.swing.*;
@@ -85,6 +85,8 @@ public class OrderMedicine{
 //                                                                              Selecting data
         order_medicine_table.addMouseListener(new MouseListener() {
             int row,med_idColumn,med_quantityCol,medicine_id,medicine_quantity;
+            Integer user_wants_quantity;
+            JOptionPane on_med_quantity;
             @Override
             public void mouseClicked(MouseEvent e) {
                 row = order_medicine_table.rowAtPoint(e.getPoint());
@@ -93,8 +95,14 @@ public class OrderMedicine{
                 if(row >= 0) {
                     medicine_id = (int) order_medicine_table.getModel().getValueAt(row, med_idColumn);
                     medicine_quantity = (int) order_medicine_table.getModel().getValueAt(row,med_quantityCol);
-                    System.out.println(medicine_id);
-                    JOptionPane.showMessageDialog(order_frame,medicine_quantity);
+                    on_med_quantity = new JOptionPane("Medicine Quantity");
+
+                    try {
+                        user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
+                    }catch(Exception error){
+                        System.out.println(error);
+                    }
+
                 }
             }
             @Override
