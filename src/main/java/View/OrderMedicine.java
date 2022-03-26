@@ -96,7 +96,7 @@ public class OrderMedicine{
                     medicine_id = (int) order_medicine_table.getModel().getValueAt(row, med_idColumn);
                     medicine_quantity = (int) order_medicine_table.getModel().getValueAt(row,med_quantityCol);
                     on_med_quantity = new JOptionPane("Medicine Quantity");
-
+                    System.out.println(medicine_id);
                     try {
                         user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
                     }catch(Exception error){
