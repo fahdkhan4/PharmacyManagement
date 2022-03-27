@@ -1,8 +1,11 @@
 package dao;
+import java.awt.*;
 import java.sql.*;
 
 public class DBService {
     public static Connection con;
+    public static Boolean duplicate_check;
+
     static{
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -12,6 +15,7 @@ public class DBService {
             e.printStackTrace();
         }
     }
+
     public static ResultSet query(String query) throws SQLException {
         try{
             Statement stmt=con.createStatement();
@@ -22,4 +26,21 @@ public class DBService {
         }
         return null;
     }
+
+    public static void insert_IntoDB(String query) {
+        duplicate_check = false;
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.executeUpdate();
+
+        }catch (Exception e){
+            duplicate_check = true;
+            System.out.println(e);
+        }
+    }
+
+
+
+
+
 }

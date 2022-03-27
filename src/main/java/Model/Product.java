@@ -7,6 +7,10 @@ public class Product {
     private Double price;
     private Integer quantity;
 
+    public Product(){
+
+    }
+
     public Product(Integer id, String m_name, String m_varient, Double price, Integer quantity) {
         this.id = id;
         this.m_name = m_name;
@@ -64,6 +68,14 @@ public class Product {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public static void main(String[] args) {
+
+        Product p = new Product();
+        System.out.println(p);
+
+
     }
 
     //    private Long id;

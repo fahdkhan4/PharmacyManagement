@@ -1,9 +1,12 @@
 package View.Admin;
 
+import Model.Product;
 import View.View_Medicines;
+import dao.*;
 
 import javax.swing.*;
 import java.awt.*;
+
 
 public class AddProduct {
 
@@ -12,6 +15,7 @@ public class AddProduct {
     JLabel p_id, p_name , p_variant, p_quantity , p_price;
     JTextField p_idText, p_nameText, p_variantText,p_quantityText, p_priceText;
     JButton add_product , back_toAdminPage , medicineListing;
+
 
     public AddProduct(){
 
@@ -107,13 +111,32 @@ public class AddProduct {
         addProduct_frame.setLayout(null);
         addProduct_frame.setVisible(true);
 
+        add_product.addActionListener(e->{
+            add_ProductFunctionality();
+        });
         view_Medicines(medicineListing);
         backTo_AdminPage(back_toAdminPage);
 
     }
-    public void add_Product(JButton addProduct){
-//            A Service method will take all values and then locate it to the database
+    public void add_ProductFunctionality() {
+
+        Integer product_id = Integer.parseInt(p_idText.getText());
+        Double product_price = Double.parseDouble(p_priceText.getText());
+        Integer product_quantity = Integer.parseInt(p_quantityText.getText());
+
+        Product product = new Product(product_id, p_nameText.getText(), p_variantText.getText(), product_price, product_quantity);
+        AddProduct_Dao dao = new AddProduct_Dao();
+        dao.insertProduct_ToDB(product);
+
+        if(DBService.duplicate_check) {
+            JOptionPane.showMessageDialog(addProduct_frame,"This Product is already Exist");
+        }
+        else{
+            JOptionPane.showMessageDialog(addProduct_frame, "Product added");
+        }
+
     }
+
     public void view_Medicines(JButton viewMedicine){
         viewMedicine.addActionListener(el->{
             View_Medicines view = new View_Medicines();
@@ -133,5 +156,9 @@ public class AddProduct {
         });
     }
 
+
+    public static void main(String[] args) {
+        AddProduct p = new AddProduct();
+    }
 
 }

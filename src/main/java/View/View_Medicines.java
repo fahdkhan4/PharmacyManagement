@@ -7,7 +7,7 @@ import Service.ProductService;
 
 public class View_Medicines {
 
-    JFrame viewMedicine_frame = new JFrame("Medicine Listing");
+    public JFrame viewMedicine_frame = new JFrame("Medicine Listing");
     JButton orderMedicine;
     public JTable medicine;
 

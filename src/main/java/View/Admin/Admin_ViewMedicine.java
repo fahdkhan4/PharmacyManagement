@@ -3,6 +3,7 @@ package View.Admin;
 import View.View_Medicines;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -18,6 +19,12 @@ public class Admin_ViewMedicine extends View_Medicines {
     }
 
     Admin_ViewMedicine(){
+
+
+//        update.addActionListener(el->{
+//            UpdateMedicine update = new UpdateMedicine();
+//        });
+
         medicine.addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -37,6 +44,7 @@ public class Admin_ViewMedicine extends View_Medicines {
             @Override
             public void mouseExited(MouseEvent e) {}
         });
+
 
     }
 }

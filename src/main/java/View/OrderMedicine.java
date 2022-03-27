@@ -2,6 +2,8 @@ package View;
 
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -9,9 +11,9 @@ import Service.*;
 
 public class OrderMedicine{
 
-    private JTable order_medicine_table;
+    private JTable order_medicine_table , userorder_table;
     private JPanel outerpanel,toppanel ;
-    private JScrollPane scrollpane;
+    private JScrollPane scrollpane , userorder_Scroll;
 
 
     public OrderMedicine(){
@@ -19,7 +21,7 @@ public class OrderMedicine{
         JFrame order_frame = new JFrame("Order Medicine");
         JLabel nameFor_Search;
         JTextField nameFor_SearchText;
-        JButton cart,exit,submit;
+        JButton buy_product,exit,find;
 
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
@@ -34,22 +36,22 @@ public class OrderMedicine{
         nameFor_SearchText = new JTextField(SwingConstants.LEFT);
         nameFor_SearchText.setBounds(150,7,200,40);
 
-        submit = new JButton("Find");
-        submit.setBounds(350,7,100,30);
-        submit.setBackground(Color.ORANGE);
-        submit.setForeground(Color.BLACK);
-        order_frame.add(submit);
+        find = new JButton("Find");
+        find.setBounds(350,7,100,40);
+        find.setBackground(Color.ORANGE);
+        find.setForeground(Color.BLACK);
+        order_frame.add(find);
 
         order_frame.add(nameFor_Search);
         order_frame.add(nameFor_SearchText);
 
-        //                                                                              cart button
+        //                                                                              buy_product button
 
-        cart = new JButton("View Cart");
-        cart.setBounds(1250,3,90,50);
-        cart.setBackground(Color.ORANGE);
-        cart.setForeground(Color.BLACK);
-        order_frame.add(cart);
+        buy_product = new JButton("BUY PRODUCT");
+        buy_product.setBounds(1100,3,140,40);
+        buy_product.setBackground(Color.ORANGE);
+        buy_product.setForeground(Color.BLACK);
+        order_frame.add(buy_product);
 
 //                                                                                         exit button
 
@@ -67,22 +69,65 @@ public class OrderMedicine{
 
 
         Object data[][] = ProductService.getAllMedicines();
-
         String [] column = {"Medicine ID","Medicine Name","Medicine Varient","Medicine Price","Quantity"};
 
         order_medicine_table = new JTable(data,column);
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight()+10);
-               
+
+//                                                                                      Column size
+        order_medicine_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+        for (int col = 0; col < order_medicine_table.getColumnCount(); col++)
+        {
+            TableColumn tableColumn = order_medicine_table.getColumnModel().getColumn(col);
+            int preferredWidth = tableColumn.getMinWidth()+150;
+            int maxWidth = tableColumn.getMaxWidth();
+
+            for (int row = 0; row < order_medicine_table.getRowCount(); row++)
+            {
+                TableCellRenderer cellRenderer = order_medicine_table.getCellRenderer(row, col);
+                Component c = order_medicine_table.prepareRenderer(cellRenderer, row, col);
+                int width = c.getPreferredSize().width + order_medicine_table.getIntercellSpacing().width;
+                preferredWidth = Math.max(preferredWidth, width);
+
+
+                if (preferredWidth >= maxWidth)
+                {
+                    preferredWidth = maxWidth;
+                    break;
+                }
+            }
+            tableColumn.setPreferredWidth( preferredWidth );
+        }
+
+//                                                                                      Table 2 heading
+        JLabel heading_Table2 = new JLabel("Cart");
+        heading_Table2.setFont(new Font("TimesRoman",Font.BOLD,40));
+        heading_Table2.setBounds(1100,90,100,50);
+        order_frame.add(heading_Table2);
+//                                                                                      Table 2 user orders
+        userorder_table = new JTable(data,column);
+        userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
+        userorder_Scroll = new JScrollPane(userorder_table);
+        userorder_table.getTableHeader().setOpaque(false);
+        userorder_table.getTableHeader().setForeground(Color.BLACK);
+        userorder_table.getTableHeader().setBackground(Color.ORANGE);
+        userorder_Scroll.setBounds(827,150,536,600);
+
+
 
         scrollpane = new JScrollPane(order_medicine_table);
         toppanel.add(labelHead,BorderLayout.PAGE_START);
         toppanel.add(scrollpane,BorderLayout.CENTER);
-        toppanel.add(cart,BorderLayout.PAGE_END);
+        outerpanel.add(userorder_Scroll);
+
+
         outerpanel.add(toppanel);
         order_frame.add(outerpanel);
         order_frame.pack();
 
-//                                                                              Selecting data
+//                                                                                        Selecting data
+
         order_medicine_table.addMouseListener(new MouseListener() {
             int row,med_idColumn,med_quantityCol,medicine_id,medicine_quantity;
             Integer user_wants_quantity;
@@ -96,7 +141,7 @@ public class OrderMedicine{
                     medicine_id = (int) order_medicine_table.getModel().getValueAt(row, med_idColumn);
                     medicine_quantity = (int) order_medicine_table.getModel().getValueAt(row,med_quantityCol);
                     on_med_quantity = new JOptionPane("Medicine Quantity");
-                    System.out.println(medicine_id);
+
                     try {
                         user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
                     }catch(Exception error){
@@ -116,22 +161,20 @@ public class OrderMedicine{
         });
 
 
-        scrollpane.setBounds(10,40,500,600);
+
         order_medicine_table.setFillsViewportHeight(true);
         order_frame.setLocationRelativeTo(null);
 
 //                                                                              Size of frame
         order_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-
-        order_medicine_table.setBounds(30,40,200,300);
         order_frame.setVisible(true);
 
-        cart.addActionListener(el->{
+
+        working_ofExitButton(exit);
+        buy_product.addActionListener(el->{
             Receipt receipt = new Receipt();
         });
-        working_ofExitButton(exit);
-
-        submit.addActionListener(el->{
+        find.addActionListener(el->{
 //            FindMedicine find = new FindMedicine(nameFor_SearchText.getText());
         });
 
