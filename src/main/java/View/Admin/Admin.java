@@ -1,12 +1,12 @@
 package View.Admin;
 
+import Service.AdminLoginServices;
 import View.Home;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Admin{
-
 
     public Admin(){
 
@@ -64,9 +64,13 @@ public class Admin{
 
 
           login.addActionListener(el -> {
-              if(name_text.getText().equalsIgnoreCase("ABC")) {
+              Boolean bool1 =  AdminLoginServices.adminLogin_details(name_text.getText(), String.valueOf(password.getPassword()));
+              if(bool1) {
                   admin_frame.dispose();
                   AdminFunctionality_UI admin = new AdminFunctionality_UI();
+              }
+              else{
+                  JOptionPane.showMessageDialog(admin_frame,"Invalid");
               }
           });
 
