@@ -3,6 +3,10 @@ package View;
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.util.List;
+
+import Model.Product;
+import Service.GetAllMedicines;
 import Service.ProductService;
 
 public class View_Medicines {
@@ -23,18 +27,12 @@ public class View_Medicines {
 
         JButton but = new JButton();
 
-        Object [][] data = ProductService.getAllMedicines();
-
-//        Object[][] data = new Object[][] {
-//                {1, "Thomas", "Alaska", 20.0,true },
-//                {2, "Jean", "Arizona", 50.0, false },
-//                {3, "Yohan", "California", 30.0, true },
-//                {4, "Emily", "Colorado", 60.0, false },
-//                {5, "Alex", "Florida", 10.0, false },
-//        };
+        ProductService productService = new ProductService();
+        Object [][] data = productService.getAllMedicines();
 
 
         medicine = new JTable(data, columns);
+
         TableColumnModel columnModel = medicine.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(20);
         columnModel.getColumn(1).setPreferredWidth(40);

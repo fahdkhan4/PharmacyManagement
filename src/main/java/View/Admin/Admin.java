@@ -61,7 +61,7 @@ public class Admin{
         admin_frame.setLayout(null);
         admin_frame.setVisible(true);
 
-
+//                                                                                   Buttons on click
 
           login.addActionListener(el -> {
               Boolean bool1 =  AdminLoginServices.adminLogin_details(name_text.getText(), String.valueOf(password.getPassword()));
@@ -70,7 +70,7 @@ public class Admin{
                   AdminFunctionality_UI admin = new AdminFunctionality_UI();
               }
               else{
-                  JOptionPane.showMessageDialog(admin_frame,"Invalid");
+                  JOptionPane.showMessageDialog(admin_frame,"Invalid Username OR Password");
               }
           });
 

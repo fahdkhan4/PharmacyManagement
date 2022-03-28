@@ -24,7 +24,4 @@ public class AdminLogin_Dao {
         return loginRequirements;
     }
 
-    public static void main(String[] args) {
-        System.out.println(getAdminDetail());
-    }
 }
