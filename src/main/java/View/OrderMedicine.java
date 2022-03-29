@@ -18,18 +18,20 @@ public class OrderMedicine{
     private JTable order_medicine_table , userorder_table;
     private JPanel outerpanel,toppanel ;
     private JScrollPane scrollpane , userorder_Scroll;
-    ArrayList<Product> userProducts = new ArrayList<>() ;
-
-
-
+    private ArrayList<Product> userProducts = new ArrayList<>();
+    public Object [][] searched_data;
 
     public OrderMedicine(){
 
-        JLabel nameFor_Search;
+        JLabel nameFor_Search ;
         JTextField nameFor_SearchText;
         JButton buy_product,exit,find;
-        AtomicBoolean bool1 = new AtomicBoolean(false);
         UserCartProduct_Services service = new UserCartProduct_Services();
+        AtomicBoolean bool1 = new AtomicBoolean(false);
+        FindMedicine medFind = new FindMedicine();
+//        searched_data = new Object[medFind.size_OfSearchMedicine()][5];
+
+
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
         toppanel = new JPanel(new BorderLayout());
@@ -80,16 +82,21 @@ public class OrderMedicine{
         String [] column = {"Medicine ID","Medicine Name","Medicine Varient","Medicine Price","Quantity"};
 
         find.addActionListener(el->{
-            FindMedicine medicineFind = new FindMedicine();
-            medicineFind.getMedicineName(nameFor_SearchText.getText());
-            Object [][] searched_data = medicineFind.findMedicine_OnSearch();
+            medFind.getMedicineName(nameFor_SearchText.getText());
+            searched_data = medFind.findMedicine_OnSearch();
+            order_medicine_table.setVisible(false);
+            order_medicine_table = new JTable(searched_data, column);
             bool1.set(true);
         });
 
+        if(bool1.get()){
 
-        order_medicine_table = new JTable(data, column);
+        }
+        else{
+            order_medicine_table = new JTable(data, column);
+        }
+
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight()+10);
-//
 //                                                                                      Column size
         order_medicine_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (int col = 0; col < order_medicine_table.getColumnCount(); col++)
@@ -138,6 +145,7 @@ public class OrderMedicine{
 
                     try {
                         user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
+
                     }catch(Exception error){
                         user_wants_quantity = null;
                         System.out.println(error);
@@ -148,6 +156,7 @@ public class OrderMedicine{
 
                             userProducts.add(new Product(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity));
                             Object [][] getUserCart_Data = service.getallUserCart_Product(userProducts);
+
 
                             userorder_table = new JTable(getUserCart_Data,column);
                             userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
@@ -185,16 +194,6 @@ public class OrderMedicine{
         heading_Table2.setBounds(1100,90,100,50);
         order_frame.add(heading_Table2);
 
-//                                                                                      Table 2 user orders
-//        Object [][] getUserCart_Data = service.getallUserCart_Product(userProducts);
-//        userorder_table = new JTable(getUserCart_Data,column);
-//        userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
-//        userorder_Scroll = new JScrollPane(userorder_table);
-//        userorder_table.getTableHeader().setOpaque(false);
-//        userorder_table.getTableHeader().setForeground(Color.BLACK);
-//        userorder_table.getTableHeader().setBackground(Color.ORANGE);
-//        userorder_Scroll.setBounds(827,150,536,600);
-//        outerpanel.add(userorder_Scroll);
 //
         scrollpane = new JScrollPane(order_medicine_table);
         toppanel.add(labelHead,BorderLayout.PAGE_START);
@@ -217,15 +216,14 @@ public class OrderMedicine{
             Receipt receipt = new Receipt();
         });
 
-
     }
-
 
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
             Home home = new Home();
         });
     }
+
 
     public static void main(String[] args) {
 

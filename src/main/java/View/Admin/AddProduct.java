@@ -139,7 +139,7 @@ public class AddProduct {
 
     public void view_Medicines(JButton viewMedicine){
         viewMedicine.addActionListener(el->{
-            AdminOrder_Medicine view = new AdminOrder_Medicine();
+            Admin_ViewMedicine view = new Admin_ViewMedicine();
         });
     }
     public void mainHeading(){

@@ -1,6 +1,8 @@
 package View;
 
 import javax.swing.*;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.util.List;
@@ -19,19 +21,14 @@ public class View_Medicines {
     public View_Medicines(){
 
         JButton exit;
-
         JPanel panel_medicine = new JPanel();
-
-
         String[] columns = new String[] {"MedicineName", "Varient", "Price", "Quantity"};
 
-        JButton but = new JButton();
 
         ProductService productService = new ProductService();
         Object [][] data = productService.getAllMedicines();
-
-
         medicine = new JTable(data, columns);
+
 
         TableColumnModel columnModel = medicine.getColumnModel();
         columnModel.getColumn(0).setPreferredWidth(20);

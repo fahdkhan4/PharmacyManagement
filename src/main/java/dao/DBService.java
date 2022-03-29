@@ -27,7 +27,7 @@ public class DBService {
         return null;
     }
 
-    public static void insert_IntoDB(String query) {
+    public static void PreparedQuery(String query) {
         duplicate_check = false;
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
