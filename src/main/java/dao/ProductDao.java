@@ -1,10 +1,11 @@
 package dao;
-import products.Product;
 
+import Model.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 public class ProductDao {
     public static List<Product> getAllProducts() {
         List<Product> results = new ArrayList<>();
@@ -16,7 +17,7 @@ public class ProductDao {
                     break;
                 results.add(new Product
                         (
-                                Integer.valueOf(rs.getString("id")),
+                                Long.valueOf(rs.getString("id")),
                                 rs.getString("m_name"),
                                 rs.getString("m_varient"),
                                 Double.valueOf(rs.getString("m_price")),
