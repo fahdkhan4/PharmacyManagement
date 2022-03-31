@@ -1,5 +1,6 @@
 package View.Admin;
 
+import Model.Product;
 import Service.ProductService;
 import dao.DeleteMedicine;
 
@@ -14,17 +15,18 @@ import java.util.HashSet;
 
 public class Admin_ViewMedicine  {
 
+    public static Product updateProduct;
 
     public JFrame viewMedicine_frame = new JFrame("Medicine");
     public JTable medicine;
     JButton update,delete;
     JButton exit;
-    JPanel panel_medicine = new JPanel();
+//    JPanel panel_medicine = new JPanel();
 
 
     Admin_ViewMedicine(){
 
-        HashSet<Integer> medicineCode_Delete = new HashSet<>();
+        HashSet<Long> medicineCode_Delete = new HashSet<>();
 
         String[] columns = new String[] {"Medicine Code", "Medicine Name", "Medicine Varient", "Medicine price","Medicine Quantity"};
 
@@ -93,8 +95,14 @@ public class Admin_ViewMedicine  {
                 int row = medicine.rowAtPoint(e.getPoint());
                 int col = 0;
                 if(row >= 0) {
-                    Integer value = (Integer) medicine.getModel().getValueAt(row, col);
-                    medicineCode_Delete.add(value);
+                    Long  id= (Long) medicine.getModel().getValueAt(row, col);
+                    String medicine_name = (String) medicine.getModel().getValueAt(row,col+1);
+                    String medicine_varient = (String) medicine.getModel().getValueAt(row,col+2);
+                    Double medicine_price = (Double) medicine.getModel().getValueAt(row,col+3);
+                    Integer medicine_quantity = (Integer) medicine.getModel().getValueAt(row,col+4);
+
+                    updateProduct = new Product(id,medicine_name,medicine_varient,medicine_price,medicine_quantity);
+                    medicineCode_Delete.add(id);
                 }
             }
             @Override
@@ -108,14 +116,20 @@ public class Admin_ViewMedicine  {
         });
 
         update.addActionListener(el->{
-//            UpdateMedicine update = new UpdateMedicine();
+            if(updateProduct == null){
+                JOptionPane.showMessageDialog(viewMedicine_frame,"First Select a product to update");
+            }
+            else {
+                UpdateMedicine update = new UpdateMedicine(updateProduct);
+                updateProduct = null;
+            }
         });
 
         delete.addActionListener(el->{
             if(medicineCode_Delete.size() != 0){
                 DeleteMedicine.delete_Medicines(medicineCode_Delete);
-
-                JOptionPane.showMessageDialog(viewMedicine_frame,"Medicine Deleted");
+                Admin_ViewMedicine view = new Admin_ViewMedicine();
+                JOptionPane.showMessageDialog(viewMedicine_frame,"Press Ok to DELETE");
             }
             else{
                 JOptionPane.showMessageDialog(viewMedicine_frame,"First choose the medicine to delete");
@@ -123,7 +137,7 @@ public class Admin_ViewMedicine  {
         });
 
         viewMedicine_frame.getContentPane().add(labelHead,BorderLayout.PAGE_START);
-        //add table to frame
+                                                                                    //add table to frame
         viewMedicine_frame.getContentPane().add(scroll,BorderLayout.CENTER);
         viewMedicine_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 

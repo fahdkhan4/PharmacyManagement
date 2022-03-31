@@ -1,14 +1,19 @@
 package View;
 
+import Model.Product;
+import Service.UserCartProduct_Services;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class Receipt {
 
-    public Receipt(){
+    public Receipt(ArrayList<Product> userProducts){
 
         JFrame receipt_frame = new JFrame("Order Medicine");
+        UserCartProduct_Services service = new UserCartProduct_Services();
         JTable receipt_medicine_table;
         JScrollPane scrollpane;
         JPanel panel;
@@ -20,12 +25,9 @@ public class Receipt {
         receipt_frame.getContentPane().add(panel);
 //
 
-        String data [] [] = {
-                {"1","Fahd","Gulistane johor", "11","12.0","3"},
-                {"2","Saad","Shahab Faisal Colony" , "11","12.0","3"}
-        };
+        Object data [][] =  service.getallUserCart_Product(userProducts) ;
 
-        String [] column = {"Code","Name", "Category","Varient","Price","Quantity","Action"};
+        String [] column = {"Code","Name","Varient","Price","Quantity"};
 
 
 //                                                                              exit button

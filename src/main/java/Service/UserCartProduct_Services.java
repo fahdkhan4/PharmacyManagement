@@ -14,10 +14,10 @@ public class UserCartProduct_Services {
         Object [][] cartProduct = new Object[size][5];
         for (int i = 0; i < size; i++) {
             cartProduct[i][0] =userCart_Details.get(i).getId();
-            cartProduct[i][1] =userCart_Details.get(i).getM_name();
-            cartProduct[i][2] =userCart_Details.get(i).getM_varient();
-            cartProduct[i][3] =userCart_Details.get(i).getPrice();
-            cartProduct[i][4] =userCart_Details.get(i).getQuantity();
+            cartProduct[i][1] =userCart_Details.get(i).getMedicine_name();
+            cartProduct[i][2] =userCart_Details.get(i).getMedicine_varient();
+            cartProduct[i][3] =userCart_Details.get(i).getMedicine_price();
+            cartProduct[i][4] =userCart_Details.get(i).getMedicine_quantity();
         }
         return cartProduct;
     }

@@ -120,7 +120,7 @@ public class AddProduct {
     }
     public void add_ProductFunctionality() {
 
-        Integer product_id = Integer.parseInt(p_idText.getText());
+        Long product_id = Long.parseLong(p_idText.getText());
         Double product_price = Double.parseDouble(p_priceText.getText());
         Integer product_quantity = Integer.parseInt(p_quantityText.getText());
 
@@ -133,6 +133,11 @@ public class AddProduct {
         }
         else{
             JOptionPane.showMessageDialog(addProduct_frame, "Product added");
+            p_idText.setText("");
+            p_nameText.setText("");
+            p_variantText.setText("");
+            p_priceText.setText("");
+            p_quantityText.setText("");
         }
 
     }

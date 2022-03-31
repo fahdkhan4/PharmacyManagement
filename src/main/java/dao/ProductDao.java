@@ -17,7 +17,7 @@ public class ProductDao {
                     break;
                 results.add(new Product
                         (
-                                Integer.valueOf(rs.getString("id")),
+                                Long.valueOf(rs.getString("id")),
                                 rs.getString("m_name"),
                                 rs.getString("m_varient"),
                                 Double.valueOf(rs.getString("m_price")),

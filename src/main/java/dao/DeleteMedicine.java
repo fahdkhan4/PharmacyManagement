@@ -8,9 +8,9 @@ public class DeleteMedicine {
 
     DeleteMedicine deleteMedicine = new DeleteMedicine();
 
-    public static void delete_Medicines(HashSet<Integer> productCode){
+    public static void delete_Medicines(HashSet<Long> productCode){
         String query ;
-        for (Integer code:productCode) {
+        for (Long code:productCode) {
             query = "DELETE FROM medicines  WHERE id="+code;
             DBService.PreparedQuery(query);
         }

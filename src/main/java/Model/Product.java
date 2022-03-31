@@ -1,136 +1,74 @@
 package Model;
 
 public class Product {
-    private Integer id;
-    private String m_name;
-    private String m_varient;
-    private Double price;
-    private Integer quantity;
+    private Long id;
+    private String medicine_name;
+    private String medicine_varient;
+    private Double medicine_price;
+    private Integer medicine_quantity;
 
-    public Product(){
+    public Product(){}
 
+    public Product(Long id, String medicine_name, String medicine_varient, Double medicine_price, Integer medicine_quantity) {
+        this.id = id;
+        this.medicine_name = medicine_name;
+        this.medicine_varient = medicine_varient;
+        this.medicine_price = medicine_price;
+        this.medicine_quantity = medicine_quantity;
     }
 
-    public Product(Integer id, String m_name, String m_varient, Double price, Integer quantity) {
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
         this.id = id;
-        this.m_name = m_name;
-        this.m_varient = m_varient;
-        this.price = price;
-        this.quantity = quantity;
+    }
+
+    public String getMedicine_name() {
+        return medicine_name;
+    }
+
+    public void setMedicine_name(String medicine_name) {
+        this.medicine_name = medicine_name;
+    }
+
+    public String getMedicine_varient() {
+        return medicine_varient;
+    }
+
+    public void setMedicine_varient(String medicine_varient) {
+        this.medicine_varient = medicine_varient;
+    }
+
+    public Double getMedicine_price() {
+        return medicine_price;
+    }
+
+    public void setMedicine_price(Double medicine_price) {
+        this.medicine_price = medicine_price;
+    }
+
+    public Integer getMedicine_quantity() {
+        return medicine_quantity;
+    }
+
+    public void setMedicine_quantity(Integer medicine_quantity) {
+        this.medicine_quantity = medicine_quantity;
     }
 
     @Override
     public String toString() {
         return "Product{" +
                 "id=" + id +
-                ", m_name='" + m_name + '\'' +
-                ", m_varient='" + m_varient + '\'' +
-                ", price=" + price +
-                ", quantity=" + quantity +
+                ", medicine_name='" + medicine_name + '\'' +
+                ", medicine_varient='" + medicine_varient + '\'' +
+                ", medicine_price=" + medicine_price +
+                ", medicine_quantity=" + medicine_quantity +
                 '}';
     }
 
-    public Integer getId() {
-        return id;
-    }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getM_name() {
-        return m_name;
-    }
-
-    public void setM_name(String m_name) {
-        this.m_name = m_name;
-    }
-
-    public String getM_varient() {
-        return m_varient;
-    }
-
-    public void setM_varient(String m_varient) {
-        this.m_varient = m_varient;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public static void main(String[] args) {
-
-        Product p = new Product();
-        System.out.println(p);
-
-
-    }
-
-    //    private Long id;
-//    private String name;
-//    private Long categoryId;
-//    private Long price;
-//
-//    public Product(Long id, String name, Long categoryId, Long price) {
-//        this.id = id;
-//        this.name = name;
-//        this.categoryId = categoryId;
-//        this.price = price;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public String getName() {
-//        return name;
-//    }
-//
-//    public void setName(String name) {
-//        this.name = name;
-//    }
-//
-//    public Long getCategoryId() {
-//        return categoryId;
-//    }
-//
-//    public void setCategoryId(Long categoryId) {
-//        this.categoryId = categoryId;
-//    }
-//
-//    public Long getPrice() {
-//        return price;
-//    }
-//
-//    public void setPrice(Long price) {
-//        this.price = price;
-//    }
-//
-//    @Override
-//    public String toString() {
-//        return "Product{" +
-//                "id=" + id +
-//                ", name='" + name + '\'' +
-//                ", categoryId=" + categoryId +
-//                ", price=" + price +
-//                '}';
-//    }
 }
 
 //owner_name, car_name,bookinmg,owner_commision,
