@@ -2,7 +2,7 @@ package View.Admin;
 
 import Model.Product;
 import Service.ProductService;
-import dao.DeleteMedicine;
+import dao.ProductFunctionality_Dao;
 
 import javax.swing.*;
 import javax.swing.table.TableCellRenderer;
@@ -129,7 +129,9 @@ public class Admin_ViewMedicine  {
         delete.addActionListener(el->{
             if(medicineCode_Delete.size() != 0){
                 updateProduct = null;
-                DeleteMedicine.delete_Medicines(medicineCode_Delete);
+                ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
+                functionality_dao.delete_Medicines(medicineCode_Delete);
+
                 Admin_ViewMedicine view = new Admin_ViewMedicine();
                 JOptionPane.showMessageDialog(viewMedicine_frame,"Press Ok to DELETE");
                 viewMedicine_frame.dispose();

@@ -1,13 +1,13 @@
 package Service;
 
-import dao.ProductDao;
 import java.util.List;
 import Model.*;
+import dao.Product_Dao;
 
 public class ProductService implements GetAllMedicines{
 
     public List<Product> getAllProducts_Data(){
-        return ProductDao.getAllProducts();
+        return Product_Dao.getAllProducts();
     }
 
     public Object[][] getAllMedicines(){

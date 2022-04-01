@@ -28,7 +28,7 @@ public class Receipt {
         receipt_frame.getContentPane().add(panel);
 //
 
-        Object data [][] =  service.getallUserCart_Product(userProducts) ;
+        Object data [][] =  service.getallUserCart_Product() ;
 
         String [] column = {"Code","Name","Varient","Price","Quantity"};
 

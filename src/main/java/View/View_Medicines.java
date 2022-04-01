@@ -1,14 +1,9 @@
 package View;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
-import java.util.List;
 
-import Model.Product;
-import Service.GetAllMedicines;
 import Service.ProductService;
 
 public class View_Medicines {
@@ -67,7 +62,7 @@ public class View_Medicines {
     public void workingOf_ExitButton(JButton exit){
         exit.addActionListener(el->{
             viewMedicine_frame.dispose();
-            Home home = new Home();
+            Employee_Functionality employeeFunctionality = new Employee_Functionality();
         });
 
     }

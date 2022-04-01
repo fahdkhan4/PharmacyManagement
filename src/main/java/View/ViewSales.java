@@ -65,7 +65,7 @@ public class ViewSales {
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
             viewSales_frame.dispose();
-            Home home= new Home();
+            Employee_Functionality employeeFunctionality = new Employee_Functionality();
         });
     }
 }

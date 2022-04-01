@@ -5,6 +5,7 @@ import java.sql.*;
 public class DBService {
     public static Connection con;
     public static Boolean duplicate_check;
+    public static Integer orderID;
 
     static{
         try {
@@ -34,6 +35,22 @@ public class DBService {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.executeUpdate();
 
+        }catch (Exception e){
+            duplicate_check = true;
+            System.out.println(e);
+        }
+    }
+
+    public static void PreparedQuery_GettingKey(String query){
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
+            pstmt.executeUpdate();
+
+            ResultSet rs = pstmt.getGeneratedKeys();
+            while(rs.next()){
+                orderID = rs.getInt(1);
+                System.out.println(orderID);
+            }
         }catch (Exception e){
             duplicate_check = true;
             System.out.println(e);

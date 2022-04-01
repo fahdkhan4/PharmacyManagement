@@ -19,10 +19,10 @@ public class AddProduct {
 
     public AddProduct(){
 
-//                                                                  Main heading
+//                                                                     Main heading
         mainHeading();
         addProduct_frame.getContentPane().setBackground(Color.BLUE);
-//                                                                   Making Inputs Fields.....
+//                                                                     Making Inputs Fields.....
         p_id = new JLabel("Product ID : ");
         p_id.setFont(new Font("Serif",Font.BOLD,18));
         p_id.setForeground(Color.ORANGE);
@@ -118,18 +118,21 @@ public class AddProduct {
         backTo_AdminPage(back_toAdminPage);
 
     }
+//                                                                              add product functionality
     public void add_ProductFunctionality() {
 
         if(p_idText.getText().equalsIgnoreCase("") || p_nameText.getText().equalsIgnoreCase("") || p_variantText.getText().equalsIgnoreCase("") || p_priceText.getText().equalsIgnoreCase("") || p_quantityText.getText().equalsIgnoreCase("")) {
             JOptionPane.showMessageDialog(addProduct_frame,"Fist fill the form");
+
         }else{
             Long product_id = Long.parseLong(p_idText.getText());
             Double product_price = Double.parseDouble(p_priceText.getText());
             Integer product_quantity = Integer.parseInt(p_quantityText.getText());
 
             Product product = new Product(product_id, p_nameText.getText(), p_variantText.getText(), product_price, product_quantity);
-            AddProduct_Dao dao = new AddProduct_Dao();
-            dao.insertProduct_ToDB(product);
+
+            ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
+            functionality_dao.insertProduct_ToDB(product);
 
             if (DBService.duplicate_check) {
                 JOptionPane.showMessageDialog(addProduct_frame, "This Product is already Exist");

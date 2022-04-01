@@ -6,27 +6,34 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.time.LocalDate;
 import java.util.ArrayList;
+
+import Model.OrdeProduct_Model;
 import Model.Product;
+import Model.ProductCart_Model;
 import Service.*;
+import dao.DBService;
+import dao.ProductFunctionality_Dao;
 
 public class OrderMedicine{
 
-     public JFrame order_frame = new JFrame("Order Medicine");
+    public JFrame order_frame = new JFrame("Order Medicine");
     private JTable order_medicine_table , userorder_table;
     private JScrollPane scrollpane , userorder_Scroll;
     public ArrayList<Product> userProducts = new ArrayList<>();
     JPanel outerpanel,toppanel;
     Object [][] data;
     Double totalMedicine_amount;
-    public JButton button;
+    public  Boolean orderbool = true;
 
     public OrderMedicine(){
 
-        JLabel nameFor_Search;
+        JLabel nameFor_Search ,activeMember;
         JTextField nameFor_SearchText;
         JButton buy_product,exit,find;
         UserCartProduct_Services service = new UserCartProduct_Services();
+        ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
         FindMedicine medFind = new FindMedicine();
 
 //                                                                              Setting panel
@@ -38,6 +45,10 @@ public class OrderMedicine{
         labelHead.setHorizontalAlignment(JLabel.CENTER);
         labelHead.setVerticalAlignment(JLabel.CENTER);
         labelHead.setFont(new Font("Arial",Font.TRUETYPE_FONT,40));
+
+//                                                                              name of active member
+        activeMember = new JLabel();
+        activeEmployeeName(activeMember);
 
 
         nameFor_Search = new JLabel("Medicine Name :");
@@ -130,11 +141,9 @@ public class OrderMedicine{
                     medicine_id = (Long) order_medicine_table.getModel().getValueAt(row, med_Column);
                     medicine_name = (String) order_medicine_table.getModel().getValueAt(row,med_Column+1);
                     medicine_varient = (String) order_medicine_table.getModel().getValueAt(row,med_Column+2);
-                    try {
-                        medicine_price = (Double) order_medicine_table.getModel().getValueAt(row, med_Column + 3);
-                    }catch(ClassCastException err){
-                        System.out.println(err);
-                    }
+
+                    medicine_price = Double.parseDouble(order_medicine_table.getModel().getValueAt(row, med_Column + 3).toString());
+
 
                     medicine_quantity = Integer.parseInt(order_medicine_table.getModel().getValueAt(row,med_quantityCol).toString());
 
@@ -150,11 +159,21 @@ public class OrderMedicine{
 
                     if(user_wants_quantity != null) {
                         if (user_wants_quantity <= medicine_quantity) {
+                            OrdeProduct_Model ordeProduct_model;
+//                                                                                             produce one order of products
+                            if(orderbool){
+                                ordeProduct_model = new OrdeProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Draft");
+                                functionality_dao.inserting_OrderInformation(ordeProduct_model);
+                                orderbool = false;
+                            }
 
-                            userProducts.add(new Product(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity));
-
+//
+                            ProductCart_Model cart_model = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity, DBService.orderID);
+                            functionality_dao.inserting_cartProduct(cart_model);
                             totalMedicine_amount = medFind.totalMedicine_Amount(medicine_price,user_wants_quantity);
-                            Object [][] getUserCart_Data = service.getallUserCart_Product(userProducts);
+
+
+                            Object [][] getUserCart_Data = service.getallUserCart_Product();
 
                             userorder_table = new JTable(getUserCart_Data,column);
                             showingtotalPrice();
@@ -216,8 +235,9 @@ public class OrderMedicine{
 
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
+
             order_frame.dispose();
-            Home home = new Home();
+            Employee_Functionality employeeFunctionality = new Employee_Functionality();
         });
     }
 
@@ -227,9 +247,15 @@ public class OrderMedicine{
             Receipt receipt = new Receipt(userProducts);
         });
     }
+    public void activeEmployeeName(JLabel accountHandler){
+        accountHandler.setText("Account handler : "+EmployeeLogin.activeEmployee);
+        accountHandler.setForeground(Color.BLACK);
+        accountHandler.setFont(new Font("Serif", Font.BOLD, 20));
+        accountHandler.setBounds(1000,50,300,50);
+        order_frame.add(accountHandler);
+    }
 
     public void showingtotalPrice(){
-        System.out.println(totalMedicine_amount);
         if(totalMedicine_amount != 0) {
             JTextField field  = new JTextField();
             field.setBounds(1200,100,130,40);

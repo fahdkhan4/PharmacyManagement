@@ -1,8 +1,7 @@
 package Service;
 
 import Model.Product;
-import com.mysql.cj.x.protobuf.MysqlxCrud;
-import dao.ProductDao;
+import dao.Product_Dao;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ public class FindMedicine implements GetAllMedicines {
 
 
     public List<Product> getAllProducts_Data(){
-        return ProductDao.getAllProducts();
+        return Product_Dao.getAllProducts();
     }
 
     public void getMedicineName(String medicineName){

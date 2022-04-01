@@ -1,20 +1,18 @@
 package View;
 
-import View.Admin.Admin;
-
 import javax.swing.*;
 import java.awt.*;
 
 
-public class Home extends Frame{
+public class Employee_Functionality {
 
     public JFrame home_frame;
     JButton orderMedicine , viewSale,viewMedicine,exit,X;
 
-    public Home(){
+    public Employee_Functionality(){
 
-        home_frame = new JFrame("Pharmacy Management System");
-        admin_login(home_frame);
+        home_frame = new JFrame("Employee functionality");
+        JLabel accountHandler = new JLabel();
         X = new JButton("X");
         orderMedicine = new JButton("Order Medicine");
         viewMedicine = new JButton("Medicine Listing");
@@ -23,12 +21,16 @@ public class Home extends Frame{
 
 //                      Main Heading
         mainHeading();
+
+//                                                                              adding the name of user
+        activeEmployeeName(accountHandler);
 //
         X.setBounds(1300,10,50,50);
         orderMedicine.setBounds(500, 350, 300, 40);
         viewMedicine.setBounds(500, 400, 300, 40);
         viewSale.setBounds(500, 450, 300, 40);
         exit.setBounds(500, 500, 300, 40);
+
 
         
         home_frame.getContentPane().setBackground(Color.BLUE);
@@ -41,7 +43,6 @@ public class Home extends Frame{
 
         home_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         home_frame.setUndecorated(true);
-//        home_frame.setSize(1400,1400);
         home_frame.setLayout(null);
         home_frame.setVisible(true);
 
@@ -58,7 +59,6 @@ public class Home extends Frame{
         selectAll = new JMenuItem("Select All");
 
 
-
         file = new JMenu("File");
         edit = new JMenu("Edit");
         about = new JMenu("About");
@@ -66,11 +66,6 @@ public class Home extends Frame{
         edit.add(cut);edit.add(copy);edit.add(paste);edit.add(selectAll);
         menu_bar = new JMenuBar();
         menu_bar.add(file);menu_bar.add(edit);menu_bar.add(about);
-
-//        x = new JMenu("x");
-//        menu_bar.add(Box.createHorizontalGlue());
-//        menu_bar.add(x);
-
 
         home_frame.add(menu_bar);
         home_frame.setJMenuBar(menu_bar);
@@ -89,7 +84,6 @@ public class Home extends Frame{
         exit.setForeground(Color.BLACK);
 
 //                                                                      OnClick Working.....
-
         workingOf_OrderMedicine(orderMedicine);
         workingOf_ViewMedicines(viewMedicine);
         workingOf_ViewSales(viewSale);
@@ -99,24 +93,20 @@ public class Home extends Frame{
 
 
     public void mainHeading(){
-        JLabel heading = new JLabel("Pharmacy Management System");
+        JLabel heading = new JLabel("Employee Working Panel");
         heading.setForeground(Color.ORANGE);
-        heading.setBounds(230,100,1000,100);
+        heading.setBounds(330,100,1000,100);
         heading.setFont(new Font("Serif", Font.BOLD, 60));
         home_frame.add(heading);
     }
 
-    public void admin_login(Frame home_frame){
-        JButton admin_login = new JButton("Admin Login");
-        admin_login.setBackground(Color.ORANGE);
-        admin_login.setForeground(Color.BLACK);
-        admin_login.setBounds(500, 300, 300, 40);
-        home_frame.add(admin_login);
 
-        admin_login.addActionListener(el->{
-            home_frame.dispose();
-            Admin obj  = new Admin();
-        });
+    public void activeEmployeeName(JLabel accountHandler){
+        accountHandler.setText("Account handler : "+EmployeeLogin.activeEmployee);
+        accountHandler.setForeground(Color.ORANGE);
+        accountHandler.setFont(new Font("Serif", Font.BOLD, 25));
+        accountHandler.setBounds(30,30,300,100);
+        home_frame.add(accountHandler);
     }
 
     public void workingOf_OrderMedicine(JButton orderMedicine){
@@ -142,13 +132,12 @@ public class Home extends Frame{
 
     public void workingOf_Exit(JButton exit){
         exit.addActionListener(el-> {
-            System.exit(1);
+            home_frame.dispose();
+            EmployeeLogin login = new EmployeeLogin();
         });
     }
 
 
-    public static void main(String[] args) {
 
-    }
 
 }

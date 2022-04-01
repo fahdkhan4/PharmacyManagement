@@ -1,7 +1,7 @@
 package View.Admin;
 
 import Service.AdminLoginServices;
-import View.Home;
+import View.EmployeeLogin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -64,9 +64,10 @@ public class Admin{
 //                                                                                   Buttons on click
 
           login.addActionListener(el -> {
-              Boolean bool1 =  AdminLoginServices.adminLogin_details(name_text.getText(), String.valueOf(password.getPassword()));
+              Boolean bool1 = AdminLoginServices.adminLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
               if(bool1) {
                   admin_frame.dispose();
+                  AdminFunctionality_UI.getActive_Admin(name_text.getText());
                   AdminFunctionality_UI admin = new AdminFunctionality_UI();
               }
               else{
@@ -76,7 +77,7 @@ public class Admin{
 
           exit.addActionListener(el->{
             admin_frame.dispose();
-            Home home = new Home();
+              EmployeeLogin emp_login = new EmployeeLogin();
         });
     }
 

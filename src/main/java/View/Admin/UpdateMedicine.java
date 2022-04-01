@@ -1,7 +1,7 @@
 package View.Admin;
 
 import Model.Product;
-import dao.UpdateMedicine_Dao;
+import dao.ProductFunctionality_Dao;
 
 import javax.swing.*;
 import java.awt.*;
@@ -112,7 +112,7 @@ public class UpdateMedicine {
 
             Product updatedData = new Product(id,updatedName,updatedVarient,updatedPrice,updatedquantity);
 
-            UpdateMedicine_Dao updateMedicine_dao = new UpdateMedicine_Dao();
+            ProductFunctionality_Dao updateMedicine_dao = new ProductFunctionality_Dao();
             updateMedicine_dao.updateMedicine(updatedData);
 
             JOptionPane.showMessageDialog(updateProduct_frame,"Medicine Updated");
