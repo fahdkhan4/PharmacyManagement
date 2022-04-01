@@ -6,8 +6,9 @@ import java.awt.*;
 
 public class ViewSales {
 
+
+    public JFrame viewSales_frame = new JFrame("Order Medicine");
     public ViewSales(){
-        JFrame viewSales_frame = new JFrame("Order Medicine");
         JPanel panel;
         JScrollPane scrollpane;
         JTable viewSales_table;
@@ -63,6 +64,7 @@ public class ViewSales {
     }
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
+            viewSales_frame.dispose();
             Home home= new Home();
         });
     }

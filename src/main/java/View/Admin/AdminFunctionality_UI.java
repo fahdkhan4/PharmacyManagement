@@ -26,6 +26,7 @@ public class AdminFunctionality_UI extends Home {
     @Override
     public void workingOf_OrderMedicine(JButton orderMedicine) {
         orderMedicine.addActionListener(el->{
+            home_frame.dispose();
             AdminOrder_Medicine order = new AdminOrder_Medicine();
         });
     }
@@ -33,6 +34,7 @@ public class AdminFunctionality_UI extends Home {
     @Override
     public void workingOf_ViewMedicines(JButton viewMedicine) {
         viewMedicine.addActionListener(el->{
+            home_frame.dispose();
             Admin_ViewMedicine view = new Admin_ViewMedicine();
 
         });
@@ -41,6 +43,7 @@ public class AdminFunctionality_UI extends Home {
     @Override
     public void workingOf_ViewSales(JButton viewSale) {
         viewSale.addActionListener(el->{
+            home_frame.dispose();
             AdminViewSales admin = new AdminViewSales();
         });
     }

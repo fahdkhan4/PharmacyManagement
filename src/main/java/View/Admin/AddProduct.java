@@ -120,30 +120,34 @@ public class AddProduct {
     }
     public void add_ProductFunctionality() {
 
-        Long product_id = Long.parseLong(p_idText.getText());
-        Double product_price = Double.parseDouble(p_priceText.getText());
-        Integer product_quantity = Integer.parseInt(p_quantityText.getText());
+        if(p_idText.getText().equalsIgnoreCase("") || p_nameText.getText().equalsIgnoreCase("") || p_variantText.getText().equalsIgnoreCase("") || p_priceText.getText().equalsIgnoreCase("") || p_quantityText.getText().equalsIgnoreCase("")) {
+            JOptionPane.showMessageDialog(addProduct_frame,"Fist fill the form");
+        }else{
+            Long product_id = Long.parseLong(p_idText.getText());
+            Double product_price = Double.parseDouble(p_priceText.getText());
+            Integer product_quantity = Integer.parseInt(p_quantityText.getText());
 
-        Product product = new Product(product_id, p_nameText.getText(), p_variantText.getText(), product_price, product_quantity);
-        AddProduct_Dao dao = new AddProduct_Dao();
-        dao.insertProduct_ToDB(product);
+            Product product = new Product(product_id, p_nameText.getText(), p_variantText.getText(), product_price, product_quantity);
+            AddProduct_Dao dao = new AddProduct_Dao();
+            dao.insertProduct_ToDB(product);
 
-        if(DBService.duplicate_check) {
-            JOptionPane.showMessageDialog(addProduct_frame,"This Product is already Exist");
-        }
-        else{
-            JOptionPane.showMessageDialog(addProduct_frame, "Product added");
-            p_idText.setText("");
-            p_nameText.setText("");
-            p_variantText.setText("");
-            p_priceText.setText("");
-            p_quantityText.setText("");
+            if (DBService.duplicate_check) {
+                JOptionPane.showMessageDialog(addProduct_frame, "This Product is already Exist");
+            } else {
+                JOptionPane.showMessageDialog(addProduct_frame, "Product added");
+                p_idText.setText("");
+                p_nameText.setText("");
+                p_variantText.setText("");
+                p_priceText.setText("");
+                p_quantityText.setText("");
+            }
         }
 
     }
 
     public void view_Medicines(JButton viewMedicine){
         viewMedicine.addActionListener(el->{
+            addProduct_frame.dispose();
             Admin_ViewMedicine view = new Admin_ViewMedicine();
         });
     }
@@ -161,9 +165,5 @@ public class AddProduct {
         });
     }
 
-
-    public static void main(String[] args) {
-        AddProduct p = new AddProduct();
-    }
 
 }

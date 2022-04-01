@@ -66,6 +66,7 @@ public class View_Medicines {
     }
     public void workingOf_ExitButton(JButton exit){
         exit.addActionListener(el->{
+            viewMedicine_frame.dispose();
             Home home = new Home();
         });
 

@@ -12,10 +12,10 @@ import Service.*;
 
 public class OrderMedicine{
 
-    JFrame order_frame = new JFrame("Order Medicine");
+     public JFrame order_frame = new JFrame("Order Medicine");
     private JTable order_medicine_table , userorder_table;
     private JScrollPane scrollpane , userorder_Scroll;
-    private ArrayList<Product> userProducts = new ArrayList<>();
+    public ArrayList<Product> userProducts = new ArrayList<>();
     JPanel outerpanel,toppanel;
     Object [][] data;
     Double totalMedicine_amount;
@@ -136,7 +136,7 @@ public class OrderMedicine{
                         System.out.println(err);
                     }
 
-                    medicine_quantity = (Integer) order_medicine_table.getModel().getValueAt(row,med_quantityCol);
+                    medicine_quantity = Integer.parseInt(order_medicine_table.getModel().getValueAt(row,med_quantityCol).toString());
 
                     on_med_quantity = new JOptionPane("Medicine Quantity");
 
@@ -209,17 +209,22 @@ public class OrderMedicine{
         order_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         order_frame.setVisible(true);
 
+        workingOf_BuyButton(buy_product);
         working_ofExitButton(exit);
-
-        buy_product.addActionListener(el->{
-            Receipt receipt = new Receipt(userProducts);
-        });
 
     }
 
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
+            order_frame.dispose();
             Home home = new Home();
+        });
+    }
+
+    public void workingOf_BuyButton(JButton buy_product){
+        buy_product.addActionListener(el->{
+            order_frame.dispose();
+            Receipt receipt = new Receipt(userProducts);
         });
     }
 
@@ -233,8 +238,6 @@ public class OrderMedicine{
         }
     }
 
-    public static void main(String[] args) {
 
-    }
 
 }

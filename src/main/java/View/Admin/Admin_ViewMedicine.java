@@ -120,6 +120,7 @@ public class Admin_ViewMedicine  {
                 JOptionPane.showMessageDialog(viewMedicine_frame,"First Select a product to update");
             }
             else {
+                viewMedicine_frame.dispose();
                 UpdateMedicine update = new UpdateMedicine(updateProduct);
                 updateProduct = null;
             }
@@ -127,9 +128,13 @@ public class Admin_ViewMedicine  {
 
         delete.addActionListener(el->{
             if(medicineCode_Delete.size() != 0){
+                updateProduct = null;
                 DeleteMedicine.delete_Medicines(medicineCode_Delete);
                 Admin_ViewMedicine view = new Admin_ViewMedicine();
                 JOptionPane.showMessageDialog(viewMedicine_frame,"Press Ok to DELETE");
+                viewMedicine_frame.dispose();
+                medicineCode_Delete.clear();
+
             }
             else{
                 JOptionPane.showMessageDialog(viewMedicine_frame,"First choose the medicine to delete");
@@ -148,6 +153,7 @@ public class Admin_ViewMedicine  {
     }
     public void workingOf_ExitButton(JButton exit) {
         exit.addActionListener(el->{
+            viewMedicine_frame.dispose();
             AdminFunctionality_UI admin = new AdminFunctionality_UI();
         });
     }

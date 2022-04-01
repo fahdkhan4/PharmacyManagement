@@ -10,9 +10,12 @@ import java.util.ArrayList;
 
 public class Receipt {
 
+    public JFrame receipt_frame = new JFrame("Order Medicine");
+    public Receipt() {
+    }
+
     public Receipt(ArrayList<Product> userProducts){
 
-        JFrame receipt_frame = new JFrame("Order Medicine");
         UserCartProduct_Services service = new UserCartProduct_Services();
         JTable receipt_medicine_table;
         JScrollPane scrollpane;
@@ -63,11 +66,15 @@ public class Receipt {
         receipt_medicine_table.setBounds(30,40,200,300);
         receipt_frame.setVisible(true);
 
+        workingOfExit_Button(exit);
+
+
+    }
+    public void workingOfExit_Button(JButton exit){
         exit.addActionListener(el->{
+            receipt_frame.dispose();
             OrderMedicine order = new OrderMedicine();
         });
-
-
     }
 
     }
