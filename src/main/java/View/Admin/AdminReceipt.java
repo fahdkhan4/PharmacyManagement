@@ -8,8 +8,8 @@ import java.util.ArrayList;
 
 public class AdminReceipt extends Receipt {
 
-    public AdminReceipt(ArrayList<Product> userProducts) {
-        super(userProducts);
+    public AdminReceipt() {
+
     }
 
     @Override

@@ -1,16 +1,18 @@
 package Service;
 
 import Model.Product;
-import dao.Product_Dao;
-
-import java.util.ArrayList;
+import dao.OrderProduct_Dao;
 import java.util.List;
 
 public class UserCartProduct_Services {
 
 
+    public Double totalamount = 0.0;
+    Double totalmedicineAmount = 0.0;
+
+
     public List<Product> getCartProduct(){
-        return  Product_Dao.getCart_Product();
+        return  OrderProduct_Dao.getCart_Product();
     }
     
 
@@ -27,4 +29,13 @@ public class UserCartProduct_Services {
         }
         return cartProduct;
     }
+    public Double totalMedicine_Amount(){
+        for (int i = 0; i < getCartProduct().size(); i++) {
+
+            totalamount = getCartProduct().get(i).getMedicine_quantity() * getCartProduct().get(i).getMedicine_price();
+        }
+        totalmedicineAmount += totalamount;
+        return totalmedicineAmount;
+    }
+
 }

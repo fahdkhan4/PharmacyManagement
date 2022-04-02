@@ -7,34 +7,33 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
-import java.util.ArrayList;
-
-import Model.OrdeProduct_Model;
-import Model.Product;
+import Model.OrderProduct_Model;
 import Model.ProductCart_Model;
 import Service.*;
 import dao.DBService;
+import dao.OrderProduct_Functionality;
 import dao.ProductFunctionality_Dao;
 
 public class OrderMedicine{
 
     public JFrame order_frame = new JFrame("Order Medicine");
-    private JTable order_medicine_table , userorder_table;
+    public JTable order_medicine_table,userorder_table;
     private JScrollPane scrollpane , userorder_Scroll;
-    public ArrayList<Product> userProducts = new ArrayList<>();
     JPanel outerpanel,toppanel;
     Object [][] data;
-    Double totalMedicine_amount;
+    public static Double total_amount;
     public  Boolean orderbool = true;
+
+    public OrderProduct_Functionality orderProduct_functionality = new OrderProduct_Functionality();
+    public UserCartProduct_Services service = new UserCartProduct_Services();
+    ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
+    FindMedicine medFind = new FindMedicine();
 
     public OrderMedicine(){
 
         JLabel nameFor_Search ,activeMember;
         JTextField nameFor_SearchText;
         JButton buy_product,exit,find;
-        UserCartProduct_Services service = new UserCartProduct_Services();
-        ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
-        FindMedicine medFind = new FindMedicine();
 
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
@@ -67,7 +66,7 @@ public class OrderMedicine{
         order_frame.add(nameFor_Search);
         order_frame.add(nameFor_SearchText);
 
-//                                                                              buy_product button
+//                                                                                        buy_product button
         buy_product = new JButton("BUY PRODUCT");
         buy_product.setBounds(1100,3,140,40);
         buy_product.setBackground(Color.ORANGE);
@@ -80,7 +79,7 @@ public class OrderMedicine{
         exit.setBackground(Color.ORANGE);
         exit.setForeground(Color.BLACK);
         order_frame.add(exit);
-//                                                                                         Data Binding
+//                                                                                          Data Binding
         ProductService productService = new ProductService();
         data = productService.getAllMedicines();
 
@@ -138,13 +137,11 @@ public class OrderMedicine{
                 med_Column = 0;
                 med_quantityCol = 4;
                 if(row >= 0) {
+
                     medicine_id = (Long) order_medicine_table.getModel().getValueAt(row, med_Column);
                     medicine_name = (String) order_medicine_table.getModel().getValueAt(row,med_Column+1);
                     medicine_varient = (String) order_medicine_table.getModel().getValueAt(row,med_Column+2);
-
                     medicine_price = Double.parseDouble(order_medicine_table.getModel().getValueAt(row, med_Column + 3).toString());
-
-
                     medicine_quantity = Integer.parseInt(order_medicine_table.getModel().getValueAt(row,med_quantityCol).toString());
 
                     on_med_quantity = new JOptionPane("Medicine Quantity");
@@ -159,23 +156,23 @@ public class OrderMedicine{
 
                     if(user_wants_quantity != null) {
                         if (user_wants_quantity <= medicine_quantity) {
-                            OrdeProduct_Model ordeProduct_model;
+                            OrderProduct_Model orderProduct_model;
 //                                                                                             produce one order of products
                             if(orderbool){
-                                ordeProduct_model = new OrdeProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Draft");
-                                functionality_dao.inserting_OrderInformation(ordeProduct_model);
+                                orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Draft");
+                                orderProduct_functionality .inserting_OrderInformation(orderProduct_model);
                                 orderbool = false;
                             }
-
 //
                             ProductCart_Model cart_model = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity, DBService.orderID);
-                            functionality_dao.inserting_cartProduct(cart_model);
-                            totalMedicine_amount = medFind.totalMedicine_Amount(medicine_price,user_wants_quantity);
+                            orderProduct_functionality .inserting_cartProduct(cart_model);
+
 
 
                             Object [][] getUserCart_Data = service.getallUserCart_Product();
-
                             userorder_table = new JTable(getUserCart_Data,column);
+
+                            total_amount = service.totalMedicine_Amount();
                             showingtotalPrice();
 
                             userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
@@ -194,7 +191,6 @@ public class OrderMedicine{
                     else{
                         JOptionPane.showMessageDialog(order_frame,"Please enter valid quantity");
                     }
-
                 }
             }
             @Override
@@ -236,15 +232,29 @@ public class OrderMedicine{
     public void working_ofExitButton(JButton exit){
         exit.addActionListener(el->{
 
-            order_frame.dispose();
-            Employee_Functionality employeeFunctionality = new Employee_Functionality();
+                if(this.userorder_table != null) {
+                    int res = JOptionPane.showOptionDialog(order_frame, "Are you Sure \n Exit will remove the cart ", "Order", JOptionPane.DEFAULT_OPTION,
+                            JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                    if(res == 0){
+                        order_frame.dispose();
+                        orderProduct_functionality.delete_cartProduct();
+                        orderProduct_functionality.delete_OrderInformation();
+                        Employee_Functionality employeeFunctionality = new Employee_Functionality();
+                    }
+                }
+                else{
+                    order_frame.dispose();
+                    Employee_Functionality employeeFunctionality = new Employee_Functionality();
+                }
         });
     }
 
     public void workingOf_BuyButton(JButton buy_product){
         buy_product.addActionListener(el->{
             order_frame.dispose();
-            Receipt receipt = new Receipt(userProducts);
+            OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Completed");
+            orderProduct_functionality.update_OrderInformation(orderProduct_model);
+            Receipt receipt = new Receipt();
         });
     }
     public void activeEmployeeName(JLabel accountHandler){
@@ -256,10 +266,10 @@ public class OrderMedicine{
     }
 
     public void showingtotalPrice(){
-        if(totalMedicine_amount != 0) {
+        if(total_amount != null || total_amount != 0.0) {
             JTextField field  = new JTextField();
             field.setBounds(1200,100,130,40);
-            field.setText(String.valueOf("Total Price : "+totalMedicine_amount));
+            field.setText(String.valueOf("Total Price : "+total_amount));
             order_frame.add(field);
         }
     }

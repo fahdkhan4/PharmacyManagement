@@ -3,12 +3,12 @@ package Model;
 import java.time.LocalDate;
 
 
-public class OrdeProduct_Model {
+public class OrderProduct_Model {
     private String employee_name;
     private LocalDate order_date;
     private String state;
 
-    public OrdeProduct_Model( String employee_name, LocalDate order_date, String state) {
+    public OrderProduct_Model(String employee_name, LocalDate order_date, String state) {
 
         this.employee_name = employee_name;
         this.order_date = order_date;

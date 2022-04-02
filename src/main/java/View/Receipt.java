@@ -11,10 +11,9 @@ import java.util.ArrayList;
 public class Receipt {
 
     public JFrame receipt_frame = new JFrame("Order Medicine");
-    public Receipt() {
-    }
 
-    public Receipt(ArrayList<Product> userProducts){
+
+    public Receipt(){
 
         UserCartProduct_Services service = new UserCartProduct_Services();
         JTable receipt_medicine_table;
@@ -31,7 +30,6 @@ public class Receipt {
         Object data [][] =  service.getallUserCart_Product() ;
 
         String [] column = {"Code","Name","Varient","Price","Quantity"};
-
 
 //                                                                              exit button
         exit= new JButton("Exit");
@@ -78,6 +76,5 @@ public class Receipt {
     }
 
     }
-
 
 

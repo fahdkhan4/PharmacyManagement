@@ -9,8 +9,6 @@ import java.util.List;
 public class FindMedicine implements GetAllMedicines {
 
     public static String medicineName;
-    public static ArrayList<Double> totalprice = new ArrayList<>();
-
 
     public List<Product> getAllProducts_Data(){
         return Product_Dao.getAllProducts();
@@ -51,17 +49,7 @@ public class FindMedicine implements GetAllMedicines {
         return products;
     }
 
-    public static Double totalMedicine_Amount(Double price,Integer quantity){
-        Double singleamount = price*quantity;
-        Double totalamount = 0.0;
 
-        totalprice.add(singleamount);
-
-        for (Double p: totalprice) {
-            totalamount+=p;
-        }
-        return totalamount;
-    }
 
 
 }
