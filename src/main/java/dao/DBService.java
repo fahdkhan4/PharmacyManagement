@@ -1,6 +1,9 @@
 package dao;
+import View.OrderMedicine;
+
 import java.awt.*;
 import java.sql.*;
+
 
 public class DBService {
     public static Connection con;
@@ -56,6 +59,17 @@ public class DBService {
             System.out.println(e);
         }
     }
+//
+//    public static void updatedataofTabele(){
+//        try{
+//            String sql = "SELECT * FROM medicines";
+//            PreparedStatement pst = con.prepareStatement(sql);
+//            ResultSet rs = pst.executeQuery();
+//
+//        }catch(Exception e){
+//            System.out.println(e);
+//        }
+//    }
 
 
 

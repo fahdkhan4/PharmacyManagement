@@ -23,7 +23,7 @@ public class UpdateMedicine {
         p_id.setFont(new Font("Serif",Font.BOLD,18));
         p_id.setForeground(Color.ORANGE);
         p_idText = new JTextField();
-        p_idText.setText(String.valueOf(updateData.getId()));
+        p_idText.setText(String.valueOf(updateData.getBarCode()));
         p_idText.setEnabled(false);
 
         p_name = new JLabel(" Name :");
@@ -49,7 +49,7 @@ public class UpdateMedicine {
         p_price.setFont(new Font("Serif",Font.BOLD,18));
         p_price.setForeground(Color.ORANGE);
         p_priceText = new JTextField();
-        p_priceText.setText(String.valueOf(updateData.getMedicine_price()));
+        p_priceText.setText(String.valueOf(updateData.getMedicine_Saleprice()));
 //                                                                         Label size.....
         p_id.setBounds(450,250,150,30);
         p_name.setBounds(450,300,100,30);
@@ -110,7 +110,7 @@ public class UpdateMedicine {
             Double updatedPrice= Double.parseDouble(p_priceText.getText());
             Integer updatedquantity = Integer.parseInt(p_quantityText.getText());
 
-            Product updatedData = new Product(id,updatedName,updatedVarient,updatedPrice,updatedquantity);
+            Product updatedData = new Product(id,updatedName,updatedVarient,null,updatedPrice,updatedquantity);
 
             ProductFunctionality_Dao updateMedicine_dao = new ProductFunctionality_Dao();
             updateMedicine_dao.updateMedicine(updatedData);

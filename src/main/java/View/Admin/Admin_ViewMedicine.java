@@ -21,7 +21,6 @@ public class Admin_ViewMedicine  {
     public JTable medicine;
     JButton update,delete;
     JButton exit;
-//    JPanel panel_medicine = new JPanel();
 
 
     Admin_ViewMedicine(){
@@ -101,7 +100,7 @@ public class Admin_ViewMedicine  {
                     Double medicine_price = (Double) medicine.getModel().getValueAt(row,col+3);
                     Integer medicine_quantity = (Integer) medicine.getModel().getValueAt(row,col+4);
 
-                    updateProduct = new Product(id,medicine_name,medicine_varient,medicine_price,medicine_quantity);
+                    updateProduct = new Product(id,medicine_name,medicine_varient,null,medicine_price,medicine_quantity);
                     medicineCode_Delete.add(id);
                 }
             }

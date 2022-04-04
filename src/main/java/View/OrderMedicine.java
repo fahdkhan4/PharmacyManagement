@@ -1,39 +1,46 @@
 package View;
 
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
-import javax.swing.table.TableColumn;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
 import Model.OrderProduct_Model;
+import Model.Product;
 import Model.ProductCart_Model;
 import Service.*;
-import dao.DBService;
-import dao.OrderProduct_Functionality;
-import dao.ProductFunctionality_Dao;
+import dao.*;
 
 public class OrderMedicine{
 
     public JFrame order_frame = new JFrame("Order Medicine");
-    public JTable order_medicine_table,userorder_table;
+    public  static JTable order_medicine_table,userorder_table ;
     private JScrollPane scrollpane , userorder_Scroll;
     JPanel outerpanel,toppanel;
     Object [][] data;
     public static Double total_amount;
     public  Boolean orderbool = true;
+    public Boolean cartbool = false;
 
     public OrderProduct_Functionality orderProduct_functionality = new OrderProduct_Functionality();
     public UserCartProduct_Services service = new UserCartProduct_Services();
     ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
+    public CartProduct cartProduct = new CartProduct();
     FindMedicine medFind = new FindMedicine();
+
+    private JTextField filtertxtField;
+    private TableRowSorter tablesorter;
+    private TableModel tablemodel;
+//
 
     public OrderMedicine(){
 
         JLabel nameFor_Search ,activeMember;
         JTextField nameFor_SearchText;
-        JButton buy_product,exit,find;
+        JButton buy_product,exit,find,removeFromCart;
 
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
@@ -45,6 +52,12 @@ public class OrderMedicine{
         labelHead.setVerticalAlignment(JLabel.CENTER);
         labelHead.setFont(new Font("Arial",Font.TRUETYPE_FONT,40));
 
+//                                                                                       Table 2 heading
+        JLabel heading_Table2 = new JLabel("Cart");
+        heading_Table2.setFont(new Font("TimesRoman",Font.BOLD,40));
+        heading_Table2.setBounds(1050,90,100,50);
+        order_frame.add(heading_Table2);
+
 //                                                                              name of active member
         activeMember = new JLabel();
         activeEmployeeName(activeMember);
@@ -54,17 +67,21 @@ public class OrderMedicine{
         nameFor_Search.setFont(new Font("Serif",Font.BOLD,20));
         nameFor_Search.setBounds(5,10,200,40);
 
-        nameFor_SearchText = new JTextField(SwingConstants.LEFT);
-        nameFor_SearchText.setBounds(150,7,200,40);
+        filtertxtField = new JTextField(15);
+        filtertxtField.setBounds(150,7,200,40);
 
-        find = new JButton("Find");
-        find.setBounds(350,7,100,40);
-        find.setBackground(Color.ORANGE);
-        find.setForeground(Color.BLACK);
-        order_frame.add(find);
+
+//                                                                              remove From cart
+        removeFromCart = new JButton("Remove From Cart");
+        removeFromCart.setBounds(850,90,160,50);
+        removeFromCart.setBackground(Color.ORANGE);
+        removeFromCart.setForeground(Color.BLACK);
+        order_frame.add(removeFromCart);
+
 
         order_frame.add(nameFor_Search);
-        order_frame.add(nameFor_SearchText);
+        order_frame.add(filtertxtField);
+
 
 //                                                                                        buy_product button
         buy_product = new JButton("BUY PRODUCT");
@@ -82,24 +99,161 @@ public class OrderMedicine{
 //                                                                                          Data Binding
         ProductService productService = new ProductService();
         data = productService.getAllMedicines();
-
         String [] column = {"Medicine ID","Medicine Name","Medicine Varient","Medicine Price","Quantity"};
-        order_medicine_table = new JTable(data, column);
 
-        find.addActionListener(el->{
-            if(nameFor_SearchText.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(order_frame,"Invalid Search");
+       tablemodel = new DefaultTableModel(data,column);
+       tablesorter  = new TableRowSorter<>(tablemodel);
+       order_medicine_table = new JTable(tablemodel);
+       order_medicine_table.setRowSorter(tablesorter);
+
+//                                                                               filtering table  data
+        filtertxtField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                search(filtertxtField.getText());
             }
-            else{
-                medFind.getMedicineName(nameFor_SearchText.getText());
-                this.data = medFind.findMedicine_OnSearch();
-                order_medicine_table = new JTable(data,column);
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                search(filtertxtField.getText());
+            }
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                search(filtertxtField.getText());
+            }
+            public void search(String str) {
+                if (str.length() == 0) {
+                    tablesorter.setRowFilter(null);
+                } else {
+                    tablesorter.setRowFilter(RowFilter.regexFilter(str));
+                }
             }
         });
 
-//                                                                                       search by medicine
+       order_medicine_table.addMouseListener(new MouseListener() {
+            Integer row,med_Column,med_quantityCol,medicine_quantity;
+            Long medicine_id;
+            String medicine_name,medicine_varient;
+            Double medicine_price;
+            Integer user_wants_quantity;
+            JOptionPane on_med_quantity;
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row = order_medicine_table.rowAtPoint(e.getPoint());
+                int viewModelRow = order_medicine_table.convertRowIndexToModel(row);
+                med_Column = 0;
+                med_quantityCol = 4;
+                if(row >= 0) {
+
+                    medicine_id = (Long) order_medicine_table.getModel().getValueAt(viewModelRow, med_Column);
+                    medicine_name = (String) order_medicine_table.getModel().getValueAt(viewModelRow,med_Column+1);
+                    medicine_varient = (String) order_medicine_table.getModel().getValueAt(viewModelRow,med_Column+2);
+                    medicine_price = Double.parseDouble(order_medicine_table.getModel().getValueAt(viewModelRow, med_Column + 3).toString());
+                    medicine_quantity = Integer.parseInt(order_medicine_table.getModel().getValueAt(viewModelRow,med_quantityCol).toString());
+
+                    on_med_quantity = new JOptionPane("Medicine Quantity");
+
+                    try {
+                        user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
+
+                    }catch(Exception error){
+                        System.out.println(error);
+                    }
+
+                    if(user_wants_quantity != null) {
+                        if (user_wants_quantity <= medicine_quantity) {
+//                                                                                  update medicine quantity
+                            Integer newMedicineQTY = medicine_quantity - user_wants_quantity;
+                            Product product = new Product(medicine_id,medicine_name,medicine_varient,null,medicine_price,newMedicineQTY);
+                            functionality_dao.updateMedicine_Quantity(product);
+
+                            OrderProduct_Model orderProduct_model;
+//                                                                                             produce one order of products
+                            if(orderbool){
+                                orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Draft");
+                                orderProduct_functionality.inserting_OrderInformation(orderProduct_model);
+                                orderbool = false;
+                            }
+//
+                            ProductCart_Model cart_model = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity, DBService.orderID);
+                            cartProduct.inserting_cartProduct(cart_model);
+
+                            Object [][] getUserCart_Data = service.getallUserCart_Product();
+                            userorder_table = new JTable(getUserCart_Data,column);
+
+                            total_amount = service.totalMedicine_Amount();
+                            showingtotalPrice();
+
+                            userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
+                            userorder_Scroll = new JScrollPane(userorder_table);
+                            userorder_table.getTableHeader().setOpaque(false);
+                            userorder_table.getTableHeader().setForeground(Color.BLACK);
+                            userorder_table.getTableHeader().setBackground(Color.ORANGE);
+                            userorder_Scroll.setBounds(827,150,536,600);
+                            outerpanel.add(userorder_Scroll);
+
+
+                        } else {
+                            JOptionPane.showMessageDialog(order_frame, medicine_quantity + " is the maximum quantity for this medicine");
+                        }
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(order_frame,"Please enter valid quantity");
+                    }
+                }
+            }
+            @Override
+            public void mousePressed(MouseEvent e) {}
+            @Override
+            public void mouseReleased(MouseEvent e) {}
+            @Override
+            public void mouseEntered(MouseEvent e) {}
+            @Override
+            public void mouseExited(MouseEvent e) {}
+        });
+
+
+//            userorder_table.addMouseListener(new MouseListener() {
+//                Integer orderRow, orderColumn;
+//                Long barcode;
+//
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    orderRow = userorder_table.rowAtPoint(e.getPoint());
+//                    orderColumn = 0;
+//                    if (orderRow >= 0) {
+//                        barcode = (Long) userorder_table.getModel().getValueAt(orderRow, orderColumn);
+//                        int res = JOptionPane.showOptionDialog(order_frame, "Are u sure to remove product from cart", "Order", JOptionPane.DEFAULT_OPTION,
+//                                JOptionPane.INFORMATION_MESSAGE, null, null, null);
+//                        if (res == 0) {
+//                            removeFromCart.addActionListener(el -> {
+//                                cartProduct.removeSpecific_CartProduct(barcode);
+//                            });
+//                        }
+//                    }
+//                }
+//
+//                @Override
+//                public void mousePressed(MouseEvent e) {
+//                }
+//
+//                @Override
+//                public void mouseReleased(MouseEvent e) {
+//                }
+//
+//                @Override
+//                public void mouseEntered(MouseEvent e) {
+//                }
+//
+//                @Override
+//                public void mouseExited(MouseEvent e) {
+//                }
+//            });
+
+
+
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight()+10);
-//                                                                                       Column size
+//                                                                                            Column size
         order_medicine_table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (int col = 0; col < order_medicine_table.getColumnCount(); col++)
         {
@@ -123,91 +277,7 @@ public class OrderMedicine{
             tableColumn.setPreferredWidth( preferredWidth );
         }
 
-        order_medicine_table.addMouseListener(new MouseListener() {
-            Integer row,med_Column,med_quantityCol,medicine_quantity;
-            Long medicine_id;
-            String medicine_name,medicine_varient;
-            Double medicine_price;
-            Integer user_wants_quantity;
-            JOptionPane on_med_quantity;
 
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                row = order_medicine_table.rowAtPoint(e.getPoint());
-                med_Column = 0;
-                med_quantityCol = 4;
-                if(row >= 0) {
-
-                    medicine_id = (Long) order_medicine_table.getModel().getValueAt(row, med_Column);
-                    medicine_name = (String) order_medicine_table.getModel().getValueAt(row,med_Column+1);
-                    medicine_varient = (String) order_medicine_table.getModel().getValueAt(row,med_Column+2);
-                    medicine_price = Double.parseDouble(order_medicine_table.getModel().getValueAt(row, med_Column + 3).toString());
-                    medicine_quantity = Integer.parseInt(order_medicine_table.getModel().getValueAt(row,med_quantityCol).toString());
-
-                    on_med_quantity = new JOptionPane("Medicine Quantity");
-
-                    try {
-                        user_wants_quantity = Integer.parseInt(on_med_quantity.showInputDialog(order_frame, "Enter Medicine Quantity", "Medicine Quantity", JOptionPane.INFORMATION_MESSAGE));
-
-                    }catch(Exception error){
-                        user_wants_quantity = null;
-                        System.out.println(error);
-                    }
-
-                    if(user_wants_quantity != null) {
-                        if (user_wants_quantity <= medicine_quantity) {
-                            OrderProduct_Model orderProduct_model;
-//                                                                                             produce one order of products
-                            if(orderbool){
-                                orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Draft");
-                                orderProduct_functionality .inserting_OrderInformation(orderProduct_model);
-                                orderbool = false;
-                            }
-//
-                            ProductCart_Model cart_model = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,user_wants_quantity, DBService.orderID);
-                            orderProduct_functionality .inserting_cartProduct(cart_model);
-
-
-
-                            Object [][] getUserCart_Data = service.getallUserCart_Product();
-                            userorder_table = new JTable(getUserCart_Data,column);
-
-                            total_amount = service.totalMedicine_Amount();
-                            showingtotalPrice();
-
-                            userorder_table.setRowHeight(userorder_table.getRowHeight()+10);
-                            userorder_Scroll = new JScrollPane(userorder_table);
-                            userorder_table.getTableHeader().setOpaque(false);
-                            userorder_table.getTableHeader().setForeground(Color.BLACK);
-                            userorder_table.getTableHeader().setBackground(Color.ORANGE);
-                            userorder_Scroll.setBounds(827,150,536,600);
-
-                            outerpanel.add(userorder_Scroll);
-
-                        } else {
-                            JOptionPane.showMessageDialog(order_frame, medicine_quantity + " is the maximum quantity for this medicine");
-                        }
-                    }
-                    else{
-                        JOptionPane.showMessageDialog(order_frame,"Please enter valid quantity");
-                    }
-                }
-            }
-            @Override
-            public void mousePressed(MouseEvent e) {}
-            @Override
-            public void mouseReleased(MouseEvent e) {}
-            @Override
-            public void mouseEntered(MouseEvent e) {}
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        });
-
-//                                                                                      Table 2 heading
-        JLabel heading_Table2 = new JLabel("Cart");
-        heading_Table2.setFont(new Font("TimesRoman",Font.BOLD,40));
-        heading_Table2.setBounds(1050,90,100,50);
-        order_frame.add(heading_Table2);
 //
         scrollpane = new JScrollPane(order_medicine_table);
         toppanel.add(labelHead,BorderLayout.PAGE_START);
@@ -217,7 +287,7 @@ public class OrderMedicine{
         outerpanel.add(toppanel);
         order_frame.add(outerpanel);
         order_frame.pack();
-//                                                                                        Selecting data
+
         order_medicine_table.setFillsViewportHeight(true);
         order_frame.setLocationRelativeTo(null);
 //                                                                                        Size of frame
@@ -237,7 +307,7 @@ public class OrderMedicine{
                             JOptionPane.INFORMATION_MESSAGE, null, null, null);
                     if(res == 0){
                         order_frame.dispose();
-                        orderProduct_functionality.delete_cartProduct();
+                        cartProduct.delete_cartProduct();
                         orderProduct_functionality.delete_OrderInformation();
                         Employee_Functionality employeeFunctionality = new Employee_Functionality();
                     }
@@ -249,14 +319,17 @@ public class OrderMedicine{
         });
     }
 
+
     public void workingOf_BuyButton(JButton buy_product){
         buy_product.addActionListener(el->{
+            this.userorder_table = null;
             order_frame.dispose();
             OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Completed");
             orderProduct_functionality.update_OrderInformation(orderProduct_model);
             Receipt receipt = new Receipt();
         });
     }
+
     public void activeEmployeeName(JLabel accountHandler){
         accountHandler.setText("Account handler : "+EmployeeLogin.activeEmployee);
         accountHandler.setForeground(Color.BLACK);
@@ -272,6 +345,10 @@ public class OrderMedicine{
             field.setText(String.valueOf("Total Price : "+total_amount));
             order_frame.add(field);
         }
+    }
+
+    public static void main(String[] args) {
+
     }
 
 

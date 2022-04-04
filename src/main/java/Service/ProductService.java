@@ -14,10 +14,10 @@ public class ProductService implements GetAllMedicines{
         int count = (int) getAllProducts_Data().stream().count();
         Object [][] data = new Object[count][5];
         for (int i = 0; i < count ; i++) {
-            data[i][0] = getAllProducts_Data().get(i).getId();
+            data[i][0] = getAllProducts_Data().get(i).getBarCode();
             data[i][1] = getAllProducts_Data().get(i).getMedicine_name();
             data[i][2] = getAllProducts_Data().get(i).getMedicine_varient();
-            data[i][3] = getAllProducts_Data().get(i).getMedicine_price();
+            data[i][3] = getAllProducts_Data().get(i).getMedicine_Saleprice();
             data[i][4] = getAllProducts_Data().get(i).getMedicine_quantity();
         }
         return data;

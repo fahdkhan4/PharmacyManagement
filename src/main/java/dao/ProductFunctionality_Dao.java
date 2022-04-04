@@ -9,7 +9,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
 
     @Override
     public void insertProduct_ToDB(Product product) {
-        String query = "INSERT INTO medicines VALUES ("+product.getId()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"','"+product.getMedicine_price()+"','"+product.getMedicine_quantity()+"')";
+        String query = "INSERT INTO products VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
         DBService.PreparedQuery(query);
     }
 
@@ -17,21 +17,24 @@ public class ProductFunctionality_Dao implements Product_Dao {
     public void delete_Medicines(HashSet<Long> productCode) {
         String query ;
         for (Long code:productCode) {
-            query = "DELETE FROM medicines  WHERE id="+code;
+            query = "DELETE FROM products  WHERE barcode="+code;
             DBService.PreparedQuery(query);
         }
     }
 
     public void updateMedicine(Product updateProduct){
 
-        String updateProduct_query = "UPDATE medicines SET m_name = '"+updateProduct.getMedicine_name()+"'," +
-                "m_varient = '"+updateProduct.getMedicine_varient()+"', m_price = '"+updateProduct.getMedicine_price()+"'," +
-                "m_quantity = '"+updateProduct.getMedicine_quantity()+"' where id = "+updateProduct.getId();
+        String updateProduct_query = "UPDATE products SET product_name = '"+updateProduct.getMedicine_name()+"'," +
+                "product_varient = '"+updateProduct.getMedicine_varient()+"', sell_price= '"+updateProduct.getMedicine_Saleprice()+"'," +
+                "product_qty = '"+updateProduct.getMedicine_quantity()+"' where barcode = "+updateProduct.getBarCode();
         DBService.PreparedQuery(updateProduct_query);
     }
 
-
-    public static void main(String[] args) {
-
+    @Override
+    public void updateMedicine_Quantity(Product updateProductQTY) {
+        String updateMedicineQTY = "UPDATE products SET product_qty = "+updateProductQTY.getMedicine_quantity()+" WHERE barcode ="+updateProductQTY.getBarCode();
+        DBService.PreparedQuery(updateMedicineQTY);
     }
+
+
 }

@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 public interface Admin_Dao {
 
-    public static HashMap<String ,String> getAdminDetail(){
+//                                                                      retrieve data from admin table DB
+    static HashMap<String ,String> getAdminDetail(){
         HashMap<String,String> loginRequirements = new HashMap();
 
         try{

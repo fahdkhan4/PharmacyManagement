@@ -36,15 +36,16 @@ public class FindMedicine implements GetAllMedicines {
 
     public Object [][] findMedicine_OnSearch(){
         int length = searchMedicine().size();
+        System.out.println(searchMedicine());
         Object [][] products = new Object[length][5];
         for (int i = 0; i < length; i++) {
-            if(searchMedicine().get(i).getMedicine_name().equalsIgnoreCase(medicineName)){
-                products[i][0] = searchMedicine().get(i).getId();
+//            if(searchMedicine().get(i).getMedicine_name().equalsIgnoreCase(medicineName)){
+                products[i][0] = searchMedicine().get(i).getBarCode();
                 products[i][1] = searchMedicine().get(i).getMedicine_name();
                 products[i][2] = searchMedicine().get(i).getMedicine_varient();
-                products[i][3] = searchMedicine().get(i).getMedicine_price();
+                products[i][3] = searchMedicine().get(i).getMedicine_Saleprice();
                 products[i][4] = searchMedicine().get(i).getMedicine_quantity();
-            }
+//            }
         }
         return products;
     }

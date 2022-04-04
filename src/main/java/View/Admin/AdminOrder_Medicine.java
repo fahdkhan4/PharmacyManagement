@@ -41,7 +41,7 @@ public class AdminOrder_Medicine extends OrderMedicine {
                        JOptionPane.INFORMATION_MESSAGE, null, null, null);
                if(res == 0){
                    order_frame.dispose();
-                   orderProduct_functionality.delete_cartProduct();
+                   cartProduct.delete_cartProduct();
                    orderProduct_functionality.delete_OrderInformation();
                    AdminFunctionality_UI admin = new AdminFunctionality_UI();
                }
