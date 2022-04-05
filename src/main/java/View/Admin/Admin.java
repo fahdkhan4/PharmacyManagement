@@ -64,14 +64,15 @@ public class Admin{
 //                                                                                   Buttons on click
 
           login.addActionListener(el -> {
-              Boolean bool1 = AdminLoginServices.adminLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
-              if(bool1) {
+
+              Boolean loginResult = AdminLoginServices.adminLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
+              if(loginResult) {
                   admin_frame.dispose();
                   AdminFunctionality_UI.getActive_Admin(name_text.getText());
                   AdminFunctionality_UI admin = new AdminFunctionality_UI();
               }
               else{
-                  JOptionPane.showMessageDialog(admin_frame,"Invalid Username OR Password");
+                  JOptionPane.showMessageDialog(admin_frame,"Invalid Username AND Password");
               }
           });
 

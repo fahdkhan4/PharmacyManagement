@@ -1,10 +1,9 @@
 package Model;
 
-public class Receipt_Model {
+public class Sales {
     private Integer productcode;
     private String productName;
     private String productVarient;
-
 
 
 }

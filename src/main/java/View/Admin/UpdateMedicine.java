@@ -104,18 +104,22 @@ public class UpdateMedicine {
         updateProduct_frame.setVisible(true);
 
         updateProduct.addActionListener(e->{
-            Long id = Long.parseLong(p_idText.getText());
-            String updatedName = p_nameText.getText();
-            String updatedVarient = p_variantText.getText();
-            Double updatedPrice= Double.parseDouble(p_priceText.getText());
-            Integer updatedquantity = Integer.parseInt(p_quantityText.getText());
+            try {
+                Long id = Long.parseLong(p_idText.getText());
+                String updatedName = p_nameText.getText();
+                String updatedVarient = p_variantText.getText();
+                Double updatedPrice = Double.parseDouble(p_priceText.getText());
+                Integer updatedquantity = Integer.parseInt(p_quantityText.getText());
 
-            Product updatedData = new Product(id,updatedName,updatedVarient,null,updatedPrice,updatedquantity);
+                Product updatedData = new Product(id, updatedName, updatedVarient, null, updatedPrice, updatedquantity);
 
-            ProductFunctionality_Dao updateMedicine_dao = new ProductFunctionality_Dao();
-            updateMedicine_dao.updateMedicine(updatedData);
+                ProductFunctionality_Dao updateMedicine_dao = new ProductFunctionality_Dao();
+                updateMedicine_dao.updateMedicine(updatedData);
 
-            JOptionPane.showMessageDialog(updateProduct_frame,"Medicine Updated");
+                JOptionPane.showMessageDialog(updateProduct_frame, "Medicine Updated");
+            }catch (Exception error){
+                JOptionPane.showMessageDialog(updateProduct_frame,"Invalid data");
+            }
 
         });
 

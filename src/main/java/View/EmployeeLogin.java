@@ -1,5 +1,6 @@
 package View;
 
+import Service.EmployeeLoginService;
 import View.Admin.Admin;
 import javax.swing.*;
 import java.awt.*;
@@ -89,8 +90,8 @@ public class EmployeeLogin {
 
         login.addActionListener(el -> {
 
-//            Boolean bool1 =  AdminLoginServices.adminLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
-            if(name_text.getText().equalsIgnoreCase("fahd")) {
+            Boolean bool1 =  EmployeeLoginService.employeeLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
+            if(bool1) {
                 employeeLogin.dispose();
                 activeEmployee = activeEmployee_name(name_text.getText());
                 Employee_Functionality employeeFunctionality = new Employee_Functionality();

@@ -11,6 +11,7 @@ import java.util.List;
 
 public interface OrderProduct_Dao {
 
+//    List<OrderProduct_Model> getOrderProduct();
 
 //                                                                              insert order information
     void inserting_OrderInformation(OrderProduct_Model productmodel);

@@ -1,10 +1,12 @@
 package View.Admin;
 
+import Model.Invoice;
 import Model.OrderProduct_Model;
 import View.EmployeeLogin;
 
 import View.OrderMedicine;
 import View.Receipt;
+import dao.DBService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +18,21 @@ public class AdminOrder_Medicine extends OrderMedicine {
     @Override
     public void workingOf_BuyButton(JButton buy_product) {
         buy_product.addActionListener(el->{
+            this.userorder_table = null;
             order_frame.dispose();
-            OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(),"Completed");
+            OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
             orderProduct_functionality.update_OrderInformation(orderProduct_model);
-            Receipt receipt = new Receipt();
+
+//                  sending invoice data
+            Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
+            invoice_dao.insertInto_InvoiceDB(invoice);
+//                 getting product and invoice data through joins
+            invoice_dao.getDataOf_InvoiceLine();
+//                 inserting the data into invoice line to show it to the recept
+            invoice_dao.insertingInvoiceDataIn_InvoiceLine();
+
+//
+            Receipt example = new Receipt();
         });
     }
 
