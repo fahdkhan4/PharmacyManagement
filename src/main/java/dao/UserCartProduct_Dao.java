@@ -25,6 +25,7 @@ public interface UserCartProduct_Dao {
                                 Long.valueOf(rs.getString("product_barcode")),
                                 rs.getString("product_name"),
                                 rs.getString("product_varient"),
+                                Double.valueOf(rs.getString("product_price")),
                                 Double.valueOf(rs.getString("price_unit")),
                                 Integer.valueOf(rs.getString("product_qty")),
                                 Integer.valueOf(rs.getString("order_id"))
@@ -44,4 +45,8 @@ public interface UserCartProduct_Dao {
     void delete_cartProduct();
 
     void removeSpecific_CartProduct(Long barcode);
+
+    void updateCartProductQuantity(ProductCart_Model updateqty);
+
+    void updateQuantityOFProductOnCancelation();
 }

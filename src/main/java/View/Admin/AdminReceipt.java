@@ -2,17 +2,17 @@ package View.Admin;
 
 import View.Receipt;
 
+import javax.swing.*;
+
 public class AdminReceipt extends Receipt {
 
     public AdminReceipt() {
 
     }
 
-//    @Override
-//    public void workingOfExit_Button(JButton exit) {
-//        exit.addActionListener(el->{
-//            receipt_frame.dispose();
-//            AdminOrder_Medicine order = new AdminOrder_Medicine();
-//        });
-//    }
+    @Override
+    public void workingOfExitButton(JButton exit) {
+        dispose();
+        AdminOrder_Medicine medicine = new AdminOrder_Medicine();
+    }
 }

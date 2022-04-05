@@ -5,15 +5,17 @@ public class Invoice_line {
     private Integer invoice_id;
     private Integer order_id;
     private String item_name;
-    private Double item_price;
+    private Double product_price;
+    private Double itemQuantity_price;
     private Integer item_qty;
     private String item_varient;
 
-    public Invoice_line(Integer invoice_id, Integer order_id, String item_name, Double item_price, Integer item_qty, String item_varient) {
+    public Invoice_line(Integer invoice_id, Integer order_id, String item_name, Double product_price, Double itemQuantity_price, Integer item_qty, String item_varient) {
         this.invoice_id = invoice_id;
         this.order_id = order_id;
         this.item_name = item_name;
-        this.item_price = item_price;
+        this.product_price = product_price;
+        this.itemQuantity_price = itemQuantity_price;
         this.item_qty = item_qty;
         this.item_varient = item_varient;
     }
@@ -24,7 +26,8 @@ public class Invoice_line {
                 "invoice_id=" + invoice_id +
                 ", order_id=" + order_id +
                 ", item_name='" + item_name + '\'' +
-                ", item_price=" + item_price +
+                ", product_price=" + product_price +
+                ", itemQuantity_price=" + itemQuantity_price +
                 ", item_qty=" + item_qty +
                 ", item_varient='" + item_varient + '\'' +
                 '}';
@@ -54,12 +57,20 @@ public class Invoice_line {
         this.item_name = item_name;
     }
 
-    public Double getItem_price() {
-        return item_price;
+    public Double getProduct_price() {
+        return product_price;
     }
 
-    public void setItem_price(Double item_price) {
-        this.item_price = item_price;
+    public void setProduct_price(Double product_price) {
+        this.product_price = product_price;
+    }
+
+    public Double getItemQuantity_price() {
+        return itemQuantity_price;
+    }
+
+    public void setItemQuantity_price(Double itemQuantity_price) {
+        this.itemQuantity_price = itemQuantity_price;
     }
 
     public Integer getItem_qty() {

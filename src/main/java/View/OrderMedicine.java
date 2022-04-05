@@ -3,6 +3,7 @@ package View;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -25,15 +26,16 @@ public class OrderMedicine {
     public Boolean invoiceBool = true;
     //                                                                                                      Objects of classes
     public OrderProduct_Functionality orderProduct_functionality = new OrderProduct_Functionality();
-    public UserCartProduct_Services service = new UserCartProduct_Services();
+    public UserCartProduct_Services cart_service = new UserCartProduct_Services();
     ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
     public CartProduct cartProduct = new CartProduct();
     FindMedicine medFind = new FindMedicine();
     public Invoice_Dao invoice_dao = new Invoice_Dao();
 
+
     private JTextField filtertxtField;
     private TableRowSorter tablesorter;
-    private TableModel tablemodel;
+    private DefaultTableModel tablemodel;
 //
 
     public OrderMedicine() {
@@ -166,7 +168,8 @@ public class OrderMedicine {
                     if (user_wants_quantity != null) {
                         if (user_wants_quantity <= medicine_quantity) {
 //                                                                                  update medicine quantity
-                            Integer newMedicineQTY = medicine_quantity - user_wants_quantity;
+                            Integer newMedicineQTY = (medicine_quantity - user_wants_quantity);
+                            System.out.println(newMedicineQTY);
                             Product product = new Product(medicine_id, medicine_name, medicine_varient, null, medicine_price, newMedicineQTY);
                             functionality_dao.updateMedicine_Quantity(product);
 
@@ -179,14 +182,24 @@ public class OrderMedicine {
                             }
                             Double finalPriceWithQuantity = user_wants_quantity * medicine_price;
 //
-                            ProductCart_Model cart_model = new ProductCart_Model(medicine_id, medicine_name, medicine_varient, finalPriceWithQuantity, user_wants_quantity, DBService.orderID);
-                            cartProduct.inserting_cartProduct(cart_model);
+                            ProductCart_Model cart_model = new ProductCart_Model(medicine_id, medicine_name, medicine_varient,medicine_price,finalPriceWithQuantity, user_wants_quantity, DBService.orderID);
+                            Boolean cartProductDuplicate = cart_service.checkDuplicateInCart(cart_model);
 
-                            total_amount = service.totalMedicine_Amount();
+                            if(cartProductDuplicate){
+                                ProductCart_Model updatecart = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,UserCartProduct_Services.cartProductprice,UserCartProduct_Services.cartProductquantity,DBService.orderID);
+                                System.out.println(updatecart);
+                                cartProduct.updateCartProductQuantity(updatecart);
+                            }
+                            else {
+                                cartProduct.inserting_cartProduct(cart_model);
+                            }
+
+                            total_amount = cart_service.totalMedicine_Amount();
                             showingtotalPrice();
 
-                            Object[][] getUserCart_Data = service.getallUserCart_Product();
+                            Object[][] getUserCart_Data = cart_service.getallUserCart_Product();
                             userorder_table = new JTable(getUserCart_Data, column);
+
 
                             userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
                             userorder_Scroll = new JScrollPane(userorder_table);
@@ -222,45 +235,6 @@ public class OrderMedicine {
             public void mouseExited(MouseEvent e) {
             }
         });
-
-//
-//                userorder_table.addMouseListener(new MouseListener() {
-//                    Integer orderRow, orderColumn;
-//                    Long barcode;
-//
-//                    @Override
-//                    public void mouseClicked(MouseEvent e) {
-//                        orderRow = userorder_table.rowAtPoint(e.getPoint());
-//                        orderColumn = 0;
-//                        if (orderRow >= 0) {
-//                            barcode = (Long) userorder_table.getModel().getValueAt(orderRow, orderColumn);
-//                            int res = JOptionPane.showOptionDialog(order_frame, "Are u sure to remove product from cart", "Order", JOptionPane.DEFAULT_OPTION,
-//                                    JOptionPane.INFORMATION_MESSAGE, null, null, null);
-//                            if (res == 0) {
-//                                removeFromCart.addActionListener(el -> {
-//                                    cartProduct.removeSpecific_CartProduct(barcode);
-//                                });
-//                            }
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void mousePressed(MouseEvent e) {
-//                    }
-//
-//                    @Override
-//                    public void mouseReleased(MouseEvent e) {
-//                    }
-//
-//                    @Override
-//                    public void mouseEntered(MouseEvent e) {
-//                    }
-//
-//                    @Override
-//                    public void mouseExited(MouseEvent e) {
-//                    }
-//            });
-//            }
 
 
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight() + 10);
@@ -315,6 +289,7 @@ public class OrderMedicine {
                         JOptionPane.INFORMATION_MESSAGE, null, null, null);
                 if (res == 0) {
                     order_frame.dispose();
+                    cartProduct.updateQuantityOFProductOnCancelation();
                     cartProduct.delete_cartProduct();
                     orderProduct_functionality.delete_OrderInformation();
                     Employee_Functionality employeeFunctionality = new Employee_Functionality();
@@ -329,22 +304,27 @@ public class OrderMedicine {
 
     public void workingOf_BuyButton(JButton buy_product) {
         buy_product.addActionListener(el -> {
-            this.userorder_table = null;
-            order_frame.dispose();
-            OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
-            orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
-//                  sending invoice data
-            Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
-            invoice_dao.insertInto_InvoiceDB(invoice);
-//                 getting product and invoice data through joins
-            invoice_dao.getDataOf_InvoiceLine();
-//                 inserting the data into invoice line to show it to the recept
-            invoice_dao.insertingInvoiceDataIn_InvoiceLine();
+            if(this.userorder_table != null) {
 
+                this.userorder_table = null;
+                order_frame.dispose();
+                OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
+                orderProduct_functionality.update_OrderInformation(orderProduct_model);
+
+//                                          sending invoice data
+                Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
+                invoice_dao.insertInto_InvoiceDB(invoice);
+//                                          getting product and invoice data through joins
+                invoice_dao.getDataOf_InvoiceLine();
+//                                           inserting the data into invoice line to show it to the recept
+                invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //
-            Receipt example = new Receipt();
-
+                Receipt example = new Receipt();
+            }
+            else{
+                JOptionPane.showMessageDialog(order_frame,"Cart is empty");
+            }
 
         });
     }

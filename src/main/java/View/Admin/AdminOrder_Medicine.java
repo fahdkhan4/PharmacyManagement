@@ -24,7 +24,7 @@ public class AdminOrder_Medicine extends OrderMedicine {
             orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
 //                  sending invoice data
-            Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
+            Invoice invoice = new Invoice(DBService.orderID,AdminFunctionality_UI.admin_name, LocalDate.now());
             invoice_dao.insertInto_InvoiceDB(invoice);
 //                 getting product and invoice data through joins
             invoice_dao.getDataOf_InvoiceLine();

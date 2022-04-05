@@ -33,12 +33,19 @@ public class Receipt extends JFrame implements ActionListener {
 
         Container content = getContentPane();
 
+        JButton exit = new JButton("Exit");
+        exit.setForeground(Color.BLACK);
+        exit.setBackground(Color.ORANGE);
+        exit.setBounds(1100,100,100,50);
+        exit.setFont(new Font("TimeRomans",Font.BOLD,15));
+        add(exit);
+
         JButton printButton = new JButton("Print the receipt");
         printButton.addActionListener(this);
         printButton.setBackground(Color.ORANGE);
         printButton.setForeground(Color.BLUE);
         printButton.setFont(new Font("TimeRomans",Font.BOLD,15));
-        printButton.setBounds(1150,100,160,50);
+        printButton.setBounds(900,100,160,50);
         add(printButton);
 
         DrawingPane drawingPanel = new DrawingPane();
@@ -47,7 +54,17 @@ public class Receipt extends JFrame implements ActionListener {
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
         setVisible(true);
+
+        workingOfExitButton(exit);
     }
+
+    public void workingOfExitButton(JButton exit){
+        exit.addActionListener(el->{
+            dispose();
+            OrderMedicine medicine = new OrderMedicine();
+        });
+    }
+
 
     public void actionPerformed(ActionEvent event) {
         PrintableDocument.printComponent(this);
@@ -67,26 +84,27 @@ public class Receipt extends JFrame implements ActionListener {
         public void paintComponent(Graphics g) {
 
             Graphics2D graph = (Graphics2D)g;
-            int y=20;
+            int y=24;
             int yShift = 12;
             int headerRectHeight=15;
 
 
             graph.setFont(new Font("Monospaced",Font.PLAIN,15));
 
-            graph.drawString("-------------------------------------",12,y);y+=yShift;
+            graph.drawString("--------------------------------------",12,y);y+=yShift;
             graph.drawString("      PharmacyManagement.pk       ",12,y);y+=yShift;
             graph.drawString("    No 00000 Address Line One   ",12,y);y+=yShift;
             graph.drawString("     Gulistan-e-Johor Karachi    ",12,y);y+=yShift;
             graph.drawString("     www.pharmacyManagement     ",12,y);y+=yShift;
             graph.drawString("        Contact us 0000       ",12,y);y+=yShift;
-            graph.drawString("-------------------------------------",12,y);y+=headerRectHeight;
+            graph.drawString("--------------------------------------",12,y);y+=headerRectHeight;
 
             graph.drawString(" ORDER ID  : "+ DBService.orderID,10,y);y+=headerRectHeight;
-            graph.drawString(" Employee Name : "+ EmployeeLogin.activeEmployee,10,y);y+=headerRectHeight;
+            graph.drawString(" Employee Name : "+invoice_dao.getDataOf_Invoice().get(0).getEmp_name(),10,y);y+=headerRectHeight;
 
-            graph.drawString(" Item Name                             Price   ",10,y);y+=yShift;
-            graph.drawString("------------------------------------------------",10,y);y+=headerRectHeight;
+            graph.drawString("--------------------------------------",10,y);y+=headerRectHeight;
+            graph.drawString(" Item Name                       Price  ",10,y);y+=yShift;
+            graph.drawString("--------------------------------------",10,y);y+=headerRectHeight;
 
             int size = invoice_dao.getDataOf_InvoiceLine().size();
             bHeight = Double.valueOf(invoice_dao.getDataOf_InvoiceLine().size());
@@ -94,8 +112,8 @@ public class Receipt extends JFrame implements ActionListener {
 
             for(int s=0; s < size; s++)
             {
-                graph.drawString(" "+invoice_dao.getDataOf_InvoiceLine().get(s).getItem_name()+"                            ",10,y);y+=yShift;
-                graph.drawString("      "+invoice_dao.getDataOf_InvoiceLine().get(s).getItem_qty()+" * "+invoice_dao.getDataOf_InvoiceLine().get(s).getItem_varient(),10,y); graph.drawString(" "+invoice_dao.getDataOf_InvoiceLine().get(s).getItem_price(),160,y);y+=yShift;
+                graph.drawString("   "+invoice_dao.gettingInvoiceLine_Data().get(s).getItem_name()+" "+invoice_dao.gettingInvoiceLine_Data().get(s).getItem_varient()+"                           ",10,y);y+=yShift;
+                graph.drawString("           "+invoice_dao.gettingInvoiceLine_Data().get(s).getItem_qty()+" * "+invoice_dao.gettingInvoiceLine_Data().get(s).getProduct_price(),10,y); graph.drawString("                "+invoice_dao.gettingInvoiceLine_Data().get(s).getItemQuantity_price(),160,y);y+=yShift;
 
             }
 
