@@ -3,7 +3,10 @@ package dao;
 import Model.Product;
 import Model.ProductCart_Model;
 
+import java.sql.ResultSet;
+
 public class CartProduct implements  UserCartProduct_Dao{
+
 
     @Override
     public void inserting_cartProduct(ProductCart_Model cart_model) {
@@ -44,5 +47,21 @@ public class CartProduct implements  UserCartProduct_Dao{
         }
     }
 
+    @Override
+    public  Double cartProductTotalAmount() {
+        Double cartTotalAmount = 0.0;
+        try{
+            ResultSet rs = DBService.query("SELECT SUM(price_unit) FROM cart WHERE order_id ="+DBService.orderID);
+            while(true){
+                assert rs != null;
+                if (!rs.next())
+                    break;
+                    cartTotalAmount = Double.valueOf(rs.getString("SUM(price_unit)"));
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return cartTotalAmount;
+    }
 
 }

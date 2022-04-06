@@ -14,35 +14,6 @@ import java.util.List;
 public class OrderProduct_Functionality implements OrderProduct_Dao {
 
 
-//    @Override
-//    public List<OrderProduct_Model> getOrderProduct() {
-//        List<OrderProduct_Model> getorder = new ArrayList<>();
-//
-//        ZoneId defaultzone = ZoneId.systemDefault();
-//        Instant instant  =
-//
-//        try {
-//            ResultSet rs = DBService.query("SELECT * from productorder where id = "+DBService.orderID);
-//
-//            while (true){
-//                assert rs != null;
-//                if (!rs.next())
-//                    break;
-//                getorder.add(new OrderProduct_Model(
-//                        rs.getString("user_name"),
-//                        LocalDate.
-//                        rs.getString("state")
-//
-//                ))
-//
-//
-//            }
-//        }
-//        catch (Exception e){
-//            System.out.println(e);
-//        }
-//        return getorder;
-//    }
 
     @Override
     public void inserting_OrderInformation(OrderProduct_Model productmodel) {

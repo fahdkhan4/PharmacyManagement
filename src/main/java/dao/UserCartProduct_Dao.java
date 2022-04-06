@@ -49,4 +49,6 @@ public interface UserCartProduct_Dao {
     void updateCartProductQuantity(ProductCart_Model updateqty);
 
     void updateQuantityOFProductOnCancelation();
+
+    Double cartProductTotalAmount();
 }

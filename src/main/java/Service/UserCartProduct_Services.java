@@ -2,9 +2,11 @@ package Service;
 
 import Model.Product;
 import Model.ProductCart_Model;
+import View.OrderMedicine;
 import dao.OrderProduct_Dao;
 import dao.UserCartProduct_Dao;
 
+import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -33,17 +35,24 @@ public class UserCartProduct_Services {
             cartProduct[i][2] =getCartProduct().get(i).getProduct_varient();
             cartProduct[i][3] =getCartProduct().get(i).getPrice_unit();
             cartProduct[i][4] =getCartProduct().get(i).getProduct_quantity();
-        }
+
+    }
         return cartProduct;
     }
-    public Double totalMedicine_Amount(){
-        for (int i = 0; i < getCartProduct().size(); i++) {
-
-            totalamount = getCartProduct().get(i).getProduct_quantity() * getCartProduct().get(i).getProduct_price();
+    public void cartData(){
+        int size = (int) getCartProduct().stream().count();
+        DefaultTableModel model = (DefaultTableModel) OrderMedicine.userorder_table.getModel();
+        Object  [] array = new Object[size];
+        for (int i = 0; i < size; i++) {
+            array[0] =getCartProduct().get(i).getProduct_code();
+            array[1] =getCartProduct().get(i).getProduct_name();
+            array[2] =getCartProduct().get(i).getProduct_varient();
+            array[3] =getCartProduct().get(i).getPrice_unit();
+            array[4] =getCartProduct().get(i).getProduct_quantity();
+            model.addRow(array);
         }
-        totalmedicineAmount += totalamount;
-        return totalmedicineAmount;
     }
+
 
     public Boolean checkDuplicateInCart(ProductCart_Model cartmodel){
         Boolean checkForvalue = false;

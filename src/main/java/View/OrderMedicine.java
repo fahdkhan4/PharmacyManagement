@@ -1,11 +1,10 @@
 package View;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.TableModelEvent;
+import javax.swing.event.*;
 import javax.swing.table.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.time.LocalDate;
@@ -23,7 +22,7 @@ public class OrderMedicine {
     Object[][] data, getUserCart_Data;
     public static Double total_amount;
     public Boolean orderbool = true;
-    public Boolean invoiceBool = true;
+
     //                                                                                                      Objects of classes
     public OrderProduct_Functionality orderProduct_functionality = new OrderProduct_Functionality();
     public UserCartProduct_Services cart_service = new UserCartProduct_Services();
@@ -35,7 +34,7 @@ public class OrderMedicine {
 
     private JTextField filtertxtField;
     private TableRowSorter tablesorter;
-    private DefaultTableModel tablemodel;
+    private DefaultTableModel tablemodel , usercartTable;
 //
 
     public OrderMedicine() {
@@ -102,7 +101,6 @@ public class OrderMedicine {
         ProductService productService = new ProductService();
         data = productService.getAllMedicines();
         String[] column = {"Medicine ID", "Medicine Name", "Medicine Varient", "Medicine Price", "Quantity"};
-
         tablemodel = new DefaultTableModel(data, column);
         tablesorter = new TableRowSorter<>(tablemodel);
         order_medicine_table = new JTable(tablemodel);
@@ -134,7 +132,10 @@ public class OrderMedicine {
             }
         });
 
-        order_medicine_table.addMouseListener(new MouseListener() {
+
+
+        order_medicine_table.addMouseListener(new MouseAdapter()
+        {
             Integer row, med_Column, med_quantityCol, medicine_quantity;
             Long medicine_id;
             String medicine_name, medicine_varient;
@@ -147,6 +148,7 @@ public class OrderMedicine {
                 row = order_medicine_table.rowAtPoint(e.getPoint());
                 med_Column = 0;
                 med_quantityCol = 4;
+                user_wants_quantity = null;
                 if (row >= 0) {
                     int viewModelRow = order_medicine_table.convertRowIndexToModel(row);
 
@@ -167,11 +169,18 @@ public class OrderMedicine {
 
                     if (user_wants_quantity != null) {
                         if (user_wants_quantity <= medicine_quantity) {
-//                                                                                  update medicine quantity
+
+
+//                                                                                                update medicine quantity
                             Integer newMedicineQTY = (medicine_quantity - user_wants_quantity);
                             System.out.println(newMedicineQTY);
                             Product product = new Product(medicine_id, medicine_name, medicine_varient, null, medicine_price, newMedicineQTY);
                             functionality_dao.updateMedicine_Quantity(product);
+
+                            tablemodel = (DefaultTableModel)order_medicine_table.getModel();
+                            tablemodel.setRowCount(0);
+                            productService.addingData();
+
 
                             OrderProduct_Model orderProduct_model;
 //                                                                                             produce one order of products
@@ -194,12 +203,13 @@ public class OrderMedicine {
                                 cartProduct.inserting_cartProduct(cart_model);
                             }
 
-                            total_amount = cart_service.totalMedicine_Amount();
                             showingtotalPrice();
 
-                            Object[][] getUserCart_Data = cart_service.getallUserCart_Product();
-                            userorder_table = new JTable(getUserCart_Data, column);
+                            getUserCart_Data = cart_service.getallUserCart_Product();
 
+
+                            usercartTable = new DefaultTableModel(getUserCart_Data,column);
+                            userorder_table = new JTable(usercartTable);
 
                             userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
                             userorder_Scroll = new JScrollPane(userorder_table);
@@ -219,22 +229,9 @@ public class OrderMedicine {
                 }
             }
 
-            @Override
-            public void mousePressed(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseEntered(MouseEvent e) {
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-            }
         });
+
+
 
 
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight() + 10);
@@ -279,6 +276,7 @@ public class OrderMedicine {
         workingOf_BuyButton(buy_product);
         working_ofExitButton(exit);
 
+//        showtable2(column);
     }
 
     public void working_ofExitButton(JButton exit) {
@@ -292,6 +290,7 @@ public class OrderMedicine {
                     cartProduct.updateQuantityOFProductOnCancelation();
                     cartProduct.delete_cartProduct();
                     orderProduct_functionality.delete_OrderInformation();
+                    this.userorder_table = null;
                     Employee_Functionality employeeFunctionality = new Employee_Functionality();
                 }
             } else {
@@ -300,7 +299,6 @@ public class OrderMedicine {
             }
         });
     }
-
 
     public void workingOf_BuyButton(JButton buy_product) {
         buy_product.addActionListener(el -> {
@@ -338,6 +336,7 @@ public class OrderMedicine {
     }
 
     public void showingtotalPrice() {
+        Double total_amount =  cartProduct.cartProductTotalAmount();
         if (total_amount != null || total_amount != 0.0) {
             JTextField field = new JTextField();
             field.setBounds(1200, 100, 130, 40);
@@ -345,6 +344,29 @@ public class OrderMedicine {
             order_frame.add(field);
         }
     }
+
+
+//    public void showtable2(String [] column){
+//        getUserCart_Data = cart_service.getallUserCart_Product();
+//        Object [][] names = {{1,"fahd",12},{2,"saad",13}};
+//        usercartTable = new DefaultTableModel(getUserCart_Data,column);
+//        userorder_table = new JTable(usercartTable);
+//
+//       userorder_table.addMouseListener(new MouseAdapter() {
+//           @Override
+//           public void mouseClicked(MouseEvent e) {
+//               JOptionPane.showMessageDialog(order_frame,"hello");
+//           }
+//       });
+//
+//        userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
+//        userorder_Scroll = new JScrollPane(userorder_table);
+//        userorder_table.getTableHeader().setOpaque(false);
+//        userorder_table.getTableHeader().setForeground(Color.BLACK);
+//        userorder_table.getTableHeader().setBackground(Color.ORANGE);
+//        userorder_Scroll.setBounds(827, 150, 536, 600);
+//        outerpanel.add(userorder_Scroll);
+//    }
 }
 
 

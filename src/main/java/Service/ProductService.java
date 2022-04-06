@@ -2,9 +2,13 @@ package Service;
 
 import java.util.List;
 import Model.*;
+import View.OrderMedicine;
 import dao.Product_Dao;
 
+import javax.swing.table.DefaultTableModel;
+
 public class ProductService implements GetAllMedicines{
+
 
     public List<Product> getAllProducts_Data(){
         return Product_Dao.getAllProducts();
@@ -22,5 +26,19 @@ public class ProductService implements GetAllMedicines{
         }
         return data;
     }
+    public void addingData(){
+        int count = (int) getAllProducts_Data().stream().count();
+        DefaultTableModel model = (DefaultTableModel) OrderMedicine.order_medicine_table.getModel();
+        Object  [] array = new Object[count];
+        for (int i = 0; i < count; i++) {
+            array[0] = getAllProducts_Data().get(i).getBarCode();
+            array[1] = getAllProducts_Data().get(i).getMedicine_name();
+            array[2] = getAllProducts_Data().get(i).getMedicine_varient();
+            array[3] = getAllProducts_Data().get(i).getMedicine_Saleprice();
+            array[4] = getAllProducts_Data().get(i).getMedicine_quantity();
+            model.addRow(array);
+        }
+    }
+
 
 }

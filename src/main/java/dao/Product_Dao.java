@@ -2,6 +2,10 @@ package dao;
 
 import Model.*;
 import Service.FindMedicine;
+import Service.ProductService;
+import View.OrderMedicine;
+
+import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -10,6 +14,7 @@ import java.util.List;
 
 public interface Product_Dao {
 
+     ProductService service = new ProductService();
 
      //                                                                    get all the products from DB
      static List<Product> getAllProducts() {
@@ -54,3 +59,4 @@ public interface Product_Dao {
 
 
 }
+
