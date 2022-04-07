@@ -8,6 +8,8 @@ import java.awt.*;
 
 public class Admin{
 
+        public static String admin_name;
+
     public Admin(){
 
         JFrame admin_frame = new JFrame("Admin Login Page");
@@ -35,7 +37,6 @@ public class Admin{
         exit.setBackground(Color.ORANGE);
 //                                                                                  heading field
         mainHeading(admin_frame);
-
 
 //                                                                                  INPUTS SIZE...
         name_label.setBounds(500,350,120,40);
@@ -67,8 +68,8 @@ public class Admin{
 
               Boolean loginResult = AdminLoginServices.adminLogin_details(name_text.getText(),String.valueOf(password.getPassword()));
               if(loginResult) {
+                  admin_name = name_text.getText();
                   admin_frame.dispose();
-                  AdminFunctionality_UI.getActive_Admin(name_text.getText());
                   AdminFunctionality_UI admin = new AdminFunctionality_UI();
               }
               else{

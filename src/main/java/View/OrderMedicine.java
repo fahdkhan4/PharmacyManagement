@@ -6,7 +6,6 @@ import javax.swing.table.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.time.LocalDate;
 
 import Model.*;
@@ -30,6 +29,7 @@ public class OrderMedicine {
     public CartProduct cartProduct = new CartProduct();
     FindMedicine medFind = new FindMedicine();
     public Invoice_Dao invoice_dao = new Invoice_Dao();
+    public ViewSales_Dao sales_dao = new ViewSales_Dao();
 
 
     private JTextField filtertxtField;
@@ -101,7 +101,9 @@ public class OrderMedicine {
         ProductService productService = new ProductService();
         data = productService.getAllMedicines();
         String[] column = {"Medicine ID", "Medicine Name", "Medicine Varient", "Medicine Price", "Quantity"};
+
         tablemodel = new DefaultTableModel(data, column);
+
         tablesorter = new TableRowSorter<>(tablemodel);
         order_medicine_table = new JTable(tablemodel);
         order_medicine_table.setRowSorter(tablesorter);
@@ -131,7 +133,6 @@ public class OrderMedicine {
                 }
             }
         });
-
 
 
         order_medicine_table.addMouseListener(new MouseAdapter()
@@ -169,7 +170,6 @@ public class OrderMedicine {
 
                     if (user_wants_quantity != null) {
                         if (user_wants_quantity <= medicine_quantity) {
-
 
 //                                                                                                update medicine quantity
                             Integer newMedicineQTY = (medicine_quantity - user_wants_quantity);
@@ -230,9 +230,6 @@ public class OrderMedicine {
             }
 
         });
-
-
-
 
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight() + 10);
 //                                                                                            Column size
@@ -312,13 +309,16 @@ public class OrderMedicine {
 
 //                                          sending invoice data
                 Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
+
                 invoice_dao.insertInto_InvoiceDB(invoice);
 //                                          getting product and invoice data through joins
                 invoice_dao.getDataOf_InvoiceLine();
 //                                           inserting the data into invoice line to show it to the recept
                 invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //
-                Receipt example = new Receipt();
+                sales_dao.insertingSalesRecord();
+
+                Receipt receipt = new Receipt();
             }
             else{
                 JOptionPane.showMessageDialog(order_frame,"Cart is empty");
@@ -358,7 +358,7 @@ public class OrderMedicine {
 //               JOptionPane.showMessageDialog(order_frame,"hello");
 //           }
 //       });
-//
+
 //        userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
 //        userorder_Scroll = new JScrollPane(userorder_table);
 //        userorder_table.getTableHeader().setOpaque(false);

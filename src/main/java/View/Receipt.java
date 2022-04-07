@@ -1,6 +1,7 @@
 package View;
 
 
+import dao.CartProduct;
 import dao.DBService;
 import dao.Invoice_Dao;
 
@@ -11,6 +12,7 @@ import java.awt.geom.*;
 
 public class Receipt extends JFrame implements ActionListener {
     Invoice_Dao invoice_dao = new Invoice_Dao();
+    CartProduct cart = new CartProduct();
     public static Double bHeight = 0.0;
 
     public static void main(String[] args) {
@@ -84,8 +86,8 @@ public class Receipt extends JFrame implements ActionListener {
         public void paintComponent(Graphics g) {
 
             Graphics2D graph = (Graphics2D)g;
-            int y=24;
-            int yShift = 12;
+            int y=20;
+            int yShift = 15;
             int headerRectHeight=15;
 
 
@@ -107,8 +109,7 @@ public class Receipt extends JFrame implements ActionListener {
             graph.drawString("--------------------------------------",10,y);y+=headerRectHeight;
 
             int size = invoice_dao.getDataOf_InvoiceLine().size();
-            bHeight = Double.valueOf(invoice_dao.getDataOf_InvoiceLine().size());
-
+            bHeight = Double.valueOf(invoice_dao.getDataOf_InvoiceLine().size()+10);
 
             for(int s=0; s < size; s++)
             {
@@ -117,9 +118,23 @@ public class Receipt extends JFrame implements ActionListener {
 
             }
 
+            graph.drawString("-------------------------------------",10,y);y+=yShift;
+            graph.drawString(" Amount :                        "+cart.cartProductTotalAmount()+"   ",10,y);y+=yShift;
+            graph.drawString("-------------------------------------",10,y);y+=yShift;
+            graph.drawString(" Discount      :                 "+20+"   ",10,y);y+=yShift;
+            graph.drawString("-------------------------------------",10,y);y+=yShift;
+            graph.drawString(" Total Amount   :                "+cart.cartProductTotalAmount()+50+"   ",10,y);y+=yShift;
+
+            graph.drawString("*************************************",10,y);y+=yShift;
+            graph.drawString("       THANK YOU COME AGAIN            ",10,y);y+=yShift;
+            graph.drawString("*************************************",10,y);y+=yShift;
+            graph.drawString("         Fahd and Anus          ",10,y);y+=yShift;
+            graph.drawString("   CONTACT: fk1271543@gmail.com       ",10,y);y+=yShift;
+
             AffineTransform origTransform = graph.getTransform();
             graph.shear(-0.95, 0);
             graph.scale(1, 3);
+
 
         }
     }

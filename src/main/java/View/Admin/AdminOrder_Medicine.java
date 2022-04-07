@@ -20,25 +20,26 @@ public class AdminOrder_Medicine extends OrderMedicine {
         buy_product.addActionListener(el->{
             this.userorder_table = null;
             order_frame.dispose();
-            OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
+            OrderProduct_Model orderProduct_model = new OrderProduct_Model(Admin.admin_name, LocalDate.now(), "Completed");
             orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
 //                  sending invoice data
-            Invoice invoice = new Invoice(DBService.orderID,AdminFunctionality_UI.admin_name, LocalDate.now());
+            Invoice invoice = new Invoice(DBService.orderID,Admin.admin_name, LocalDate.now());
             invoice_dao.insertInto_InvoiceDB(invoice);
 //                 getting product and invoice data through joins
             invoice_dao.getDataOf_InvoiceLine();
 //                 inserting the data into invoice line to show it to the recept
             invoice_dao.insertingInvoiceDataIn_InvoiceLine();
+//                  inserting all the sales
+            sales_dao.insertingSalesRecord();
 
-//
             Receipt example = new Receipt();
         });
     }
 
     @Override
     public void activeEmployeeName(JLabel accountHandler) {
-        accountHandler.setText("Account handler : "+AdminFunctionality_UI.admin_name);
+        accountHandler.setText("Account handler : "+Admin.admin_name);
         accountHandler.setForeground(Color.BLACK);
         accountHandler.setFont(new Font("Serif", Font.BOLD, 20));
         accountHandler.setBounds(1000,50,300,50);
