@@ -16,6 +16,7 @@ public class EmployeeLogin {
 
 //                                                                                  heading field
         mainHeading(employeeLogin);
+        subHeading(employeeLogin);
 //                                                                                  INPUTS .....
         JLabel name_label = new JLabel("User Name : ");
         name_label.setFont(new Font("Serif",Font.BOLD,20));
@@ -109,10 +110,17 @@ public class EmployeeLogin {
 
     public void mainHeading(Frame frame){
         JLabel heading = new JLabel("Pharmacy Management System");
-        heading.setForeground(Color.ORANGE);
+        heading.setForeground(Color.BLACK);
         heading.setBounds(230,30,1000,100);
         heading.setFont(new Font("Serif", Font.BOLD, 70));
         frame.add(heading);
+    }
+    public void subHeading(Frame frame){
+        JLabel subheading = new JLabel("Employee Login");
+        subheading.setForeground(Color.ORANGE);
+        subheading.setBounds(520,200,700,100);
+        subheading.setFont(new Font("Serif", Font.BOLD, 50));
+        frame.add(subheading);
     }
     public static String activeEmployee_name(String name){
         return name;

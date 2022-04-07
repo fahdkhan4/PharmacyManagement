@@ -14,19 +14,27 @@ public class ShowSalesDetail {
 
                JButton exit;
 
+
+                JLabel heading = new JLabel("ORDER SALE DETAIL");
+                heading.setHorizontalAlignment(JLabel.CENTER);
+                heading.setVerticalAlignment(JLabel.CENTER);
+                heading.setFont(new Font("TimeRomans",Font.BOLD,40));
+
+
                 showOrder_frame = new JFrame();
                 showOrder_frame.setTitle("Details Of Sale No "+order_id);
+                showOrder_frame.add(heading, BorderLayout.PAGE_START);
 
                 JPanel buttonpanel = new JPanel();
 
                 exit = new JButton("Exit");
-                exit.setBounds(1250,3,90,40);
+                exit.setPreferredSize(new Dimension(130,50));
                 exit.setBackground(Color.ORANGE);
                 exit.setForeground(Color.BLACK);
 
                 buttonpanel.add(exit);
                 buttonpanel.setBounds(40,30,1000,50);
-                buttonpanel.setBackground(Color.CYAN);
+                buttonpanel.setBackground(Color.darkGray);
 
 
                 Object [][] data =  details.saleDetailsBy_OrderID();
@@ -34,6 +42,7 @@ public class ShowSalesDetail {
 
                 orderDetails_table = new JTable(data, columnNames);
                 orderDetails_table.setBounds(30, 40, 200, 300);
+                orderDetails_table.setRowHeight(  orderDetails_table.getRowHeight()+10);
 
                 JScrollPane sp = new JScrollPane(orderDetails_table);
                 showOrder_frame.add(buttonpanel,BorderLayout.LINE_START);

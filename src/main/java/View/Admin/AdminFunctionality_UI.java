@@ -11,17 +11,6 @@ public class AdminFunctionality_UI extends Employee_Functionality {
     JLabel accountHandler = new JLabel();
 
 
-
-    @Override
-    public void activeEmployeeName(JLabel accountHandler) {
-
-        accountHandler.setText("Account handler : "+Admin.admin_name);
-        accountHandler.setForeground(Color.ORANGE);
-        accountHandler.setFont(new Font("Serif", Font.BOLD, 25));
-        accountHandler.setBounds(30,30,300,100);
-        home_frame.add(accountHandler);
-    }
-
     public AdminFunctionality_UI() {
 //                                                                      adding add product button
         home_frame.setTitle("Admin Home Page");
@@ -48,6 +37,16 @@ public class AdminFunctionality_UI extends Employee_Functionality {
         heading.setFont(new Font("Serif", Font.BOLD, 60));
         home_frame.add(heading);
     }
+    @Override
+    public void activeEmployeeName(JLabel accountHandler) {
+
+        accountHandler.setText("Account handler : "+Admin.admin_name);
+        accountHandler.setForeground(Color.ORANGE);
+        accountHandler.setFont(new Font("Serif", Font.BOLD, 25));
+        accountHandler.setBounds(30,30,300,100);
+        home_frame.add(accountHandler);
+    }
+
 
     @Override
     public void workingOf_OrderMedicine(JButton orderMedicine) {
@@ -78,7 +77,6 @@ public class AdminFunctionality_UI extends Employee_Functionality {
     public void workingOf_Exit(JButton exit) {
         exit.addActionListener(el->{
             home_frame.dispose();
-            Admin.admin_name = null;
             Admin admin = new Admin();
         });
     }

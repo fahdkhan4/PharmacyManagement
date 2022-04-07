@@ -57,7 +57,7 @@ public class ViewSales {
         butonpanel.add(getInfo);
         butonpanel.add(bookList);
         butonpanel.setBounds(40,30,1000,50);
-        butonpanel.setBackground(Color.CYAN);
+        butonpanel.setBackground(Color.darkGray);
 
         Object data [][] = sale.viewSaleRecord();
         String [] column = {"No","Order ID", "Employee Name","Order Date"," Cost Price","Sell Price","Profit"};

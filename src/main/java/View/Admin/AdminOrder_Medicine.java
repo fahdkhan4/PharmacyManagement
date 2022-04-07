@@ -33,12 +33,13 @@ public class AdminOrder_Medicine extends OrderMedicine {
 //                  inserting all the sales
             sales_dao.insertingSalesRecord();
 
-            Receipt example = new Receipt();
+           AdminReceipt receipt = new AdminReceipt();
         });
     }
 
     @Override
     public void activeEmployeeName(JLabel accountHandler) {
+        System.out.println(Admin.admin_name);
         accountHandler.setText("Account handler : "+Admin.admin_name);
         accountHandler.setForeground(Color.BLACK);
         accountHandler.setFont(new Font("Serif", Font.BOLD, 20));
