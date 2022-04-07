@@ -15,11 +15,10 @@ import dao.*;
 public class OrderMedicine {
 
     public JFrame order_frame = new JFrame("Order Medicine");
-    public static JTable order_medicine_table, userorder_table;
+    public JTable order_medicine_table, userorder_table;
     private JScrollPane scrollpane, userorder_Scroll;
     JPanel outerpanel, toppanel;
     Object[][] data, getUserCart_Data;
-    public static Double total_amount;
     public Boolean orderbool = true;
 
     //                                                                                                      Objects of classes
@@ -27,7 +26,6 @@ public class OrderMedicine {
     public UserCartProduct_Services cart_service = new UserCartProduct_Services();
     ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
     public CartProduct cartProduct = new CartProduct();
-    FindMedicine medFind = new FindMedicine();
     public Invoice_Dao invoice_dao = new Invoice_Dao();
     public ViewSales_Dao sales_dao = new ViewSales_Dao();
 
@@ -41,7 +39,7 @@ public class OrderMedicine {
 
         JLabel nameFor_Search, activeMember;
         JTextField nameFor_SearchText;
-        JButton buy_product, exit, find, removeFromCart;
+        JButton buy_product, exit;
 
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
@@ -72,14 +70,6 @@ public class OrderMedicine {
         filtertxtField.setBounds(150, 7, 200, 40);
 
 
-//                                                                              remove From cart
-        removeFromCart = new JButton("Remove From Cart");
-        removeFromCart.setBounds(850, 90, 160, 50);
-        removeFromCart.setBackground(Color.ORANGE);
-        removeFromCart.setForeground(Color.BLACK);
-        order_frame.add(removeFromCart);
-
-
         order_frame.add(nameFor_Search);
         order_frame.add(filtertxtField);
 
@@ -98,12 +88,16 @@ public class OrderMedicine {
         exit.setForeground(Color.BLACK);
         order_frame.add(exit);
 //                                                                                          Data Binding
+
         ProductService productService = new ProductService();
         data = productService.getAllMedicines();
+
         String[] column = {"Medicine ID", "Medicine Name", "Medicine Varient", "Medicine Price", "Quantity"};
 
-        tablemodel = new DefaultTableModel(data, column);
 
+//                                                                              filtering the table
+
+        tablemodel = new DefaultTableModel(data, column);
         tablesorter = new TableRowSorter<>(tablemodel);
         order_medicine_table = new JTable(tablemodel);
         order_medicine_table.setRowSorter(tablesorter);
@@ -173,13 +167,14 @@ public class OrderMedicine {
 
 //                                                                                                update medicine quantity
                             Integer newMedicineQTY = (medicine_quantity - user_wants_quantity);
-                            System.out.println(newMedicineQTY);
                             Product product = new Product(medicine_id, medicine_name, medicine_varient, null, medicine_price, newMedicineQTY);
                             functionality_dao.updateMedicine_Quantity(product);
 
+//                            editing product  table
+
                             tablemodel = (DefaultTableModel)order_medicine_table.getModel();
                             tablemodel.setRowCount(0);
-                            productService.addingData();
+                            productService.addingData(tablemodel,order_medicine_table);
 
 
                             OrderProduct_Model orderProduct_model;
@@ -189,6 +184,7 @@ public class OrderMedicine {
                                 orderProduct_functionality.inserting_OrderInformation(orderProduct_model);
                                 orderbool = false;
                             }
+
                             Double finalPriceWithQuantity = user_wants_quantity * medicine_price;
 //
                             ProductCart_Model cart_model = new ProductCart_Model(medicine_id, medicine_name, medicine_varient,medicine_price,finalPriceWithQuantity, user_wants_quantity, DBService.orderID);
@@ -196,7 +192,6 @@ public class OrderMedicine {
 
                             if(cartProductDuplicate){
                                 ProductCart_Model updatecart = new ProductCart_Model(medicine_id,medicine_name,medicine_varient,medicine_price,UserCartProduct_Services.cartProductprice,UserCartProduct_Services.cartProductquantity,DBService.orderID);
-                                System.out.println(updatecart);
                                 cartProduct.updateCartProductQuantity(updatecart);
                             }
                             else {
@@ -206,11 +201,8 @@ public class OrderMedicine {
                             showingtotalPrice();
 
                             getUserCart_Data = cart_service.getallUserCart_Product();
-
-
                             usercartTable = new DefaultTableModel(getUserCart_Data,column);
                             userorder_table = new JTable(usercartTable);
-
                             userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
                             userorder_Scroll = new JScrollPane(userorder_table);
                             userorder_table.getTableHeader().setOpaque(false);
@@ -218,7 +210,6 @@ public class OrderMedicine {
                             userorder_table.getTableHeader().setBackground(Color.ORANGE);
                             userorder_Scroll.setBounds(827, 150, 536, 600);
                             outerpanel.add(userorder_Scroll);
-
 
                         } else {
                             JOptionPane.showMessageDialog(order_frame, medicine_quantity + " is the maximum quantity for this medicine");
@@ -254,6 +245,8 @@ public class OrderMedicine {
         }
 
 
+
+
 //
         scrollpane = new JScrollPane(order_medicine_table);
         toppanel.add(labelHead, BorderLayout.PAGE_START);
@@ -273,7 +266,6 @@ public class OrderMedicine {
         workingOf_BuyButton(buy_product);
         working_ofExitButton(exit);
 
-//        showtable2(column);
     }
 
     public void working_ofExitButton(JButton exit) {
@@ -317,7 +309,6 @@ public class OrderMedicine {
                 invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //
                 sales_dao.insertingSalesRecord();
-
                 Receipt receipt = new Receipt();
             }
             else{
@@ -345,28 +336,6 @@ public class OrderMedicine {
         }
     }
 
-
-//    public void showtable2(String [] column){
-//        getUserCart_Data = cart_service.getallUserCart_Product();
-//        Object [][] names = {{1,"fahd",12},{2,"saad",13}};
-//        usercartTable = new DefaultTableModel(getUserCart_Data,column);
-//        userorder_table = new JTable(usercartTable);
-//
-//       userorder_table.addMouseListener(new MouseAdapter() {
-//           @Override
-//           public void mouseClicked(MouseEvent e) {
-//               JOptionPane.showMessageDialog(order_frame,"hello");
-//           }
-//       });
-
-//        userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
-//        userorder_Scroll = new JScrollPane(userorder_table);
-//        userorder_table.getTableHeader().setOpaque(false);
-//        userorder_table.getTableHeader().setForeground(Color.BLACK);
-//        userorder_table.getTableHeader().setBackground(Color.ORANGE);
-//        userorder_Scroll.setBounds(827, 150, 536, 600);
-//        outerpanel.add(userorder_Scroll);
-//    }
 }
 
 

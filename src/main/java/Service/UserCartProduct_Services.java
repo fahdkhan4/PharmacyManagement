@@ -1,21 +1,15 @@
 package Service;
 
-import Model.Product;
 import Model.ProductCart_Model;
-import View.OrderMedicine;
-import dao.OrderProduct_Dao;
 import dao.UserCartProduct_Dao;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class UserCartProduct_Services {
 
 
-    public Double totalamount = 0.0;
-    Double totalmedicineAmount = 0.0;
     public static Integer  cartProductquantity;
     public static Double cartProductprice;
 
@@ -35,13 +29,13 @@ public class UserCartProduct_Services {
             cartProduct[i][2] =getCartProduct().get(i).getProduct_varient();
             cartProduct[i][3] =getCartProduct().get(i).getPrice_unit();
             cartProduct[i][4] =getCartProduct().get(i).getProduct_quantity();
-
     }
         return cartProduct;
     }
-    public void cartData(){
+
+    public DefaultTableModel cartData(DefaultTableModel model, JTable userorder_table){
         int size = (int) getCartProduct().stream().count();
-        DefaultTableModel model = (DefaultTableModel) OrderMedicine.userorder_table.getModel();
+         model = (DefaultTableModel) userorder_table.getModel();
         Object  [] array = new Object[size];
         for (int i = 0; i < size; i++) {
             array[0] =getCartProduct().get(i).getProduct_code();
@@ -51,6 +45,7 @@ public class UserCartProduct_Services {
             array[4] =getCartProduct().get(i).getProduct_quantity();
             model.addRow(array);
         }
+        return model;
     }
 
 
@@ -66,7 +61,6 @@ public class UserCartProduct_Services {
                 checkForvalue = true;
             }
         }
-
         return checkForvalue;
     }
 

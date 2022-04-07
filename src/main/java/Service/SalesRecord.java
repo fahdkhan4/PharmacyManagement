@@ -5,6 +5,7 @@ import View.OrderMedicine;
 import View.ViewSales;
 import dao.ViewSales_Dao;
 
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.View;
 import java.util.List;
@@ -44,9 +45,9 @@ public class SalesRecord {
         return sales;
     }
 
-    public void filterSales_ByName(){
+    public DefaultTableModel filterSales_ByName(DefaultTableModel model, JTable viewSales_table){
         int size = (int) filterByName().stream().count();
-        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        model = (DefaultTableModel)viewSales_table.getModel();
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = filterByName().get(i).getId();
@@ -58,11 +59,12 @@ public class SalesRecord {
             sales [6] = filterByName().get(i).getProfit();
             model.addRow(sales);
         }
+        return model;
     }
 
-    public void filterSales_ByDate(){
+    public DefaultTableModel filterSales_ByDate(DefaultTableModel model,JTable viewSales_table){
         int size = (int) filterByDate().stream().count();
-        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        model = (DefaultTableModel) viewSales_table.getModel();
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = filterByDate().get(i).getId();
@@ -74,11 +76,12 @@ public class SalesRecord {
             sales [6] = filterByDate().get(i).getProfit();
             model.addRow(sales);
         }
+        return model;
     }
 
-    public void SortingBy_Profit(){
+    public DefaultTableModel SortingBy_Profit(DefaultTableModel model,JTable viewSales_table){
         int size = (int) sortByProfit().stream().count();
-        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        model = (DefaultTableModel) viewSales_table.getModel();
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = sortByProfit().get(i).getId();
@@ -90,11 +93,12 @@ public class SalesRecord {
             sales [6] = sortByProfit().get(i).getProfit();
             model.addRow(sales);
         }
+        return model;
     }
 
-    public void viewAllSaleRecord(){
+    public DefaultTableModel viewAllSaleRecord(DefaultTableModel model,JTable viewSales_table){
         int size = saleRecords().size();
-        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        model = (DefaultTableModel) viewSales_table.getModel();
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = saleRecords().get(i).getId();
@@ -106,6 +110,7 @@ public class SalesRecord {
             sales [6] = saleRecords().get(i).getProfit();
             model.addRow(sales);
         }
+        return model;
     }
 
 }

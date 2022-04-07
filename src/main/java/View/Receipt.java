@@ -72,7 +72,7 @@ public class Receipt extends JFrame implements ActionListener {
         PrintableDocument.printComponent(this);
     }
 
-    class DrawingPane extends JPanel {
+      class DrawingPane extends JPanel {
         private int fontSize = 20;
         private int messageWidth;
 

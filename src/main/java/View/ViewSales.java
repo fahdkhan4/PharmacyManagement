@@ -17,12 +17,12 @@ import java.util.Locale;
 public class ViewSales {
 
     public JFrame viewSales_frame = new JFrame("Order Medicine");
-    public static JTable viewSales_table;
+    public JTable viewSales_table;
     public ViewSales_Dao sales_dao = new ViewSales_Dao();
     public SalesRecord sale = new SalesRecord();
     DefaultTableModel model;
-    public static Integer SalesDetails_orderId;
 
+    public static Integer SalesDetails_orderId;
     public static String emp_name;
     public static LocalDate firstdate;
     public static LocalDate seconddate;
@@ -46,16 +46,16 @@ public class ViewSales {
         tablepanel = new JPanel();
         tablepanel.setLayout(new BorderLayout());
 
-        String [] bookTitles = {"Filter By Name", "Filter By Date", "Filter By profit" ," All sales"};
+        String [] filteringOptions = {"Filter By Name", "Filter By Date", "Filter By profit" ," All sales"};
 
-        JComboBox<String> bookList = new JComboBox<>(bookTitles);
+        JComboBox<String> filteringCheckbox = new JComboBox<>(filteringOptions);
 
 
         JButton getInfo = new JButton("Order Details");
         getInfo.setPreferredSize(new Dimension(150,50));
         getInfo.setBackground(Color.ORANGE);
         butonpanel.add(getInfo);
-        butonpanel.add(bookList);
+        butonpanel.add(filteringCheckbox);
         butonpanel.setBounds(40,30,1000,50);
         butonpanel.setBackground(Color.darkGray);
 
@@ -83,7 +83,7 @@ public class ViewSales {
         Object[] filterName = {"Employee Name:", employeename};
         Object[] datefilter = {"Date From :", firstDate, "Date to :", secondDate};
 
-       bookList.addActionListener(new ActionListener() {
+       filteringCheckbox.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
                JComboBox booklist = (JComboBox) e.getSource();
@@ -96,7 +96,7 @@ public class ViewSales {
                        emp_name = employeename.getText();
                        model = (DefaultTableModel)viewSales_table.getModel();
                        model.setRowCount(0);
-                       sale.filterSales_ByName();
+                       sale.filterSales_ByName(model,viewSales_table);
                    }
                }
                else if(s1.equalsIgnoreCase("Filter By Date")){
@@ -118,18 +118,18 @@ public class ViewSales {
 
                        model = (DefaultTableModel)viewSales_table.getModel();
                        model.setRowCount(0);
-                       sale.filterSales_ByDate();
+                       sale.filterSales_ByDate(model,viewSales_table);
                    }
                }
                else if (s1.equalsIgnoreCase("Filter By profit")){
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
-                   sale.SortingBy_Profit();
+                   sale.SortingBy_Profit(model,viewSales_table);
                }
                else{
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
-                   sale.viewAllSaleRecord();
+                   sale.viewAllSaleRecord(model,viewSales_table);
                }
            }
        });
