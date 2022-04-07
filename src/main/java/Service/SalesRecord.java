@@ -21,6 +21,10 @@ public class SalesRecord {
         return sales_dao.filterByName();
     }
 
+    public List<SaleRecord> sortByProfit(){
+        return sales_dao.sortByProfit();
+    }
+
     public List<SaleRecord> filterByDate(){
         return sales_dao.filterByDate();
     }
@@ -43,7 +47,6 @@ public class SalesRecord {
     public void filterSales_ByName(){
         int size = (int) filterByName().stream().count();
         DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
-        System.out.println(size);
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = filterByName().get(i).getId();
@@ -58,10 +61,8 @@ public class SalesRecord {
     }
 
     public void filterSales_ByDate(){
-        System.out.println(filterByDate());
         int size = (int) filterByDate().stream().count();
         DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
-        System.out.println(size);
         Object [] sales = new Object[7];
         for (int i = 0; i < size; i++) {
             sales [0] = filterByDate().get(i).getId();
@@ -71,6 +72,38 @@ public class SalesRecord {
             sales [4] = filterByDate().get(i).getCost_price();
             sales [5] = filterByDate().get(i).getSell_price();
             sales [6] = filterByDate().get(i).getProfit();
+            model.addRow(sales);
+        }
+    }
+
+    public void SortingBy_Profit(){
+        int size = (int) sortByProfit().stream().count();
+        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        Object [] sales = new Object[7];
+        for (int i = 0; i < size; i++) {
+            sales [0] = sortByProfit().get(i).getId();
+            sales [1] = sortByProfit().get(i).getOrder_id();
+            sales [2] = sortByProfit().get(i).getEmp_name();
+            sales [3] = sortByProfit().get(i).getOrder_date();
+            sales [4] = sortByProfit().get(i).getCost_price();
+            sales [5] = sortByProfit().get(i).getSell_price();
+            sales [6] = sortByProfit().get(i).getProfit();
+            model.addRow(sales);
+        }
+    }
+
+    public void viewAllSaleRecord(){
+        int size = saleRecords().size();
+        DefaultTableModel model = (DefaultTableModel) ViewSales.viewSales_table.getModel();
+        Object [] sales = new Object[7];
+        for (int i = 0; i < size; i++) {
+            sales [0] = saleRecords().get(i).getId();
+            sales [1] = saleRecords().get(i).getOrder_id();
+            sales [2] = saleRecords().get(i).getEmp_name();
+            sales [3] = saleRecords().get(i).getOrder_date();
+            sales [4] = saleRecords().get(i).getCost_price();
+            sales [5] = saleRecords().get(i).getSell_price();
+            sales [6] = saleRecords().get(i).getProfit();
             model.addRow(sales);
         }
     }

@@ -1,5 +1,6 @@
 package dao;
 
+import Model.ProductCart_Model;
 import Model.SaleRecord;
 import View.ViewSales;
 
@@ -12,7 +13,7 @@ public class ViewSales_Dao implements Sales_Dao {
 
     @Override
     public void insertingSalesRecord() {
-        String query = "INSERT INTO sales (order_id,emp_name,order_date,cost_price,sell_price,profit) SELECT distinct o.id, o.user_name , o.order_date , SUM(c.price_unit)AS  priceSell , SUM(p.cost_price * c.product_qty)  costPrice  , (SUM(c.price_unit) - SUM(p.cost_price * c.product_qty)) AS profit  FROM ((cart c\n" +
+        String query = "INSERT INTO sales (order_id,emp_name,order_date,cost_price,sell_price,profit) SELECT distinct o.id, o.user_name , o.order_date , SUM(p.cost_price * c.product_qty) AS costPrice , SUM(c.price_unit) AS  priceSell , (SUM(c.price_unit) - SUM(p.cost_price * c.product_qty)) AS profit  FROM ((cart c\n" +
                 "INNER JOIN productorder o ON o.id = c.order_id)\n" +
                 "INNER JOIN products p ON p.barcode = c.product_barcode)\n" +
                 " WHERE o.state = \"Completed\" GROUP BY o.id HAVING o.id NOT IN (SELECT order_id FROM sales)";
@@ -98,6 +99,57 @@ public class ViewSales_Dao implements Sales_Dao {
             System.out.println(e);
         }
         return filterdate;
+    }
+
+    @Override
+    public List<SaleRecord> sortByProfit() {
+        List<SaleRecord> sort = new ArrayList<>();
+        try{
+            ResultSet rs = DBService.query("SELECT * FROM sales ORDER BY profit DESC");
+            while (true) {
+                assert rs != null;
+                if (!rs.next())
+                    break;
+                sort.add(new SaleRecord(
+                        Integer.valueOf(rs.getString("id")),
+                        Integer.valueOf(rs.getString("order_id")),
+                        rs.getString("emp_name"),
+                        LocalDate.parse(rs.getString("order_date")),
+                        Double.valueOf(rs.getString("cost_price")),
+                        Double.valueOf(rs.getString("sell_price")),
+                        Double.valueOf(rs.getString("profit"))
+                ));
+            }
+        }catch (Exception e){
+            System.out.println(e);
+        }
+        return sort;
+    }
+
+    @Override
+    public List<ProductCart_Model> gettingSalesDetails() {
+        List<ProductCart_Model> model = new ArrayList<>();
+        try{
+            ResultSet rs = DBService.query("SELECT * FROM cart WHERE order_id = "+ViewSales.SalesDetails_orderId);
+            while (true){
+                assert rs!= null;
+                if(!rs.next())
+                    break;
+                model.add(new ProductCart_Model(
+                        Long.parseLong(rs.getString("product_barcode")),
+                        rs.getString("product_name"),
+                        rs.getString("product_varient"),
+                        Double.valueOf(rs.getString("product_price")),
+                        Double.valueOf(rs.getString("price_unit")),
+                        Integer.valueOf(rs.getString("product_qty")),
+                        Integer.valueOf(rs.getString("order_id"))
+                ));
+
+            }
+        }catch (Exception error){
+            System.out.println(error);
+        }
+        return model;
     }
 
 

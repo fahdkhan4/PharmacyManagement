@@ -1,13 +1,18 @@
 package View;
 
 import Service.SalesRecord;
+import View.Admin.Admin_ShowSalesDetails;
 import dao.ViewSales_Dao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class ViewSales {
 
@@ -16,12 +21,14 @@ public class ViewSales {
     public ViewSales_Dao sales_dao = new ViewSales_Dao();
     public SalesRecord sale = new SalesRecord();
     DefaultTableModel model;
+    public static Integer SalesDetails_orderId;
 
     public static String emp_name;
-    public static String firstdate;
-    public static String seconddate;
+    public static LocalDate firstdate;
+    public static LocalDate seconddate;
 
     public ViewSales(){
+
         JPanel tablepanel , butonpanel;
         JScrollPane scrollpane;
 
@@ -39,7 +46,7 @@ public class ViewSales {
         tablepanel = new JPanel();
         tablepanel.setLayout(new BorderLayout());
 
-        String [] bookTitles = {"Filter By Name", "Filter By Date", "Filter By Price"};
+        String [] bookTitles = {"Filter By Name", "Filter By Date", "Filter By profit" ," All sales"};
 
         JComboBox<String> bookList = new JComboBox<>(bookTitles);
 
@@ -58,19 +65,23 @@ public class ViewSales {
         //                                                                              cart button
         model = new DefaultTableModel(data,column);
         viewSales_table = new JTable(model);
-
         viewSales_table.setRowHeight(viewSales_table.getRowHeight()+10);
 
-//                                                              add action
+        viewSales_table.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                workingOnMouse(e);
+            }
+        });
+
+//                                                              add action on combo box
         JTextField employeename = new JTextField();
         JTextField firstDate = new JTextField();
         JTextField secondDate = new JTextField();
 
-        Object[] message = {"Employee Name:", employeename};
-        Object[] datefilter = {
-                "Date From :", firstDate,
-                "Date to :", secondDate
-        };
+
+        Object[] filterName = {"Employee Name:", employeename};
+        Object[] datefilter = {"Date From :", firstDate, "Date to :", secondDate};
 
        bookList.addActionListener(new ActionListener() {
            @Override
@@ -79,7 +90,7 @@ public class ViewSales {
                String s1 = (String) booklist.getSelectedItem();
 
                if (s1.equalsIgnoreCase("Filter By Name")) {
-                   int option = JOptionPane.showConfirmDialog(null, message, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
+                   int option = JOptionPane.showConfirmDialog(null, filterName, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
                    if (option == JOptionPane.OK_OPTION) {
 
                        emp_name = employeename.getText();
@@ -89,26 +100,40 @@ public class ViewSales {
                    }
                }
                else if(s1.equalsIgnoreCase("Filter By Date")){
+
+                   firstDate.setText("2022-04-06");
+                   secondDate.setText("2022-04-06");
+
                    int option = JOptionPane.showConfirmDialog(null, datefilter, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
                    if (option == JOptionPane.OK_OPTION) {
 
-                       firstdate = firstDate.getText();
-                       seconddate = secondDate.getText();
+                       try {
+                           DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
+                           firstdate =  LocalDate.parse(firstDate.getText(),formatter);
+                           seconddate = LocalDate.parse(secondDate.getText(),formatter);
+
+                       }catch (Exception error){
+                           System.out.println(error);
+                       }
 
                        model = (DefaultTableModel)viewSales_table.getModel();
                        model.setRowCount(0);
                        sale.filterSales_ByDate();
                    }
                }
+               else if (s1.equalsIgnoreCase("Filter By profit")){
+                   model = (DefaultTableModel)viewSales_table.getModel();
+                   model.setRowCount(0);
+                   sale.SortingBy_Profit();
+               }
                else{
-
+                   model = (DefaultTableModel)viewSales_table.getModel();
+                   model.setRowCount(0);
+                   sale.viewAllSaleRecord();
                }
            }
        });
-
-
 //
-
         scrollpane = new JScrollPane(viewSales_table);
         tablepanel.setBounds(1,100,700,600);
         tablepanel.add(scrollpane);
@@ -121,7 +146,6 @@ public class ViewSales {
         viewSales_frame.add(butonpanel,BorderLayout.LINE_START);
         viewSales_frame.add(tablepanel,BorderLayout.CENTER);
         viewSales_frame.getContentPane().add(labelHead,BorderLayout.PAGE_START);
-
 
 //                                                                              Size of frame
         viewSales_frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -137,4 +161,15 @@ public class ViewSales {
             Employee_Functionality employeeFunctionality = new Employee_Functionality();
         });
     }
+    public void workingOnMouse(MouseEvent e){
+        Integer sale_row,sale_column;
+        sale_row = viewSales_table.rowAtPoint(e.getPoint());
+        sale_column = 1;
+        SalesDetails_orderId =(Integer) viewSales_table.getModel().getValueAt(sale_row,sale_column);
+        viewSales_frame.dispose();
+        ShowSalesDetail saleDetails = new ShowSalesDetail(SalesDetails_orderId);
+
+    }
+
+
 }

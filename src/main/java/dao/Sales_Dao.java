@@ -1,5 +1,6 @@
 package dao;
 
+import Model.ProductCart_Model;
 import Model.SaleRecord;
 
 import java.util.List;
@@ -16,4 +17,7 @@ public interface Sales_Dao {
 
     List<SaleRecord> filterByDate();
 
+    List<SaleRecord> sortByProfit();
+
+    List<ProductCart_Model> gettingSalesDetails();
 }
