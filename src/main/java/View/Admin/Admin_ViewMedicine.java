@@ -94,14 +94,18 @@ public class Admin_ViewMedicine  {
                 int row = medicine.rowAtPoint(e.getPoint());
                 int col = 0;
                 if(row >= 0) {
-                    Long  id= (Long) medicine.getModel().getValueAt(row, col);
-                    String medicine_name = (String) medicine.getModel().getValueAt(row,col+1);
-                    String medicine_varient = (String) medicine.getModel().getValueAt(row,col+2);
-                    Double medicine_price = (Double) medicine.getModel().getValueAt(row,col+3);
-                    Integer medicine_quantity = (Integer) medicine.getModel().getValueAt(row,col+4);
+                    try {
+                        Long id = (Long) medicine.getModel().getValueAt(row, col);
+                        String medicine_name = (String) medicine.getModel().getValueAt(row, col + 1);
+                        String medicine_varient = (String) medicine.getModel().getValueAt(row, col + 2);
+                        Double medicine_price = Double.parseDouble(medicine.getModel().getValueAt(row, col + 3).toString());
+                        Integer medicine_quantity = (Integer) medicine.getModel().getValueAt(row, col + 4);
 
-                    updateProduct = new Product(id,medicine_name,medicine_varient,null,medicine_price,medicine_quantity);
-                    medicineCode_Delete.add(id);
+                        updateProduct = new Product(id, medicine_name, medicine_varient, null, medicine_price, medicine_quantity);
+                        medicineCode_Delete.add(id);
+                    }catch (Exception err){
+                        System.out.println(err);
+                    }
                 }
             }
             @Override

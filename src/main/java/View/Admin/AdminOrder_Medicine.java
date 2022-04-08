@@ -17,9 +17,11 @@ public class AdminOrder_Medicine extends OrderMedicine {
 
     @Override
     public void workingOf_BuyButton(JButton buy_product) {
+
         buy_product.addActionListener(el->{
             this.userorder_table = null;
             order_frame.dispose();
+            System.out.println(Admin.admin_name);
             OrderProduct_Model orderProduct_model = new OrderProduct_Model(Admin.admin_name, LocalDate.now(), "Completed");
             orderProduct_functionality.update_OrderInformation(orderProduct_model);
 

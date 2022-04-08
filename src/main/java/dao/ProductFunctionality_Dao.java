@@ -69,7 +69,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(searchByBarcode);
+
         return  searchByBarcode;
     }
 

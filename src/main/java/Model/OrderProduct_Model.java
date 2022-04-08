@@ -8,6 +8,10 @@ public class OrderProduct_Model {
     private LocalDate order_date;
     private String state;
 
+
+    public OrderProduct_Model() {
+    }
+
     public OrderProduct_Model(String employee_name, LocalDate order_date, String state) {
 
         this.employee_name = employee_name;

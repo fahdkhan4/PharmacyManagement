@@ -9,7 +9,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.LocalDate;
-
 import Model.*;
 import Service.*;
 import dao.*;
@@ -20,18 +19,18 @@ public class OrderMedicine {
     public JTable order_medicine_table, userorder_table;
     private JScrollPane scrollpane, userorder_Scroll;
     JPanel outerpanel, toppanel;
-    Object[][] data;
-    Object [][]getUserCart_Data;
+    Object[][] data , getUserCart_Data;
     public Boolean orderbool = true;
 
     //                                                                                                      Objects of classes
     public OrderProduct_Functionality orderProduct_functionality = new OrderProduct_Functionality();
     public UserCartProduct_Services cart_service = new UserCartProduct_Services();
-    ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
     public CartProduct cartProduct = new CartProduct();
     public Invoice_Dao invoice_dao = new Invoice_Dao();
     public ViewSales_Dao sales_dao = new ViewSales_Dao();
     public ProductService productService = new ProductService();
+    OrderProduct_Model orderProduct_model;
+    ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
 
 
     private JTextField filtertxtField;
@@ -45,8 +44,6 @@ public class OrderMedicine {
         JLabel nameFor_Search,barcodelabel, activeMember;
         JTextField  barcodetext;
         JButton buy_product, exit;
-
-
 
 //                                                                              Setting panel
         outerpanel = new JPanel(new BorderLayout());
@@ -109,13 +106,10 @@ public class OrderMedicine {
 
 
 //                                                                              filtering the table
-
         tablemodel = new DefaultTableModel(data, column);
         tablesorter = new TableRowSorter<>(tablemodel);
         order_medicine_table = new JTable(tablemodel);
         order_medicine_table.setRowSorter(tablesorter);
-
-
 
 //                                                                               filtering table  data
         filtertxtField.getDocument().addDocumentListener(new DocumentListener() {
@@ -142,8 +136,6 @@ public class OrderMedicine {
                 }
             }
         });
-
-
 
 
         order_medicine_table.addMouseListener(new MouseAdapter()
@@ -193,8 +185,6 @@ public class OrderMedicine {
                             tablemodel.setRowCount(0);
                             productService.addingData(tablemodel,order_medicine_table);
 
-
-                            OrderProduct_Model orderProduct_model;
 //                                                                                             produce one order of products
                             if (orderbool) {
                                 orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Draft");
@@ -203,7 +193,6 @@ public class OrderMedicine {
                             }
 
                             Double finalPriceWithQuantity = user_wants_quantity * medicine_price;
-//
                             ProductCart_Model cart_model = new ProductCart_Model(medicine_id, medicine_name, medicine_varient,medicine_price,finalPriceWithQuantity, user_wants_quantity, DBService.orderID);
                             Boolean cartProductDuplicate = cart_service.checkDuplicateInCart(cart_model);
 
@@ -214,14 +203,12 @@ public class OrderMedicine {
                             else {
                                 cartProduct.inserting_cartProduct(cart_model);
                             }
-
+//                            ....................................................................
 
                             showingtotalPrice();
-
                             getUserCart_Data = cart_service.getallUserCart_Product();
                             usercartTable = new DefaultTableModel(getUserCart_Data,column);
                             userorder_table = new JTable(usercartTable);
-
 
                             userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
                             userorder_Scroll = new JScrollPane(userorder_table);
@@ -231,7 +218,7 @@ public class OrderMedicine {
                             userorder_Scroll.setBounds(827, 150, 536, 600);
                             outerpanel.add(userorder_Scroll);
 
-
+//                          ...................................................................
                         } else {
                             JOptionPane.showMessageDialog(order_frame, medicine_quantity + " is the maximum quantity for this medicine");
                         }
@@ -243,33 +230,35 @@ public class OrderMedicine {
 
         });
 
-        //          barcode work
-        barcodetext.addActionListener(new ActionListener() {
+//            getUserCart_Data = cart_service.getallUserCart_Product();
+//            usercartTable = new DefaultTableModel(getUserCart_Data, column);
+//            userorder_table = new JTable(usercartTable);
+//
+//            userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
+//            userorder_Scroll = new JScrollPane(userorder_table);
+//
+//            userorder_table.getTableHeader().setOpaque(false);
+//            userorder_table.getTableHeader().setForeground(Color.BLACK);
+//            userorder_table.getTableHeader().setBackground(Color.ORANGE);
+//
+//            userorder_Scroll.setBounds(827, 150, 536, 600);
+//            outerpanel.add(userorder_Scroll);
+//
+
+                                                                    //          barcode work
+         barcodetext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+
+                if (orderbool) {
+                    orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Draft");
+                    orderProduct_functionality.inserting_OrderInformation(orderProduct_model);
+                    orderbool = false;
+                }
                 getBarcode_Product(barcodetext.getText());
 
-                usercartTable = (DefaultTableModel)userorder_table.getModel();
-                usercartTable.setRowCount(0);
-                cart_service.cartData(usercartTable,userorder_table);
             }
         });
-
-//                                                                                              Table user cart
-
-//        getUserCart_Data = cart_service.getallUserCart_Product();
-//        usercartTable = new DefaultTableModel(getUserCart_Data,column);
-//        usercartTable = new DefaultTableModel(getUserCart_Data,column);
-//        userorder_table = new JTable(usercartTable);
-//
-//        userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
-//        userorder_Scroll = new JScrollPane(userorder_table);
-//        userorder_table.getTableHeader().setOpaque(false);
-//        userorder_table.getTableHeader().setForeground(Color.BLACK);
-//        userorder_table.getTableHeader().setBackground(Color.ORANGE);
-//        userorder_Scroll.setBounds(827, 150, 536, 600);
-//
-//        outerpanel.add(userorder_Scroll);
 
 
         order_medicine_table.setRowHeight(order_medicine_table.getRowHeight() + 10);
@@ -293,7 +282,6 @@ public class OrderMedicine {
             }
             tableColumn.setPreferredWidth(preferredWidth);
         }
-
 //
         scrollpane = new JScrollPane(order_medicine_table);
         toppanel.add(labelHead, BorderLayout.PAGE_START);
@@ -302,7 +290,6 @@ public class OrderMedicine {
 
         outerpanel.add(toppanel);
         order_frame.add(outerpanel);
-        order_frame.pack();
 
         order_medicine_table.setFillsViewportHeight(true);
         order_frame.setLocationRelativeTo(null);
@@ -343,7 +330,6 @@ public class OrderMedicine {
 
                 this.userorder_table = null;
                 order_frame.dispose();
-
                 OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
                 orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
@@ -357,13 +343,11 @@ public class OrderMedicine {
                 invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //
                 sales_dao.insertingSalesRecord();
-
                 Receipt receipt = new Receipt();
             }
             else{
                 JOptionPane.showMessageDialog(order_frame,"Cart is empty");
             }
-
         });
     }
 
@@ -384,6 +368,7 @@ public class OrderMedicine {
             order_frame.add(field);
         }
     }
+
     public void getBarcode_Product(String barcode){
         try {
             long code = Long.parseLong(barcode);
@@ -395,15 +380,23 @@ public class OrderMedicine {
 
             cartProduct.insertIntoCartBy_Barcode();
 
-
         }catch (Exception e){
-
+            System.out.println(e);
         };
     }
-
-
 }
 
+//                getUserCart_Data = cart_service.getallUserCart_Product();
+//                usercartTable = new DefaultTableModel(getUserCart_Data,column);
+//                userorder_table = new JTable(usercartTable);
+//
+//                userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
+//                userorder_Scroll = new JScrollPane(userorder_table);
+//                userorder_table.getTableHeader().setOpaque(false);
+//                userorder_table.getTableHeader().setForeground(Color.BLACK);
+//                userorder_table.getTableHeader().setBackground(Color.ORANGE);
+//                userorder_Scroll.setBounds(827, 150, 536, 600);
+//                outerpanel.add(userorder_Scroll);
 
 
 

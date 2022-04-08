@@ -162,12 +162,18 @@ public class ViewSales {
         });
     }
     public void workingOnMouse(MouseEvent e){
-        Integer sale_row,sale_column;
-        sale_row = viewSales_table.rowAtPoint(e.getPoint());
-        sale_column = 1;
-        SalesDetails_orderId =(Integer) viewSales_table.getModel().getValueAt(sale_row,sale_column);
-        viewSales_frame.dispose();
-        ShowSalesDetail saleDetails = new ShowSalesDetail(SalesDetails_orderId);
+        try {
+            Integer sale_row, sale_column;
+            sale_row = viewSales_table.rowAtPoint(e.getPoint());
+            sale_column = 1;
+            if(sale_row >= 0) {
+                SalesDetails_orderId = (Integer) viewSales_table.getModel().getValueAt(sale_row, sale_column);
+                viewSales_frame.dispose();
+                ShowSalesDetail saleDetails = new ShowSalesDetail(SalesDetails_orderId);
+            }
+        }catch (Exception err){
+            System.out.println("View Sales"+err);
+        }
 
     }
 

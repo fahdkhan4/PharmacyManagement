@@ -19,12 +19,19 @@ public class AdminViewSales extends ViewSales {
     @Override
     public void workingOnMouse(MouseEvent e) {
 
-        Integer sale_row,sale_column;
-        sale_row = viewSales_table.rowAtPoint(e.getPoint());
-        sale_column = 1;
-        SalesDetails_orderId =(Integer) viewSales_table.getModel().getValueAt(sale_row,sale_column);
-        viewSales_frame.dispose();
-        Admin_ShowSalesDetails saledetails  = new Admin_ShowSalesDetails(SalesDetails_orderId);
+        try {
+            Integer sale_row, sale_column;
+
+            sale_row = viewSales_table.rowAtPoint(e.getPoint());
+            sale_column = 1;
+            if(sale_row >= 0) {
+                SalesDetails_orderId = (Integer) viewSales_table.getModel().getValueAt(sale_row, sale_column);
+                viewSales_frame.dispose();
+                Admin_ShowSalesDetails saledetails = new Admin_ShowSalesDetails(SalesDetails_orderId);
+            }
+        }catch (Exception error){
+            System.out.println("Admin view Sales"+error);
+        }
 
 
     }

@@ -25,7 +25,7 @@ public class OrderProduct_Functionality implements OrderProduct_Dao {
 
     @Override
     public void update_OrderInformation(OrderProduct_Model updateproduct) {
-        String query = "UPDATE productorder SET state = '"+updateproduct.getState()+"' WHERE id = "+DBService.orderID;
+        String query = "UPDATE productorder SET  user_name = '"+updateproduct.getEmployee_name()+"', state = '"+updateproduct.getState()+"' WHERE id = "+DBService.orderID;
         DBService.PreparedQuery(query);
     }
 
