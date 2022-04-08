@@ -30,7 +30,7 @@ public class Admin_ViewMedicine  {
         String[] columns = new String[] {"Medicine Code", "Medicine Name", "Medicine Varient", "Medicine price","Medicine Quantity"};
 
         ProductService productService = new ProductService();
-        Object [][] data = productService.getAllMedicines();
+        Object [][] data = productService.getAllMedicineForUpdate();
 
         medicine = new JTable(data, columns);
 

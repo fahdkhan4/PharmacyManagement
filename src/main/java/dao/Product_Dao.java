@@ -14,10 +14,33 @@ import java.util.List;
 
 public interface Product_Dao {
 
-     ProductService service = new ProductService();
 
      //                                                                    get all the products from DB
      static List<Product> getAllProducts() {
+          List<Product> results = new ArrayList<>();
+          try {
+               ResultSet rs = DBService.query("select * from products where product_qty <> 0");
+               while (true) {
+                    assert rs != null;
+                    if (!rs.next())
+                         break;
+                    results.add(new Product
+                            (
+                                    Long.valueOf(rs.getString("barcode")),
+                                    rs.getString("product_name"),
+                                    rs.getString("product_varient"),
+                                    Double.valueOf(rs.getString("cost_price")),
+                                    Double.valueOf(rs.getString("sell_price")),
+                                    Integer.valueOf(rs.getString("product_qty"))));
+               }
+
+          } catch (SQLException e) {
+               e.printStackTrace();
+          }
+          return results;
+     }
+
+     static List<Product> getAllProductsZerosALSO() {
           List<Product> results = new ArrayList<>();
           try {
                ResultSet rs = DBService.query("select * from products");
@@ -39,9 +62,8 @@ public interface Product_Dao {
                e.printStackTrace();
           }
           return results;
-     }
+     };
 
-     ;
 
 
      //                                                                    Add product into database
@@ -56,6 +78,9 @@ public interface Product_Dao {
 //                                                                         update medicine quantity
      void updateMedicine_Quantity(Product updateProductQTY);
 
+     void deleteAllHaving_QTY0();
+
+     List<Product> searchBybarcode();
 
 
 }

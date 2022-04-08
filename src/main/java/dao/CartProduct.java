@@ -4,15 +4,19 @@ import Model.Product;
 import Model.ProductCart_Model;
 
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class CartProduct implements  UserCartProduct_Dao{
 
+    ProductFunctionality_Dao product_dao = new ProductFunctionality_Dao();
 
     @Override
     public void inserting_cartProduct(ProductCart_Model cart_model) {
         String query = "INSERT INTO cart(product_barcode,product_name,product_varient,product_price,price_unit,product_qty,order_id) VALUES ("+cart_model.getProduct_code()+",'"+cart_model.getProduct_name()+"','"+cart_model.getProduct_varient()+"',"+cart_model.getProduct_price()+","+cart_model.getPrice_unit()+","+cart_model.getProduct_quantity()+","+cart_model.getOrder_id()+")";
         DBService.PreparedQuery(query);
     }
+
 
     @Override
     public void delete_cartProduct() {
@@ -37,7 +41,7 @@ public class CartProduct implements  UserCartProduct_Dao{
 
         for (ProductCart_Model cart:UserCartProduct_Dao.getCart_Product()) {
             Integer finalquantity = 0;
-            for (Product product:Product_Dao.getAllProducts()) {
+            for (Product product:Product_Dao.getAllProductsZerosALSO()) {
                 if(cart.getProduct_code().equals(product.getBarCode())){
                     finalquantity = cart.getProduct_quantity() + product.getMedicine_quantity();
                     String query = "UPDATE products SET product_qty = "+finalquantity+" WHERE barcode = "+cart.getProduct_code();
@@ -63,5 +67,15 @@ public class CartProduct implements  UserCartProduct_Dao{
         }
         return cartTotalAmount;
     }
+
+    @Override
+    public void insertIntoCartBy_Barcode() {
+
+        String query = "INSERT INTO cart(product_barcode,product_name,product_varient,product_price,price_unit,product_qty,order_id) " +
+                " VALUES ("+product_dao.searchBybarcode().get(0).getBarCode()+",'"+product_dao.searchBybarcode().get(0).getMedicine_name()+"','"+product_dao.searchBybarcode().get(0).getMedicine_varient()+"',"+product_dao.searchBybarcode().get(0).getMedicine_Saleprice()+","+product_dao.searchBybarcode().get(0).getMedicine_Saleprice()+",1,"+DBService.orderID+") ";
+        DBService.PreparedQuery(query);
+
+    }
+
 
 }

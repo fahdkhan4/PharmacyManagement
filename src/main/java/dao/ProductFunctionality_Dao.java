@@ -1,8 +1,13 @@
 package dao;
 
 import Model.Product;
+import View.OrderMedicine;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 public class ProductFunctionality_Dao implements Product_Dao {
 
@@ -35,6 +40,41 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String updateMedicineQTY = "UPDATE products SET product_qty = "+updateProductQTY.getMedicine_quantity()+" WHERE barcode ="+updateProductQTY.getBarCode();
         DBService.PreparedQuery(updateMedicineQTY);
     }
+
+    @Override
+    public void deleteAllHaving_QTY0() {
+        String query = "DELETE FROM products WHERE product_qty = 0";
+        DBService.PreparedQuery(query);
+    }
+
+    @Override
+    public List<Product> searchBybarcode() {
+        List<Product> searchByBarcode = new ArrayList<>();
+        try{
+            ResultSet rs = DBService.query("SELECT * FROM products WHERE barcode  = "+ OrderMedicine.barcodeSearch);
+            while (true) {
+                assert rs != null;
+                if (!rs.next())
+                    break;
+                searchByBarcode.add(new Product
+                        (
+                                Long.valueOf(rs.getString("barcode")),
+                                rs.getString("product_name"),
+                                rs.getString("product_varient"),
+                                Double.valueOf(rs.getString("cost_price")),
+                                Double.valueOf(rs.getString("sell_price")),
+                                Integer.valueOf(rs.getString("product_qty"))));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        System.out.println(searchByBarcode);
+        return  searchByBarcode;
+    }
+
+
+
 
 
 }

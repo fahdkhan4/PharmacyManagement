@@ -34,9 +34,10 @@ public class UserCartProduct_Services {
     }
 
     public DefaultTableModel cartData(DefaultTableModel model, JTable userorder_table){
+
         int size = (int) getCartProduct().stream().count();
          model = (DefaultTableModel) userorder_table.getModel();
-        Object  [] array = new Object[size];
+        Object  [] array = new Object[5];
         for (int i = 0; i < size; i++) {
             array[0] =getCartProduct().get(i).getProduct_code();
             array[1] =getCartProduct().get(i).getProduct_name();

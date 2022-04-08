@@ -51,4 +51,6 @@ public interface UserCartProduct_Dao {
     void updateQuantityOFProductOnCancelation();
 
     Double cartProductTotalAmount();
+
+    void insertIntoCartBy_Barcode();
 }
