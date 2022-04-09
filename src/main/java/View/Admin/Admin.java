@@ -32,7 +32,7 @@ public class Admin{
         JButton login = new JButton("Login");
         login.setForeground(Color.BLACK);
         login.setBackground(Color.ORANGE);
-        JButton exit = new JButton("Exit");
+        JButton exit = new JButton("Back");
         exit.setForeground(Color.BLACK);
         exit.setBackground(Color.ORANGE);
 //                                                                                  heading field

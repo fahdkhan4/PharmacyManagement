@@ -14,8 +14,8 @@ public class ProductFunctionality_Dao implements Product_Dao {
 
     @Override
     public void insertProduct_ToDB(Product product) {
-        String query = "INSERT INTO products VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
-        DBService.PreparedQuery(query);
+        String query = "INSERT INTO products(barcode,product_name,product_varient,cost_price,sell_price,product_qty) VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
+        DBService.addProductPreparedQuery(query);
     }
 
     @Override
@@ -23,7 +23,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String query ;
         for (Long code:productCode) {
             query = "DELETE FROM products  WHERE barcode="+code;
-            DBService.PreparedQuery(query);
+            DBService.deleteProduct(query);
         }
     }
 

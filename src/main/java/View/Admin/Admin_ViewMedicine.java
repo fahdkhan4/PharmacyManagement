@@ -19,6 +19,7 @@ public class Admin_ViewMedicine  {
 
     public JFrame viewMedicine_frame = new JFrame("Medicine");
     public JTable medicine;
+    public static Boolean deleterowError;
     JButton update,delete;
     JButton exit;
 
@@ -67,7 +68,7 @@ public class Admin_ViewMedicine  {
 
 //
 
-        exit = new JButton("Exit");
+        exit = new JButton("Back");
         exit.setBounds(1250,3,90,40);
         exit.setBackground(Color.ORANGE);
         exit.setForeground(Color.BLACK);
@@ -131,13 +132,18 @@ public class Admin_ViewMedicine  {
 
         delete.addActionListener(el->{
             if(medicineCode_Delete.size() != 0){
+                deleterowError = true;
                 updateProduct = null;
                 ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
                 functionality_dao.delete_Medicines(medicineCode_Delete);
 
-                Admin_ViewMedicine view = new Admin_ViewMedicine();
-                JOptionPane.showMessageDialog(viewMedicine_frame,"Press Ok to DELETE");
-                viewMedicine_frame.dispose();
+                if(deleterowError) {
+                    Admin_ViewMedicine view = new Admin_ViewMedicine();
+                    JOptionPane.showMessageDialog(viewMedicine_frame, "Press Ok to DELETE");
+                    viewMedicine_frame.dispose();
+                    deleterowError = false;
+                }
+
                 medicineCode_Delete.clear();
 
             }
@@ -161,5 +167,10 @@ public class Admin_ViewMedicine  {
             viewMedicine_frame.dispose();
             AdminFunctionality_UI admin = new AdminFunctionality_UI();
         });
+    }
+
+    public static void errorOnDeleteProduct(){
+        deleterowError = false;
+        JOptionPane.showMessageDialog(null,"Cannot delete the product\n \t first remove it from cart");
     }
 }

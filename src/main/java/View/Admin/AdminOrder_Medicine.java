@@ -19,23 +19,29 @@ public class AdminOrder_Medicine extends OrderMedicine {
     public void workingOf_BuyButton(JButton buy_product) {
 
         buy_product.addActionListener(el->{
-            this.userorder_table = null;
-            order_frame.dispose();
-            System.out.println(Admin.admin_name);
-            OrderProduct_Model orderProduct_model = new OrderProduct_Model(Admin.admin_name, LocalDate.now(), "Completed");
-            orderProduct_functionality.update_OrderInformation(orderProduct_model);
+
+            if(this.userorder_table != null) {
+                this.userorder_table = null;
+                order_frame.dispose();
+                System.out.println(Admin.admin_name);
+                OrderProduct_Model orderProduct_model = new OrderProduct_Model(Admin.admin_name, LocalDate.now(), "Completed");
+                orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
 //                  sending invoice data
-            Invoice invoice = new Invoice(DBService.orderID,Admin.admin_name, LocalDate.now());
-            invoice_dao.insertInto_InvoiceDB(invoice);
+                Invoice invoice = new Invoice(DBService.orderID, Admin.admin_name, LocalDate.now());
+                invoice_dao.insertInto_InvoiceDB(invoice);
 //                 getting product and invoice data through joins
-            invoice_dao.getDataOf_InvoiceLine();
+                invoice_dao.getDataOf_InvoiceLine();
 //                 inserting the data into invoice line to show it to the recept
-            invoice_dao.insertingInvoiceDataIn_InvoiceLine();
+                invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //                  inserting all the sales
-            sales_dao.insertingSalesRecord();
+                sales_dao.insertingSalesRecord();
 
-           AdminReceipt receipt = new AdminReceipt();
+                AdminReceipt receipt = new AdminReceipt();
+            }
+            else{
+                JOptionPane.showMessageDialog(order_frame,"Cart is empty");
+            }
         });
     }
 

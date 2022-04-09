@@ -136,6 +136,7 @@ public class AddProduct {
 
         }else {
             try {
+
                 Long product_id = Long.parseLong(p_codeText.getText());
                 Double productCost_price = Double.parseDouble(p_costpriceText.getText());
                 Double productSell_price = Double.parseDouble(p_sellpriceText.getText());
@@ -159,6 +160,7 @@ public class AddProduct {
                     p_quantityText.setText("");
                 }
             }catch (Exception e){
+                System.out.println(e);
                 JOptionPane.showMessageDialog(addProduct_frame,"Invalid input type");
             }
         }

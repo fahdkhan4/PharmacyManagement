@@ -27,7 +27,7 @@ public class ShowSalesDetail {
 
                 JPanel buttonpanel = new JPanel();
 
-                exit = new JButton("Exit");
+                exit = new JButton("Back");
                 exit.setPreferredSize(new Dimension(130,50));
                 exit.setBackground(Color.ORANGE);
                 exit.setForeground(Color.BLACK);

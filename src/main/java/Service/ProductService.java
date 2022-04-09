@@ -25,6 +25,7 @@ public class ProductService implements GetAllMedicines{
     public List<Product> getMedicineByBarCode(){
         return product_dao.searchBybarcode();
     }
+
     public Object[][] getAllMedicines(){
         int count = (int) getAllProducts_Data().stream().count();
         Object [][] data = new Object[count][5];

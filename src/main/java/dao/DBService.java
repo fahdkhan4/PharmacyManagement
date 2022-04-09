@@ -1,4 +1,5 @@
 package dao;
+import View.Admin.Admin_ViewMedicine;
 import View.OrderMedicine;
 
 import java.awt.*;
@@ -32,14 +33,27 @@ public class DBService {
 
     }
 
-    public static void PreparedQuery(String query) {
+    public static void addProductPreparedQuery(String query) {
         duplicate_check = false;
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.executeUpdate();
 
         }catch (Exception e){
+
             duplicate_check = true;
+            System.out.println(e);
+        }
+    }
+
+    public static void PreparedQuery(String query) {
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.executeUpdate();
+
+        }catch (Exception e){
+
             System.out.println(e);
         }
     }
@@ -59,18 +73,18 @@ public class DBService {
             System.out.println(e);
         }
     }
-//
-//    public static void updatedataofTabele(){
-//        try{
-//            String sql = "SELECT * FROM medicines";
-//            PreparedStatement pst = con.prepareStatement(sql);
-//            ResultSet rs = pst.executeQuery();
-//
-//        }catch(Exception e){
-//            System.out.println(e);
-//        }
-//    }
 
+    public static void deleteProduct(String query) {
+
+        try {
+            PreparedStatement pstmt = con.prepareStatement(query);
+            pstmt.executeUpdate();
+
+        }catch (Exception e){
+
+            Admin_ViewMedicine.errorOnDeleteProduct();
+        }
+    }
 
 
 

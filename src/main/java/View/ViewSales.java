@@ -35,7 +35,7 @@ public class ViewSales {
         JButton exit;
 //                                                                              Setting panel
 
-        exit = new JButton("Exit");
+        exit = new JButton("Back");
         exit.setBounds(1250,3,90,40);
         exit.setBackground(Color.ORANGE);
         exit.setForeground(Color.BLACK);

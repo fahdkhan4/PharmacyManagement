@@ -41,6 +41,7 @@ public class OrderMedicine {
 
     public OrderMedicine() {
 
+
         JLabel nameFor_Search,barcodelabel, activeMember;
         JTextField  barcodetext;
         JButton buy_product, exit;
@@ -93,7 +94,7 @@ public class OrderMedicine {
         order_frame.add(buy_product);
 
 //                                                                                         exit button
-        exit = new JButton("Exit");
+        exit = new JButton("Back");
         exit.setBounds(1250, 3, 90, 40);
         exit.setBackground(Color.ORANGE);
         exit.setForeground(Color.BLACK);
@@ -112,6 +113,7 @@ public class OrderMedicine {
         order_medicine_table.setRowSorter(tablesorter);
 
 //                                                                               filtering table  data
+
         filtertxtField.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -136,6 +138,11 @@ public class OrderMedicine {
                 }
             }
         });
+
+        JTextField field = new JTextField();
+        field.setBounds(1200, 100, 130, 40);
+//        field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
+        order_frame.add(field);
 
 
         order_medicine_table.addMouseListener(new MouseAdapter()
@@ -204,8 +211,8 @@ public class OrderMedicine {
                                 cartProduct.inserting_cartProduct(cart_model);
                             }
 //                            ....................................................................
-
-                            showingtotalPrice();
+                            field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
+//                            showingtotalPrice();
                             getUserCart_Data = cart_service.getallUserCart_Product();
                             usercartTable = new DefaultTableModel(getUserCart_Data,column);
                             userorder_table = new JTable(usercartTable);
@@ -359,14 +366,17 @@ public class OrderMedicine {
         order_frame.add(accountHandler);
     }
 
-    public void showingtotalPrice() {
+    public Double showingtotalPrice() {
         Double total_amount =  cartProduct.cartProductTotalAmount();
+        System.out.println(total_amount);
         if (total_amount != null || total_amount != 0.0) {
-            JTextField field = new JTextField();
-            field.setBounds(1200, 100, 130, 40);
-            field.setText(String.valueOf("Total Price : " + total_amount));
-            order_frame.add(field);
+//            JTextField field = new JTextField();
+//            field.setBounds(1200, 100, 130, 40);
+//            field.setText(String.valueOf("Total Price : " + total_amount));
+//            order_frame.add(field);
+            return total_amount;
         }
+        return 0.0;
     }
 
     public void getBarcode_Product(String barcode){
@@ -386,17 +396,6 @@ public class OrderMedicine {
     }
 }
 
-//                getUserCart_Data = cart_service.getallUserCart_Product();
-//                usercartTable = new DefaultTableModel(getUserCart_Data,column);
-//                userorder_table = new JTable(usercartTable);
-//
-//                userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
-//                userorder_Scroll = new JScrollPane(userorder_table);
-//                userorder_table.getTableHeader().setOpaque(false);
-//                userorder_table.getTableHeader().setForeground(Color.BLACK);
-//                userorder_table.getTableHeader().setBackground(Color.ORANGE);
-//                userorder_Scroll.setBounds(827, 150, 536, 600);
-//                outerpanel.add(userorder_Scroll);
 
 
 

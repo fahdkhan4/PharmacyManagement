@@ -17,7 +17,7 @@ public class Employee_Functionality {
         orderMedicine = new JButton("Order Medicine");
         viewMedicine = new JButton("Medicine Listing");
         viewSale = new JButton("View Sale");
-        exit = new JButton("Exit");
+        exit = new JButton("Back");
 
 //                      Main Heading
         mainHeading();
