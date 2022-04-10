@@ -22,13 +22,14 @@ public class UserCartProduct_Services {
     public Object [][] getallUserCart_Product(){
 
         int size = (int) getCartProduct().stream().count();
-        Object [][] cartProduct = new Object[size][5];
+        Object [][] cartProduct = new Object[size][6];
         for (int i = 0; i < size; i++) {
             cartProduct[i][0] =getCartProduct().get(i).getProduct_code();
             cartProduct[i][1] =getCartProduct().get(i).getProduct_name();
             cartProduct[i][2] =getCartProduct().get(i).getProduct_varient();
-            cartProduct[i][3] =getCartProduct().get(i).getPrice_unit();
+            cartProduct[i][3] =getCartProduct().get(i).getProduct_price();
             cartProduct[i][4] =getCartProduct().get(i).getProduct_quantity();
+            cartProduct[i][5] =getCartProduct().get(i).getPrice_unit();
     }
         return cartProduct;
     }
@@ -37,13 +38,14 @@ public class UserCartProduct_Services {
 
         int size = (int) getCartProduct().stream().count();
          model = (DefaultTableModel) userorder_table.getModel();
-        Object  [] array = new Object[5];
+        Object  [] array = new Object[6];
         for (int i = 0; i < size; i++) {
             array[0] =getCartProduct().get(i).getProduct_code();
             array[1] =getCartProduct().get(i).getProduct_name();
             array[2] =getCartProduct().get(i).getProduct_varient();
-            array[3] =getCartProduct().get(i).getPrice_unit();
+            array[3] =getCartProduct().get(i).getProduct_price();
             array[4] =getCartProduct().get(i).getProduct_quantity();
+            array[5] =getCartProduct().get(i).getPrice_unit();
             model.addRow(array);
         }
         return model;

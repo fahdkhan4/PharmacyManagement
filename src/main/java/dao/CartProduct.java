@@ -25,12 +25,6 @@ public class CartProduct implements  UserCartProduct_Dao{
     }
 
     @Override
-    public void removeSpecific_CartProduct(Long barcode) {
-        String query = "DELETE FROM cart WHERE product_barcode = "+barcode;
-        DBService.PreparedQuery(query);
-    }
-
-    @Override
     public void updateCartProductQuantity(ProductCart_Model updateqty) {
         String query = "UPDATE cart SET product_qty = "+updateqty.getProduct_quantity()+",price_unit = "+updateqty.getPrice_unit()+" WHERE product_barcode = "+updateqty.getProduct_code();
         DBService.PreparedQuery(query);
@@ -77,5 +71,21 @@ public class CartProduct implements  UserCartProduct_Dao{
 
     }
 
+//                                          Related to barcode scanner procedure
+
+
+    @Override
+    public void updateCartProductQTY(Long barcode, Integer remaingqty,Double productPrice) {
+        String query = "UPDATE cart SET product_qty = "+remaingqty+" , price_unit = "+productPrice+"  WHERE product_barcode = "+barcode+ " AND  order_id = "+DBService.orderID;
+        DBService.PreparedQuery(query);
+    }
+
+    @Override
+    public void removeAllproductQTY_0() {
+        String query = "DELETE FROM cart WHERE product_qty = 0 AND order_id = "+DBService.orderID;
+        DBService.PreparedQuery(query);
+    }
+
+//                                                          update cart product qty
 
 }

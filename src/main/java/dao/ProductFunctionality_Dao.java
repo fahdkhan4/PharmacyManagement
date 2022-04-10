@@ -48,6 +48,24 @@ public class ProductFunctionality_Dao implements Product_Dao {
         DBService.PreparedQuery(updateQuantity);
     }
 
+//                                                                      get product quantity of barcode scanner product
+    @Override
+    public int getProductQuantityOf_barcodeScanner(Long barcode,Integer quantity) {
+        int productQuantity =  quantity;
+        for (int i = 0; i < Product_Dao.getAllProducts().size(); i++) {
+            if(Product_Dao.getAllProducts().get(i).getBarCode().equals(barcode)){
+                productQuantity += Product_Dao.getAllProducts().get(i).getMedicine_quantity();
+            }
+        }
+        return productQuantity;
+    }
+
+    @Override
+    public void updateMedicineQuantity_AfterRemovingFromCart(Long barcode, Integer quantity) {
+        String query = "UPDATE products SET product_qty = "+quantity+" WHERE barcode = "+barcode;
+        DBService.PreparedQuery(query);
+    }
+
     @Override
     public List<Product> searchBybarcode() {
         List<Product> searchByBarcode = new ArrayList<>();

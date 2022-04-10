@@ -105,7 +105,7 @@ public class OrderMedicine {
 
         data = productService.getAllMedicines();
 
-        String[] column = {"Medicine ID", "Medicine Name", "Medicine Varient", "Medicine Price", "Quantity"};
+        String[] column = {"Bar Code", "Medicine Name", "Medicine Varient", "Medicine Price", "Quantity"};
 
 
 //                                                                              filtering the table
@@ -143,7 +143,6 @@ public class OrderMedicine {
 
         JTextField field = new JTextField();
         field.setBounds(1200, 100, 130, 40);
-//        field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
         order_frame.add(field);
 
 
@@ -237,8 +236,8 @@ public class OrderMedicine {
         });
 
 //                                                                                  table 2 user order medicine
-
-        usercartTable = new DefaultTableModel(getUserCart_Data,column);
+        String[] userCartTable_column = {"Code", "Name", "Medicine Varient", "Price", "Quantity","Sub total"};
+        usercartTable = new DefaultTableModel(getUserCart_Data,userCartTable_column);
         userorder_table = new JTable(usercartTable);
         userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
         userorder_Scroll = new JScrollPane(userorder_table);
@@ -249,10 +248,14 @@ public class OrderMedicine {
         outerpanel.add(userorder_Scroll);
 
 //                                                                                          usertabel mouse action work
+        JTextField removeqty = new JTextField();
+        Object[] removeqty_array = {"Remove Quantity :", removeqty};
 
         userorder_table.addMouseListener(new MouseAdapter() {
-            int row,column;
+            int row,column,medicine_qty,remainingQTY;
             long medicine_id;
+            String medicine_name;
+            Double medicine_price;
             @Override
             public void mouseClicked(MouseEvent e) {
                 row = userorder_table.rowAtPoint(e.getPoint());
@@ -260,7 +263,38 @@ public class OrderMedicine {
                 if(row >= 0) {
                     int viewModelRow = userorder_table.convertRowIndexToModel(row);
                     medicine_id = (Long) userorder_table.getModel().getValueAt(viewModelRow,column);
-                    JOptionPane.showMessageDialog(null,"Medicine code"+medicine_id);
+                    medicine_name = userorder_table.getModel().getValueAt(viewModelRow,column+1).toString();
+                    medicine_price = (Double) userorder_table.getModel().getValueAt(viewModelRow,column+3);
+                    medicine_qty = (Integer) userorder_table.getModel().getValueAt(viewModelRow,column+4);
+
+                    removeqty.setText(String.valueOf(medicine_qty));
+
+                        int option = JOptionPane.showConfirmDialog(null, removeqty_array, "Remove Medicine "+medicine_name, JOptionPane.OK_CANCEL_OPTION);
+                        if (option == JOptionPane.OK_OPTION) {
+//
+                            remainingQTY =  medicine_qty - Integer.valueOf(removeqty.getText());
+
+//                                                                               updating medicine qty
+                            Double finalPriceWithQuantity = remainingQTY * medicine_price;
+                            cartProduct.updateCartProductQTY(medicine_id,remainingQTY,finalPriceWithQuantity);
+                            cartProduct.removeAllproductQTY_0();
+
+                            usercartTable = (DefaultTableModel) userorder_table.getModel();
+                            usercartTable.setRowCount(0);
+                            cart_service.cartData(usercartTable,userorder_table);
+
+//                                                          first find the quantity of the product from product db
+                            int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id,Integer.valueOf(removeqty.getText()));
+                            System.out.println(productQty_ProductTable);
+//                                                      now adding back the product qty into product table
+                            functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id,productQty_ProductTable);
+
+                            tablemodel = (DefaultTableModel)order_medicine_table.getModel();
+                            tablemodel.setRowCount(0);
+                            productService.addingData(tablemodel,order_medicine_table);
+
+                            field.setText(String.valueOf("Total Price : " + showingtotalPrice()));
+                        }
                 }
             }
         });
@@ -276,7 +310,7 @@ public class OrderMedicine {
                     orderbool = false;
                 }
                 getBarcode_Product(barcodetext.getText(),field);
-
+                barcodetext.setText("");
             }
         });
 
@@ -346,20 +380,20 @@ public class OrderMedicine {
     public void workingOf_BuyButton(JButton buy_product) {
         buy_product.addActionListener(el -> {
 
-            if(this.userorder_table != null) {
+            if(this.userorder_table.getRowCount() > 0) {
 
                 this.userorder_table = null;
                 order_frame.dispose();
                 OrderProduct_Model orderProduct_model = new OrderProduct_Model(EmployeeLogin.activeEmployee, LocalDate.now(), "Completed");
                 orderProduct_functionality.update_OrderInformation(orderProduct_model);
 
-//                                          sending invoice data
+//                                              sending invoice data
                 Invoice invoice = new Invoice(DBService.orderID, EmployeeLogin.activeEmployee, LocalDate.now());
 
                 invoice_dao.insertInto_InvoiceDB(invoice);
-//                                          getting product and invoice data through joins
+//                                              getting product and invoice data through joins
                 invoice_dao.getDataOf_InvoiceLine();
-//                                           inserting the data into invoice line to show it to the recept
+//                                              inserting the data into invoice line to show it to the recept
                 invoice_dao.insertingInvoiceDataIn_InvoiceLine();
 //
                 sales_dao.insertingSalesRecord();
@@ -389,7 +423,7 @@ public class OrderMedicine {
     }
 
     public void getBarcode_Product(String barcode,JTextField field){
-        Integer finalquantity,quantity = 0;
+        Integer finalquantity,quantity =0;
         try {
             long code = Long.parseLong(barcode);
             barcodeSearch = code;
@@ -407,7 +441,6 @@ public class OrderMedicine {
                 quantity = productService.getmedicineQuantityBy_Barcode(barcodeSearch);
                 System.out.println("Quantity"+quantity);
                 finalquantity = quantity - 1;
-                System.out.println(finalquantity);
                 functionality_dao.updateMedicineQuantity_Barcode(barcodeSearch,finalquantity);
 
                 tablemodel = (DefaultTableModel)order_medicine_table.getModel();
@@ -415,6 +448,7 @@ public class OrderMedicine {
                 productService.addingData(tablemodel,order_medicine_table);
 
                 cartProduct.insertIntoCartBy_Barcode();
+
             }
 
             field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));

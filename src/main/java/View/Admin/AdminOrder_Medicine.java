@@ -20,7 +20,7 @@ public class AdminOrder_Medicine extends OrderMedicine {
 
         buy_product.addActionListener(el->{
 
-            if(this.userorder_table != null) {
+            if(this.userorder_table.getRowCount() > 0) {
                 this.userorder_table = null;
                 order_frame.dispose();
                 System.out.println(Admin.admin_name);
@@ -59,7 +59,7 @@ public class AdminOrder_Medicine extends OrderMedicine {
     public void working_ofExitButton(JButton exit) {
        exit.addActionListener(el->{
 
-           if(this.userorder_table != null) {
+           if(this.userorder_table.getRowCount() > 0) {
                int res = JOptionPane.showOptionDialog(order_frame, "Are you Sure \n Exit will remove the cart ", "Order", JOptionPane.DEFAULT_OPTION,
                        JOptionPane.INFORMATION_MESSAGE, null, null, null);
                if(res == 0){

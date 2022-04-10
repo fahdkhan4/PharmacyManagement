@@ -44,7 +44,6 @@ public interface UserCartProduct_Dao {
 //                                                                          delete cart product
     void delete_cartProduct();
 
-    void removeSpecific_CartProduct(Long barcode);
 
     void updateCartProductQuantity(ProductCart_Model updateqty);
 
@@ -53,4 +52,8 @@ public interface UserCartProduct_Dao {
     Double cartProductTotalAmount();
 
     void insertIntoCartBy_Barcode();
+
+    void updateCartProductQTY(Long barcode,Integer remaingqty,Double productprice);
+
+    void removeAllproductQTY_0();
 }

@@ -80,8 +80,13 @@ public interface Product_Dao {
 
 //                                                                         searching medicine by barcode
      List<Product> searchBybarcode();
-//
+//                                                                         subtract 1 productqty from product
      void updateMedicineQuantity_Barcode(Long barcode,Integer productQTY);
+
+//                                                                         get product quantity of barcode scanner product
+     int getProductQuantityOf_barcodeScanner(Long barcode,Integer quantity);
+//                                                                         adding quantity in product db after cart remove it
+     void updateMedicineQuantity_AfterRemovingFromCart(Long barcode,Integer quantity);
 
 }
 
