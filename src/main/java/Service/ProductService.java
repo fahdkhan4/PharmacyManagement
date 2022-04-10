@@ -81,4 +81,15 @@ public class ProductService implements GetAllMedicines{
         return model;
     }
 
+//                                                              finding the quantity of the specific barcode
+    public Integer getmedicineQuantityBy_Barcode(Long barcode){
+        Integer quantity = 0 ;
+        for (Product product:getMedicineByBarCode()) {
+            if(product.getBarCode().equals(barcode)){
+                quantity += product.getMedicine_quantity();
+            }
+        }
+        return quantity;
+    }
+
 }

@@ -66,6 +66,7 @@ public class OrderMedicine {
         activeMember = new JLabel();
         activeEmployeeName(activeMember);
 
+//                                                                                                   All buttons
 
         nameFor_Search = new JLabel("Medicine Name :");
         nameFor_Search.setFont(new Font("Serif", Font.BOLD, 20));
@@ -99,6 +100,7 @@ public class OrderMedicine {
         exit.setBackground(Color.ORANGE);
         exit.setForeground(Color.BLACK);
         order_frame.add(exit);
+
 //                                                                                          Data Binding
 
         data = productService.getAllMedicines();
@@ -210,20 +212,17 @@ public class OrderMedicine {
                             else {
                                 cartProduct.inserting_cartProduct(cart_model);
                             }
-//                            ....................................................................
-                            field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
-//                            showingtotalPrice();
-                            getUserCart_Data = cart_service.getallUserCart_Product();
-                            usercartTable = new DefaultTableModel(getUserCart_Data,column);
-                            userorder_table = new JTable(usercartTable);
 
-                            userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
-                            userorder_Scroll = new JScrollPane(userorder_table);
-                            userorder_table.getTableHeader().setOpaque(false);
-                            userorder_table.getTableHeader().setForeground(Color.BLACK);
-                            userorder_table.getTableHeader().setBackground(Color.ORANGE);
-                            userorder_Scroll.setBounds(827, 150, 536, 600);
-                            outerpanel.add(userorder_Scroll);
+//                            ....................................................................
+//                                                                                                          for price
+                            field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
+
+//                                                                                                          show cart product
+                            getUserCart_Data = cart_service.getallUserCart_Product();
+                            usercartTable = (DefaultTableModel) userorder_table.getModel();
+                            usercartTable.setRowCount(0);
+
+                            cart_service.cartData(usercartTable,userorder_table);
 
 //                          ...................................................................
                         } else {
@@ -237,22 +236,36 @@ public class OrderMedicine {
 
         });
 
-//            getUserCart_Data = cart_service.getallUserCart_Product();
-//            usercartTable = new DefaultTableModel(getUserCart_Data, column);
-//            userorder_table = new JTable(usercartTable);
-//
-//            userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
-//            userorder_Scroll = new JScrollPane(userorder_table);
-//
-//            userorder_table.getTableHeader().setOpaque(false);
-//            userorder_table.getTableHeader().setForeground(Color.BLACK);
-//            userorder_table.getTableHeader().setBackground(Color.ORANGE);
-//
-//            userorder_Scroll.setBounds(827, 150, 536, 600);
-//            outerpanel.add(userorder_Scroll);
-//
+//                                                                                  table 2 user order medicine
 
-                                                                    //          barcode work
+        usercartTable = new DefaultTableModel(getUserCart_Data,column);
+        userorder_table = new JTable(usercartTable);
+        userorder_table.setRowHeight(userorder_table.getRowHeight() + 10);
+        userorder_Scroll = new JScrollPane(userorder_table);
+        userorder_table.getTableHeader().setOpaque(false);
+        userorder_table.getTableHeader().setForeground(Color.BLACK);
+        userorder_table.getTableHeader().setBackground(Color.ORANGE);
+        userorder_Scroll.setBounds(827, 150, 536, 600);
+        outerpanel.add(userorder_Scroll);
+
+//                                                                                          usertabel mouse action work
+
+        userorder_table.addMouseListener(new MouseAdapter() {
+            int row,column;
+            long medicine_id;
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                row = userorder_table.rowAtPoint(e.getPoint());
+                column = 0;
+                if(row >= 0) {
+                    int viewModelRow = userorder_table.convertRowIndexToModel(row);
+                    medicine_id = (Long) userorder_table.getModel().getValueAt(viewModelRow,column);
+                    JOptionPane.showMessageDialog(null,"Medicine code"+medicine_id);
+                }
+            }
+        });
+
+                                                                                  //          barcode work
          barcodetext.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -262,7 +275,7 @@ public class OrderMedicine {
                     orderProduct_functionality.inserting_OrderInformation(orderProduct_model);
                     orderbool = false;
                 }
-                getBarcode_Product(barcodetext.getText());
+                getBarcode_Product(barcodetext.getText(),field);
 
             }
         });
@@ -312,7 +325,7 @@ public class OrderMedicine {
     public void working_ofExitButton(JButton exit) {
         exit.addActionListener(el -> {
 
-            if (this.userorder_table != null) {
+            if (this.userorder_table.getRowCount() > 0) {
                 int res = JOptionPane.showOptionDialog(order_frame, "Are you Sure \n Exit will remove the cart ", "Order", JOptionPane.DEFAULT_OPTION,
                         JOptionPane.INFORMATION_MESSAGE, null, null, null);
                 if (res == 0) {
@@ -370,25 +383,47 @@ public class OrderMedicine {
         Double total_amount =  cartProduct.cartProductTotalAmount();
         System.out.println(total_amount);
         if (total_amount != null || total_amount != 0.0) {
-//            JTextField field = new JTextField();
-//            field.setBounds(1200, 100, 130, 40);
-//            field.setText(String.valueOf("Total Price : " + total_amount));
-//            order_frame.add(field);
             return total_amount;
         }
         return 0.0;
     }
 
-    public void getBarcode_Product(String barcode){
+    public void getBarcode_Product(String barcode,JTextField field){
+        Integer finalquantity,quantity = 0;
         try {
             long code = Long.parseLong(barcode);
             barcodeSearch = code;
 
-            tablemodel = (DefaultTableModel)order_medicine_table.getModel();
-            tablemodel.setRowCount(0);
-            productService.getMedicineByBarcode(tablemodel,order_medicine_table);
+//            tablemodel = (DefaultTableModel)order_medicine_table.getModel();
+//            tablemodel.setRowCount(0);
+//            productService.getMedicineByBarcode(tablemodel,order_medicine_table);
 
-            cartProduct.insertIntoCartBy_Barcode();
+            Boolean barcodeCheck_duplicate = cart_service.checkDuplicateIncart_ByBarcode(barcodeSearch);
+
+            if(barcodeCheck_duplicate){
+                JOptionPane.showMessageDialog(null,"This product is already exist");
+            }
+            else {
+                quantity = productService.getmedicineQuantityBy_Barcode(barcodeSearch);
+                System.out.println("Quantity"+quantity);
+                finalquantity = quantity - 1;
+                System.out.println(finalquantity);
+                functionality_dao.updateMedicineQuantity_Barcode(barcodeSearch,finalquantity);
+
+                tablemodel = (DefaultTableModel)order_medicine_table.getModel();
+                tablemodel.setRowCount(0);
+                productService.addingData(tablemodel,order_medicine_table);
+
+                cartProduct.insertIntoCartBy_Barcode();
+            }
+
+            field.setText(String.valueOf("Total Price : " + showingtotalPrice() ));
+
+            getUserCart_Data = cart_service.getallUserCart_Product();
+            usercartTable = (DefaultTableModel) userorder_table.getModel();
+            usercartTable.setRowCount(0);
+
+            cart_service.cartData(usercartTable,userorder_table);
 
         }catch (Exception e){
             System.out.println(e);

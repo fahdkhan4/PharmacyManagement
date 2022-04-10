@@ -78,10 +78,10 @@ public interface Product_Dao {
 //                                                                         update medicine quantity
      void updateMedicine_Quantity(Product updateProductQTY);
 
-     void deleteAllHaving_QTY0();
-
+//                                                                         searching medicine by barcode
      List<Product> searchBybarcode();
-
+//
+     void updateMedicineQuantity_Barcode(Long barcode,Integer productQTY);
 
 }
 

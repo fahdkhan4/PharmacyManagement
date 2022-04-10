@@ -34,17 +34,18 @@ public class ProductFunctionality_Dao implements Product_Dao {
                 "product_qty = '"+updateProduct.getMedicine_quantity()+"' where barcode = "+updateProduct.getBarCode();
         DBService.PreparedQuery(updateProduct_query);
     }
-
+//                                                                    update medicine quantity for mouse click
     @Override
     public void updateMedicine_Quantity(Product updateProductQTY) {
         String updateMedicineQTY = "UPDATE products SET product_qty = "+updateProductQTY.getMedicine_quantity()+" WHERE barcode ="+updateProductQTY.getBarCode();
         DBService.PreparedQuery(updateMedicineQTY);
     }
 
+//                                                                      update medicine quantity for barcode scanner
     @Override
-    public void deleteAllHaving_QTY0() {
-        String query = "DELETE FROM products WHERE product_qty = 0";
-        DBService.PreparedQuery(query);
+    public void updateMedicineQuantity_Barcode(Long barcode,Integer productQTY) {
+        String updateQuantity = "UPDATE products SET product_qty = "+productQTY+" WHERE barcode = "+barcode;
+        DBService.PreparedQuery(updateQuantity);
     }
 
     @Override
@@ -72,7 +73,6 @@ public class ProductFunctionality_Dao implements Product_Dao {
 
         return  searchByBarcode;
     }
-
 
 
 

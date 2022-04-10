@@ -65,4 +65,15 @@ public class UserCartProduct_Services {
         return checkForvalue;
     }
 
+    public Boolean checkDuplicateIncart_ByBarcode(Long barcode){
+        Boolean checkForduplicateValue = false;
+
+        for (int i = 0; i < getCartProduct().size(); i++) {
+           if(getCartProduct().get(i).getProduct_code().equals(barcode)){
+               checkForduplicateValue = true;
+           }
+        }
+        return checkForduplicateValue;
+    }
+
 }
