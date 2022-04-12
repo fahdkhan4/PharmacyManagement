@@ -142,6 +142,7 @@ public class OrderMedicine {
         });
 
         JTextField field = new JTextField();
+        field.setEditable(false);
         field.setBounds(1200, 100, 130, 40);
         order_frame.add(field);
 
@@ -258,45 +259,49 @@ public class OrderMedicine {
             Double medicine_price;
             @Override
             public void mouseClicked(MouseEvent e) {
-                row = userorder_table.rowAtPoint(e.getPoint());
-                column = 0;
-                if(row >= 0) {
-                    int viewModelRow = userorder_table.convertRowIndexToModel(row);
-                    medicine_id = (Long) userorder_table.getModel().getValueAt(viewModelRow,column);
-                    medicine_name = userorder_table.getModel().getValueAt(viewModelRow,column+1).toString();
-                    medicine_price = (Double) userorder_table.getModel().getValueAt(viewModelRow,column+3);
-                    medicine_qty = (Integer) userorder_table.getModel().getValueAt(viewModelRow,column+4);
+                try {
+                    row = userorder_table.rowAtPoint(e.getPoint());
+                    column = 0;
+                    if (row >= 0) {
+                        int viewModelRow = userorder_table.convertRowIndexToModel(row);
+                        medicine_id = (Long) userorder_table.getModel().getValueAt(viewModelRow, column);
+                        medicine_name = userorder_table.getModel().getValueAt(viewModelRow, column + 1).toString();
+                        medicine_price = (Double) userorder_table.getModel().getValueAt(viewModelRow, column + 3);
+                        medicine_qty = (Integer) userorder_table.getModel().getValueAt(viewModelRow, column + 4);
 
-                    removeqty.setText(String.valueOf(medicine_qty));
+                        removeqty.setText(String.valueOf(medicine_qty));
 
-                        int option = JOptionPane.showConfirmDialog(null, removeqty_array, "Remove Medicine "+medicine_name, JOptionPane.OK_CANCEL_OPTION);
+                        int option = JOptionPane.showConfirmDialog(null, removeqty_array, "Remove Medicine " + medicine_name, JOptionPane.OK_CANCEL_OPTION);
                         if (option == JOptionPane.OK_OPTION) {
 //
-                            remainingQTY =  medicine_qty - Integer.valueOf(removeqty.getText());
+                            remainingQTY = medicine_qty - Integer.valueOf(removeqty.getText());
 
 //                                                                               updating medicine qty
                             Double finalPriceWithQuantity = remainingQTY * medicine_price;
-                            cartProduct.updateCartProductQTY(medicine_id,remainingQTY,finalPriceWithQuantity);
+                            cartProduct.updateCartProductQTY(medicine_id, remainingQTY, finalPriceWithQuantity);
                             cartProduct.removeAllproductQTY_0();
 
                             usercartTable = (DefaultTableModel) userorder_table.getModel();
                             usercartTable.setRowCount(0);
-                            cart_service.cartData(usercartTable,userorder_table);
+                            cart_service.cartData(usercartTable, userorder_table);
 
 //                                                          first find the quantity of the product from product db
-                            int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id,Integer.valueOf(removeqty.getText()));
+                            int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id, Integer.valueOf(removeqty.getText()));
                             System.out.println(productQty_ProductTable);
 //                                                      now adding back the product qty into product table
-                            functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id,productQty_ProductTable);
+                            functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id, productQty_ProductTable);
 
-                            tablemodel = (DefaultTableModel)order_medicine_table.getModel();
+                            tablemodel = (DefaultTableModel) order_medicine_table.getModel();
                             tablemodel.setRowCount(0);
-                            productService.addingData(tablemodel,order_medicine_table);
+                            productService.addingData(tablemodel, order_medicine_table);
 
                             field.setText(String.valueOf("Total Price : " + showingtotalPrice()));
                         }
+                    }
+                }catch (Exception order_e){
+                    System.out.println(order_e+" order med");
                 }
-            }
+                }
         });
 
                                                                                   //          barcode work
@@ -415,7 +420,6 @@ public class OrderMedicine {
 
     public Double showingtotalPrice() {
         Double total_amount =  cartProduct.cartProductTotalAmount();
-        System.out.println(total_amount);
         if (total_amount != null || total_amount != 0.0) {
             return total_amount;
         }

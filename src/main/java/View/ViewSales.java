@@ -26,13 +26,24 @@ public class ViewSales {
     public static String emp_name;
     public static LocalDate firstdate;
     public static LocalDate seconddate;
+    Double amountRevenue;
 
     public ViewSales(){
 
         JPanel tablepanel , butonpanel;
         JScrollPane scrollpane;
-
+        JTextField totalAmount;
         JButton exit;
+
+        totalAmount = new JTextField();
+        totalAmount.setEditable(false);
+        amountRevenue = sale.totalRevenue();
+        totalAmount.setText("     Revenue : "+amountRevenue);
+        totalAmount.setFont(new Font("TimesRoman",Font.BOLD,15));
+        totalAmount.setBackground(Color.ORANGE);
+        totalAmount.setForeground(Color.BLACK);
+        totalAmount.setBounds(1000,3,200,40);
+        viewSales_frame.add(totalAmount);
 //                                                                              Setting panel
 
         exit = new JButton("Back");
@@ -51,10 +62,6 @@ public class ViewSales {
         JComboBox<String> filteringCheckbox = new JComboBox<>(filteringOptions);
 
 
-        JButton getInfo = new JButton("Order Details");
-        getInfo.setPreferredSize(new Dimension(150,50));
-        getInfo.setBackground(Color.ORANGE);
-        butonpanel.add(getInfo);
         butonpanel.add(filteringCheckbox);
         butonpanel.setBounds(40,30,1000,50);
         butonpanel.setBackground(Color.darkGray);

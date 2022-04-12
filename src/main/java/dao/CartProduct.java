@@ -57,7 +57,7 @@ public class CartProduct implements  UserCartProduct_Dao{
                     cartTotalAmount = Double.valueOf(rs.getString("SUM(price_unit)"));
             }
         }catch (Exception e){
-            System.out.println(e);
+            System.out.println("Total amount went 0"+e);
         }
         return cartTotalAmount;
     }

@@ -11,6 +11,7 @@ public class DBService {
     public static Boolean duplicate_check;
     public static Integer orderID;
 
+//     make a method of
     static{
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

@@ -113,4 +113,13 @@ public class SalesRecord {
         return model;
     }
 
+    public Double totalRevenue(){
+        Double totalAmount = 0.0;
+        int size = saleRecords().size();
+        for (int i = 0; i < size ; i++) {
+            totalAmount += saleRecords().get(i).getProfit();
+        }
+        return totalAmount;
+    }
+
 }
