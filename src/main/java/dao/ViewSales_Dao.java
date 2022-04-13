@@ -5,6 +5,7 @@ import Model.SaleRecord;
 import View.ViewSales;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,17 @@ public class ViewSales_Dao implements Sales_Dao {
                 "INNER JOIN productorder o ON o.id = c.order_id)\n" +
                 "INNER JOIN products p ON p.barcode = c.product_barcode)\n" +
                 " WHERE o.state = \"Completed\" GROUP BY o.id HAVING o.id NOT IN (SELECT order_id FROM sales)";
+        try {
+            DBService.PreparedQuery(query);
+        }catch (Exception e){
 
-        DBService.PreparedQuery(query);
+        }finally {
+            try {
+                DBService.con.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -44,6 +54,13 @@ public class ViewSales_Dao implements Sales_Dao {
         }
         catch (Exception error){
             System.out.println(error);
+        }
+        finally {
+            try {
+                DBService.con.close();
+            }catch (Exception e){
+
+            }
         }
         return saleRecords;
     }
@@ -72,6 +89,18 @@ public class ViewSales_Dao implements Sales_Dao {
         }catch (Exception e){
             System.out.println(e);
         }
+        try {
+            DBService.con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                DBService.con.close();
+            }catch (Exception e){
+
+            }
+        }
         return filterName;
     }
 
@@ -98,6 +127,13 @@ public class ViewSales_Dao implements Sales_Dao {
         }catch (Exception e){
             System.out.println(e);
         }
+        finally {
+            try {
+                DBService.con.close();
+            }catch (Exception e){
+
+            }
+        }
         return filterdate;
     }
 
@@ -122,6 +158,13 @@ public class ViewSales_Dao implements Sales_Dao {
             }
         }catch (Exception e){
             System.out.println(e);
+        }
+        finally {
+            try {
+                DBService.con.close();
+            }catch (Exception e){
+
+            }
         }
         return sort;
     }
@@ -148,6 +191,13 @@ public class ViewSales_Dao implements Sales_Dao {
             }
         }catch (Exception error){
             System.out.println(error);
+        }
+        finally {
+            try {
+                DBService.con.close();
+            }catch (Exception e){
+
+            }
         }
         return model;
     }

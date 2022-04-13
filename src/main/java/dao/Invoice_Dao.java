@@ -15,7 +15,11 @@ public class Invoice_Dao implements InvoiceDB_Dao {
     public void insertInto_InvoiceDB(Invoice invoice) {
 
         String query = "INSERT INTO invoice(order_id,emp_name,invoice_date) VALUES ("+invoice.getOrder_id()+",'"+invoice.getEmp_name()+"','"+invoice.getDate()+"')";
-        DBService.PreparedQuery(query);
+        try {
+            DBService.PreparedQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -77,7 +81,11 @@ public class Invoice_Dao implements InvoiceDB_Dao {
     public void insertingInvoiceDataIn_InvoiceLine() {
         for (Invoice_line invoice_Data:getDataOf_InvoiceLine()) {
             String query  = "INSERT INTO invoice_line VALUES ("+invoice_Data.getInvoice_id()+","+invoice_Data.getOrder_id()+",'"+invoice_Data.getItem_name()+"','"+invoice_Data.getItem_varient()+"',"+invoice_Data.getProduct_price()+","+invoice_Data.getItemQuantity_price()+","+invoice_Data.getItem_qty()+")";
-            DBService.PreparedQuery(query);
+            try {
+                DBService.PreparedQuery(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -271,32 +271,37 @@ public class OrderMedicine {
 
                         removeqty.setText(String.valueOf(medicine_qty));
 
-                        int option = JOptionPane.showConfirmDialog(null, removeqty_array, "Remove Medicine " + medicine_name, JOptionPane.OK_CANCEL_OPTION);
-                        if (option == JOptionPane.OK_OPTION) {
+                            int option = JOptionPane.showConfirmDialog(null, removeqty_array, "Remove Medicine " + medicine_name, JOptionPane.OK_CANCEL_OPTION);
+                            if (option == JOptionPane.OK_OPTION) {
+                                if(Integer.valueOf(removeqty.getText()) <= medicine_qty) {
 //
-                            remainingQTY = medicine_qty - Integer.valueOf(removeqty.getText());
+                                    remainingQTY = medicine_qty - Integer.valueOf(removeqty.getText());
 
 //                                                                               updating medicine qty
-                            Double finalPriceWithQuantity = remainingQTY * medicine_price;
-                            cartProduct.updateCartProductQTY(medicine_id, remainingQTY, finalPriceWithQuantity);
-                            cartProduct.removeAllproductQTY_0();
+                                    Double finalPriceWithQuantity = remainingQTY * medicine_price;
+                                    cartProduct.updateCartProductQTY(medicine_id, remainingQTY, finalPriceWithQuantity);
+                                    cartProduct.removeAllproductQTY_0();
 
-                            usercartTable = (DefaultTableModel) userorder_table.getModel();
-                            usercartTable.setRowCount(0);
-                            cart_service.cartData(usercartTable, userorder_table);
+                                    usercartTable = (DefaultTableModel) userorder_table.getModel();
+                                    usercartTable.setRowCount(0);
+                                    cart_service.cartData(usercartTable, userorder_table);
 
 //                                                          first find the quantity of the product from product db
-                            int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id, Integer.valueOf(removeqty.getText()));
-                            System.out.println(productQty_ProductTable);
+                                    int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id, Integer.valueOf(removeqty.getText()));
+                                    System.out.println(productQty_ProductTable);
 //                                                      now adding back the product qty into product table
-                            functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id, productQty_ProductTable);
+                                    functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id, productQty_ProductTable);
 
-                            tablemodel = (DefaultTableModel) order_medicine_table.getModel();
-                            tablemodel.setRowCount(0);
-                            productService.addingData(tablemodel, order_medicine_table);
+                                    tablemodel = (DefaultTableModel) order_medicine_table.getModel();
+                                    tablemodel.setRowCount(0);
+                                    productService.addingData(tablemodel, order_medicine_table);
 
-                            field.setText(String.valueOf("Total Price : " + showingtotalPrice()));
-                        }
+                                    field.setText(String.valueOf("Total Price : " + showingtotalPrice()));
+                                }
+                                else{
+                                    JOptionPane.showMessageDialog(null,"product in cart is "+medicine_qty);
+                                }
+                            }
                     }
                 }catch (Exception order_e){
                     System.out.println(order_e+" order med");

@@ -13,9 +13,14 @@ public class ProductFunctionality_Dao implements Product_Dao {
 
 
     @Override
-    public void insertProduct_ToDB(Product product) {
+    public void insertProduct_ToDB(Product product)  {
         String query = "INSERT INTO products(barcode,product_name,product_varient,cost_price,sell_price,product_qty) VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
-        DBService.addProductPreparedQuery(query);
+        try {
+            DBService.addProductPreparedQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -23,7 +28,11 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String query ;
         for (Long code:productCode) {
             query = "DELETE FROM products  WHERE barcode="+code;
-            DBService.deleteProduct(query);
+            try {
+                DBService.deleteProduct(query);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -32,20 +41,32 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String updateProduct_query = "UPDATE products SET product_name = '"+updateProduct.getMedicine_name()+"'," +
                 "product_varient = '"+updateProduct.getMedicine_varient()+"', sell_price= '"+updateProduct.getMedicine_Saleprice()+"'," +
                 "product_qty = '"+updateProduct.getMedicine_quantity()+"' where barcode = "+updateProduct.getBarCode();
-        DBService.PreparedQuery(updateProduct_query);
+        try {
+            DBService.PreparedQuery(updateProduct_query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 //                                                                    update medicine quantity for mouse click
     @Override
     public void updateMedicine_Quantity(Product updateProductQTY) {
         String updateMedicineQTY = "UPDATE products SET product_qty = "+updateProductQTY.getMedicine_quantity()+" WHERE barcode ="+updateProductQTY.getBarCode();
-        DBService.PreparedQuery(updateMedicineQTY);
+        try {
+            DBService.PreparedQuery(updateMedicineQTY);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 //                                                                      update medicine quantity for barcode scanner
     @Override
     public void updateMedicineQuantity_Barcode(Long barcode,Integer productQTY) {
         String updateQuantity = "UPDATE products SET product_qty = "+productQTY+" WHERE barcode = "+barcode;
-        DBService.PreparedQuery(updateQuantity);
+        try {
+            DBService.PreparedQuery(updateQuantity);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 //                                                                      get product quantity of barcode scanner product
@@ -63,7 +84,11 @@ public class ProductFunctionality_Dao implements Product_Dao {
     @Override
     public void updateMedicineQuantity_AfterRemovingFromCart(Long barcode, Integer quantity) {
         String query = "UPDATE products SET product_qty = "+quantity+" WHERE barcode = "+barcode;
-        DBService.PreparedQuery(query);
+        try {
+            DBService.PreparedQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

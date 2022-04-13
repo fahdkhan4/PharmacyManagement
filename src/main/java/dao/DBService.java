@@ -11,8 +11,9 @@ public class DBService {
     public static Boolean duplicate_check;
     public static Integer orderID;
 
-//     make a method of
-    static{
+
+
+    public static void createConnection(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con= DriverManager.getConnection(
@@ -22,11 +23,15 @@ public class DBService {
         }
     }
 
+
     public static ResultSet query(String query) throws SQLException {
+        createConnection();
         try{
             Statement stmt=con.createStatement();
             ResultSet rs=stmt.executeQuery(query);
+
             return rs;
+
         }catch(Exception e){
             System.out.println(e);
         }
@@ -34,32 +39,34 @@ public class DBService {
 
     }
 
-    public static void addProductPreparedQuery(String query) {
+    public static void addProductPreparedQuery(String query) throws SQLException {
+        createConnection();
         duplicate_check = false;
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.executeUpdate();
 
         }catch (Exception e){
-
             duplicate_check = true;
             System.out.println(e);
         }
+
     }
 
-    public static void PreparedQuery(String query) {
-
+    public static void PreparedQuery(String query)  {
+        createConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.executeUpdate();
-
         }catch (Exception e){
 
             System.out.println(e);
         }
+
     }
 
-    public static void PreparedQuery_GettingKey(String query){
+    public static void PreparedQuery_GettingKey(String query) throws SQLException {
+        createConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
             pstmt.executeUpdate();
@@ -69,25 +76,24 @@ public class DBService {
                 orderID = rs.getInt(1);
                 System.out.println(orderID);
             }
+
         }catch (Exception e){
             duplicate_check = true;
             System.out.println(e);
         }
+
     }
 
-    public static void deleteProduct(String query) {
-
+    public static void deleteProduct(String query) throws SQLException {
+        createConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement(query);
             pstmt.executeUpdate();
 
         }catch (Exception e){
-
             Admin_ViewMedicine.errorOnDeleteProduct();
         }
+
     }
-
-
-
 
 }

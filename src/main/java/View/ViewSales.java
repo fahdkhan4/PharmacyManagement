@@ -35,6 +35,16 @@ public class ViewSales {
         JTextField totalAmount;
         JButton exit;
 
+        JTextField filteringDetail_1 = new JTextField();
+        filteringDetail_1.setEditable(false);
+        filteringDetail_1.setVisible(false);
+        filteringDetail_1.setForeground(Color.BLACK);
+        filteringDetail_1.setBackground(Color.ORANGE);
+        filteringDetail_1.setFont(new Font("TimesRoman",Font.BOLD,15));
+        filteringDetail_1.setBounds(100,3,300,40);
+        viewSales_frame.add(filteringDetail_1);
+
+
         totalAmount = new JTextField();
         totalAmount.setEditable(false);
         amountRevenue = sale.totalRevenue();
@@ -100,6 +110,9 @@ public class ViewSales {
                    int option = JOptionPane.showConfirmDialog(null, filterName, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
                    if (option == JOptionPane.OK_OPTION) {
 
+                       filteringDetail_1.setText("Filtering by name : "+employeename.getText());
+                       filteringDetail_1.setVisible(true);
+
                        emp_name = employeename.getText();
                        model = (DefaultTableModel)viewSales_table.getModel();
                        model.setRowCount(0);
@@ -118,6 +131,11 @@ public class ViewSales {
                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH);
                            firstdate =  LocalDate.parse(firstDate.getText(),formatter);
                            seconddate = LocalDate.parse(secondDate.getText(),formatter);
+
+                           filteringDetail_1.setText("Date from : "+firstDate.getText()+" To "+secondDate.getText());
+                           filteringDetail_1.setVisible(true);
+
+
 
                        }catch (Exception error){
                            System.out.println(error);

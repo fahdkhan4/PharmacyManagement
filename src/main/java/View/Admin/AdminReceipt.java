@@ -37,7 +37,7 @@ public class AdminReceipt extends JFrame implements ActionListener {
 
         Container content = getContentPane();
 
-        JButton exit = new JButton("Exit");
+        JButton exit = new JButton("Back");
         exit.setForeground(Color.BLACK);
         exit.setBackground(Color.ORANGE);
         exit.setBounds(1100,100,100,50);
