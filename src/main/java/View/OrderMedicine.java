@@ -288,7 +288,7 @@ public class OrderMedicine {
 
 //                                                          first find the quantity of the product from product db
                                     int productQty_ProductTable = functionality_dao.getProductQuantityOf_barcodeScanner(medicine_id, Integer.valueOf(removeqty.getText()));
-                                    System.out.println(productQty_ProductTable);
+
 //                                                      now adding back the product qty into product table
                                     functionality_dao.updateMedicineQuantity_AfterRemovingFromCart(medicine_id, productQty_ProductTable);
 
@@ -448,7 +448,7 @@ public class OrderMedicine {
             }
             else {
                 quantity = productService.getmedicineQuantityBy_Barcode(barcodeSearch);
-                System.out.println("Quantity"+quantity);
+
                 finalquantity = quantity - 1;
                 functionality_dao.updateMedicineQuantity_Barcode(barcodeSearch,finalquantity);
 

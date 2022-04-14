@@ -150,8 +150,6 @@ public class Admin_ViewMedicine  {
                         medicineDefaultTable.setRowCount(0);
                         productService.addingData(medicineDefaultTable,medicine);
 
-//                        Admin_ViewMedicine view = new Admin_ViewMedicine();
-//                        viewMedicine_frame.dispose();
                         deleterowError = false;
                     }
 
