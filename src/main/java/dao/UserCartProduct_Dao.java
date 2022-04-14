@@ -31,6 +31,7 @@ public interface UserCartProduct_Dao {
                                 Integer.valueOf(rs.getString("order_id"))
                         ));
             }
+            DBService.con.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

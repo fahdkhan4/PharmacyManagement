@@ -47,7 +47,6 @@ public class PrintableDocument implements Printable {
 
     public void print() {
         PrinterJob printJob = PrinterJob.getPrinterJob();
-//        printJob.setPrintable(this);
         printJob.setPrintable(this,getPageFormat(printJob));
         if(printJob.printDialog())
             try {

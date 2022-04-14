@@ -17,6 +17,7 @@ public interface EmployeeLogin_Dao {
                     break;
                 loginRequirements.put(rs.getString("employeeName"),rs.getString("emp_password"));
             }
+            DBService.con.close();
         }catch (Exception e)
         {
             System.out.println(e);

@@ -11,7 +11,7 @@ public interface InvoiceDB_Dao {
 
     void insertInto_InvoiceDB(Invoice invoice);
 
-    List<Invoice> getDataOf_Invoice() throws SQLException;
+    List<Invoice> getDataOf_Invoice();
 
     List<Invoice_line> getDataOf_InvoiceLine();
 

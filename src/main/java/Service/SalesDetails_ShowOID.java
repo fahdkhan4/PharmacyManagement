@@ -14,7 +14,6 @@ public class SalesDetails_ShowOID {
 
 
     public Object[][] saleDetailsBy_OrderID(){
-        System.out.println(salesRecords());
         int size = (int) salesRecords().stream().count();
         Object [][] details = new Object[size][6];
         for (int i = 0; i < size ; i++) {

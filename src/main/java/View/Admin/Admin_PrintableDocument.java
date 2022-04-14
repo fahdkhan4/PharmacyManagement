@@ -10,7 +10,7 @@ public class Admin_PrintableDocument implements Printable {
         private Component compent;
 
         public static void printComponent(Component c) {
-            new View.PrintableDocument(c).print();
+            new View.Admin.Admin_PrintableDocument(c).print();
         }
 
         public Admin_PrintableDocument(Component compent) {
@@ -24,7 +24,7 @@ public class Admin_PrintableDocument implements Printable {
             PageFormat pf = pj.defaultPage();
             Paper paper = pf.getPaper();
 
-            double bodyHeight = bHeight+10;
+            double bodyHeight = bHeight;
             double headerHeight = 5.0;
             double footerHeight = 5.0;
             double width = cm_to_pp(14);
@@ -48,8 +48,8 @@ public class Admin_PrintableDocument implements Printable {
         }
 
         public void print() {
+
             PrinterJob printJob = PrinterJob.getPrinterJob();
-//        printJob.setPrintable(this);
             printJob.setPrintable(this,getPageFormat(printJob));
             if(printJob.printDialog())
                 try {

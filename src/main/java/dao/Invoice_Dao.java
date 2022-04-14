@@ -17,6 +17,7 @@ public class Invoice_Dao implements InvoiceDB_Dao {
         String query = "INSERT INTO invoice(order_id,emp_name,invoice_date) VALUES ("+invoice.getOrder_id()+",'"+invoice.getEmp_name()+"','"+invoice.getDate()+"')";
         try {
             DBService.PreparedQuery(query);
+            DBService.con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -40,7 +41,7 @@ public class Invoice_Dao implements InvoiceDB_Dao {
                         LocalDate.parse(rs.getString("invoice_date"))
                 ));
             }
-
+            DBService.con.close();
         }catch (Exception e){
             System.out.println(e);
         }
@@ -69,7 +70,7 @@ public class Invoice_Dao implements InvoiceDB_Dao {
                             rs.getString("product_varient")
                     ));
               }
-
+            DBService.con.close();
 
         }catch (Exception e){
             System.out.println(e);
@@ -83,6 +84,7 @@ public class Invoice_Dao implements InvoiceDB_Dao {
             String query  = "INSERT INTO invoice_line VALUES ("+invoice_Data.getInvoice_id()+","+invoice_Data.getOrder_id()+",'"+invoice_Data.getItem_name()+"','"+invoice_Data.getItem_varient()+"',"+invoice_Data.getProduct_price()+","+invoice_Data.getItemQuantity_price()+","+invoice_Data.getItem_qty()+")";
             try {
                 DBService.PreparedQuery(query);
+                DBService.con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -111,6 +113,7 @@ public class Invoice_Dao implements InvoiceDB_Dao {
                 ));
 
             }
+            DBService.con.close();
         }catch (Exception e){
             System.out.println(e);
         }

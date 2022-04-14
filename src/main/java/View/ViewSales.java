@@ -110,7 +110,7 @@ public class ViewSales {
                    int option = JOptionPane.showConfirmDialog(null, filterName, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
                    if (option == JOptionPane.OK_OPTION) {
 
-                       filteringDetail_1.setText("Filtering by name : "+employeename.getText());
+                       filteringDetail_1.setText("Filtered by name : "+employeename.getText());
                        filteringDetail_1.setVisible(true);
 
                        emp_name = employeename.getText();
@@ -119,7 +119,7 @@ public class ViewSales {
                        sale.filterSales_ByName(model,viewSales_table);
                    }
                }
-               else if(s1.equalsIgnoreCase("Filter By Date")){
+               else if(s1.equalsIgnoreCase("Filtered By Date")){
 
                    firstDate.setText("2022-04-06");
                    secondDate.setText("2022-04-06");
@@ -147,11 +147,13 @@ public class ViewSales {
                    }
                }
                else if (s1.equalsIgnoreCase("Filter By profit")){
+                   filteringDetail_1.setVisible(false);
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
                    sale.SortingBy_Profit(model,viewSales_table);
                }
                else{
+                   filteringDetail_1.setVisible(false);
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
                    sale.viewAllSaleRecord(model,viewSales_table);

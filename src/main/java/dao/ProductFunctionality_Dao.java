@@ -14,9 +14,11 @@ public class ProductFunctionality_Dao implements Product_Dao {
 
     @Override
     public void insertProduct_ToDB(Product product)  {
-        String query = "INSERT INTO products(barcode,product_name,product_varient,cost_price,sell_price,product_qty) VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
         try {
+            String query = "INSERT INTO products(barcode,product_name,product_varient,cost_price,sell_price,product_qty) VALUES ("+product.getBarCode()+",'"+product.getMedicine_name()+"','"+product.getMedicine_varient()+"',"+product.getMedicine_Costprice()+","+product.getMedicine_Saleprice()+","+product.getMedicine_quantity()+")";
             DBService.addProductPreparedQuery(query);
+            DBService.con.close();
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -30,6 +32,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
             query = "DELETE FROM products  WHERE barcode="+code;
             try {
                 DBService.deleteProduct(query);
+                DBService.con.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -43,6 +46,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
                 "product_qty = '"+updateProduct.getMedicine_quantity()+"' where barcode = "+updateProduct.getBarCode();
         try {
             DBService.PreparedQuery(updateProduct_query);
+            DBService.con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,6 +57,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String updateMedicineQTY = "UPDATE products SET product_qty = "+updateProductQTY.getMedicine_quantity()+" WHERE barcode ="+updateProductQTY.getBarCode();
         try {
             DBService.PreparedQuery(updateMedicineQTY);
+            DBService.con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,6 +69,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String updateQuantity = "UPDATE products SET product_qty = "+productQTY+" WHERE barcode = "+barcode;
         try {
             DBService.PreparedQuery(updateQuantity);
+            DBService.con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -86,6 +92,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
         String query = "UPDATE products SET product_qty = "+quantity+" WHERE barcode = "+barcode;
         try {
             DBService.PreparedQuery(query);
+            DBService.con.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -109,6 +116,7 @@ public class ProductFunctionality_Dao implements Product_Dao {
                                 Double.valueOf(rs.getString("sell_price")),
                                 Integer.valueOf(rs.getString("product_qty"))));
             }
+            DBService.con.close();
 
         } catch (SQLException e) {
             e.printStackTrace();

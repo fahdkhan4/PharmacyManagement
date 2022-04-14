@@ -5,7 +5,6 @@ import Model.SaleRecord;
 import View.ViewSales;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +19,9 @@ public class ViewSales_Dao implements Sales_Dao {
                 " WHERE o.state = \"Completed\" GROUP BY o.id HAVING o.id NOT IN (SELECT order_id FROM sales)";
         try {
             DBService.PreparedQuery(query);
+            DBService.con.close();
         }catch (Exception e){
 
-        }finally {
-            try {
-                DBService.con.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -51,17 +45,12 @@ public class ViewSales_Dao implements Sales_Dao {
                             Double.valueOf(rs.getString("profit"))
                     ));
             }
+            DBService.con.close();
         }
         catch (Exception error){
             System.out.println(error);
         }
-        finally {
-            try {
-                DBService.con.close();
-            }catch (Exception e){
 
-            }
-        }
         return saleRecords;
     }
 
@@ -86,21 +75,11 @@ public class ViewSales_Dao implements Sales_Dao {
                         Double.valueOf(rs.getString("profit"))
                 ));
             }
+            DBService.con.close();
         }catch (Exception e){
             System.out.println(e);
         }
-        try {
-            DBService.con.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        finally {
-            try {
-                DBService.con.close();
-            }catch (Exception e){
 
-            }
-        }
         return filterName;
     }
 
@@ -124,16 +103,11 @@ public class ViewSales_Dao implements Sales_Dao {
                         Double.valueOf(rs.getString("profit"))
                 ));
             }
+            DBService.con.close();
         }catch (Exception e){
             System.out.println(e);
         }
-        finally {
-            try {
-                DBService.con.close();
-            }catch (Exception e){
 
-            }
-        }
         return filterdate;
     }
 
@@ -156,15 +130,9 @@ public class ViewSales_Dao implements Sales_Dao {
                         Double.valueOf(rs.getString("profit"))
                 ));
             }
+            DBService.con.close();
         }catch (Exception e){
             System.out.println(e);
-        }
-        finally {
-            try {
-                DBService.con.close();
-            }catch (Exception e){
-
-            }
         }
         return sort;
     }
@@ -189,16 +157,11 @@ public class ViewSales_Dao implements Sales_Dao {
                 ));
 
             }
+            DBService.con.close();
         }catch (Exception error){
             System.out.println(error);
         }
-        finally {
-            try {
-                DBService.con.close();
-            }catch (Exception e){
 
-            }
-        }
         return model;
     }
 

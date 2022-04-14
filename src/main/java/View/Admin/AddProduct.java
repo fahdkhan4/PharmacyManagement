@@ -132,7 +132,7 @@ public class AddProduct {
     public void add_ProductFunctionality() {
 
         if(p_codeText.getText().equalsIgnoreCase("") || p_nameText.getText().equalsIgnoreCase("") || p_variantText.getText().equalsIgnoreCase("") || p_costpriceText.getText().equalsIgnoreCase("") || p_sellpriceText.getText().equalsIgnoreCase("") || p_quantityText.getText().equalsIgnoreCase("")) {
-            JOptionPane.showMessageDialog(addProduct_frame,"Fist fill the form");
+            JOptionPane.showMessageDialog(addProduct_frame,"Please fill all the fields !!");
 
         }else {
             try {
@@ -150,6 +150,12 @@ public class AddProduct {
 
                 if (DBService.duplicate_check) {
                     JOptionPane.showMessageDialog(addProduct_frame, "This Product is already Exist");
+                    p_codeText.setText("");
+                    p_nameText.setText("");
+                    p_variantText.setText("");
+                    p_costpriceText.setText("");
+                    p_sellpriceText.setText("");
+                    p_quantityText.setText("");
                 } else {
                     JOptionPane.showMessageDialog(addProduct_frame, "Product added");
                     p_codeText.setText("");

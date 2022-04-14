@@ -5,6 +5,7 @@ import Service.ProductService;
 import dao.ProductFunctionality_Dao;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import java.awt.*;
@@ -20,6 +21,7 @@ public class Admin_ViewMedicine  {
     public JFrame viewMedicine_frame = new JFrame("Medicine");
     public JTable medicine;
     public static Boolean deleterowError;
+    DefaultTableModel medicineDefaultTable;
     JButton update,delete;
     JButton exit;
 
@@ -33,7 +35,8 @@ public class Admin_ViewMedicine  {
         ProductService productService = new ProductService();
         Object [][] data = productService.getAllMedicineForUpdate();
 
-        medicine = new JTable(data, columns);
+        medicineDefaultTable = new DefaultTableModel(data,columns);
+        medicine = new JTable(medicineDefaultTable);
 
         medicine.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         for (int col = 0; col < medicine.getColumnCount(); col++)
@@ -135,13 +138,23 @@ public class Admin_ViewMedicine  {
                 deleterowError = true;
                 updateProduct = null;
                 ProductFunctionality_Dao functionality_dao = new ProductFunctionality_Dao();
-                functionality_dao.delete_Medicines(medicineCode_Delete);
+
 
                 if(deleterowError) {
-                    Admin_ViewMedicine view = new Admin_ViewMedicine();
-                    JOptionPane.showMessageDialog(viewMedicine_frame, "Press Ok to DELETE");
-                    viewMedicine_frame.dispose();
-                    deleterowError = false;
+
+                    int option = JOptionPane.showConfirmDialog(viewMedicine_frame, "Press Ok to Delete", "Delete Medicine", JOptionPane.OK_CANCEL_OPTION);
+                    if(option == JOptionPane.OK_OPTION) {
+                        functionality_dao.delete_Medicines(medicineCode_Delete);
+
+                        medicineDefaultTable = (DefaultTableModel) medicine.getModel();
+                        medicineDefaultTable.setRowCount(0);
+                        productService.addingData(medicineDefaultTable,medicine);
+
+//                        Admin_ViewMedicine view = new Admin_ViewMedicine();
+//                        viewMedicine_frame.dispose();
+                        deleterowError = false;
+                    }
+
                 }
 
                 medicineCode_Delete.clear();

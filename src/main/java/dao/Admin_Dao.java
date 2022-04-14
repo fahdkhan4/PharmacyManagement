@@ -17,6 +17,7 @@ public interface Admin_Dao {
                     break;
                 loginRequirements.put(rs.getString("username"),rs.getString("password"));
             }
+            DBService.con.close();
         }catch (Exception e)
         {
             System.out.println(e);

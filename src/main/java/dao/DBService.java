@@ -1,8 +1,6 @@
 package dao;
 import View.Admin.Admin_ViewMedicine;
-import View.OrderMedicine;
 
-import java.awt.*;
 import java.sql.*;
 
 
@@ -14,6 +12,7 @@ public class DBService {
 
 
     public static void createConnection(){
+//                                                      create connection
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con= DriverManager.getConnection(
@@ -24,7 +23,7 @@ public class DBService {
     }
 
 
-    public static ResultSet query(String query) throws SQLException {
+    public static ResultSet query(String query){
         createConnection();
         try{
             Statement stmt=con.createStatement();
@@ -36,10 +35,9 @@ public class DBService {
             System.out.println(e);
         }
         return null;
-
     }
 
-    public static void addProductPreparedQuery(String query) throws SQLException {
+    public static void addProductPreparedQuery(String query) {
         createConnection();
         duplicate_check = false;
         try {
@@ -65,7 +63,7 @@ public class DBService {
 
     }
 
-    public static void PreparedQuery_GettingKey(String query) throws SQLException {
+    public static void PreparedQuery_GettingKey(String query) {
         createConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement(query,Statement.RETURN_GENERATED_KEYS);
@@ -84,7 +82,7 @@ public class DBService {
 
     }
 
-    public static void deleteProduct(String query) throws SQLException {
+    public static void deleteProduct(String query)  {
         createConnection();
         try {
             PreparedStatement pstmt = con.prepareStatement(query);

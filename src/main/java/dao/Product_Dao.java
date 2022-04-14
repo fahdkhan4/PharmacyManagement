@@ -27,7 +27,7 @@ public interface Product_Dao {
                                     Double.valueOf(rs.getString("sell_price")),
                                     Integer.valueOf(rs.getString("product_qty"))));
                }
-
+               DBService.con.close();
           } catch (SQLException e) {
                e.printStackTrace();
           }
@@ -51,6 +51,7 @@ public interface Product_Dao {
                                     Double.valueOf(rs.getString("sell_price")),
                                     Integer.valueOf(rs.getString("product_qty"))));
                }
+               DBService.con.close();
 
           } catch (SQLException e) {
                e.printStackTrace();

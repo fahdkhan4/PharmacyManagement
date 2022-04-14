@@ -128,8 +128,8 @@ public class Receipt extends JFrame implements ActionListener {
             graph.drawString("*************************************",10,y);y+=yShift;
             graph.drawString("       THANK YOU COME AGAIN            ",10,y);y+=yShift;
             graph.drawString("*************************************",10,y);y+=yShift;
-            graph.drawString("         Fahd and Anus          ",10,y);y+=yShift;
-            graph.drawString("   CONTACT: fk1271543@gmail.com       ",10,y);y+=yShift;
+            graph.drawString("          Fahd and Anus          ",10,y);y+=yShift;
+            graph.drawString("    CONTACT: fk1271543@gmail.com       ",10,y);y+=yShift;
 
             AffineTransform origTransform = graph.getTransform();
             graph.shear(-0.95, 0);

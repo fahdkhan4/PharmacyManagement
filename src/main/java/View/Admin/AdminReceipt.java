@@ -1,6 +1,5 @@
 package View.Admin;
 
-import View.PrintableDocument;
 import View.WindowShow;
 import dao.CartProduct;
 import dao.DBService;
@@ -111,7 +110,7 @@ public class AdminReceipt extends JFrame implements ActionListener {
             graph.drawString("--------------------------------------",10,y);y+=headerRectHeight;
 
             int size = invoice_dao.getDataOf_InvoiceLine().size();
-            admin_bHeight = Double.valueOf((invoice_dao.getDataOf_InvoiceLine().size())+10);
+            admin_bHeight = Double.valueOf(invoice_dao.getDataOf_InvoiceLine().size()+10);
 
             for(int s=0; s < size; s++)
             {
