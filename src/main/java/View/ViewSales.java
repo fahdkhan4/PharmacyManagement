@@ -119,12 +119,12 @@ public class ViewSales {
                        sale.filterSales_ByName(model,viewSales_table);
                    }
                }
-               else if(s1.equalsIgnoreCase("Filtered By Date")){
+               else if(s1.equalsIgnoreCase("Filter By Date")){
 
                    firstDate.setText("2022-04-06");
                    secondDate.setText("2022-04-06");
 
-                   int option = JOptionPane.showConfirmDialog(null, datefilter, "Filter By Name", JOptionPane.OK_CANCEL_OPTION);
+                   int option = JOptionPane.showConfirmDialog(null, datefilter, "Filtered By Date", JOptionPane.OK_CANCEL_OPTION);
                    if (option == JOptionPane.OK_OPTION) {
 
                        try {
@@ -134,7 +134,6 @@ public class ViewSales {
 
                            filteringDetail_1.setText("Date from : "+firstDate.getText()+" To "+secondDate.getText());
                            filteringDetail_1.setVisible(true);
-
 
 
                        }catch (Exception error){
