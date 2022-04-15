@@ -13,10 +13,11 @@ public class ViewSales_Dao implements Sales_Dao {
 
     @Override
     public void insertingSalesRecord() {
-        String query = "INSERT INTO sales (order_id,emp_name,order_date,cost_price,sell_price,profit) SELECT distinct o.id, o.user_name , o.order_date , SUM(p.cost_price * c.product_qty) AS costPrice , SUM(c.price_unit) AS  priceSell , (SUM(c.price_unit) - SUM(p.cost_price * c.product_qty)) AS profit  FROM ((cart c\n" +
-                "INNER JOIN productorder o ON o.id = c.order_id)\n" +
-                "INNER JOIN products p ON p.barcode = c.product_barcode)\n" +
-                " WHERE o.state = \"Completed\" GROUP BY o.id HAVING o.id NOT IN (SELECT order_id FROM sales)";
+
+        String query = "INSERT INTO sales(order_id,emp_name,order_date,cost_price,sell_price,profit) SELECT\n" +
+                "o.id , o.user_name , o.order_date , SUM(p.cost_price * c.product_qty) AS costPrice ,\n" +
+                " SUM(c.price_unit) AS  priceSell ,  (SUM(c.price_unit) - SUM(p.cost_price * c.product_qty)) AS profit  FROM ((cart c INNER JOIN productorder o ON o.id = c.order_id)\n" +
+                "INNER JOIN products p ON p.barcode = c.product_barcode) WHERE o.state = \"Completed\" GROUP BY o.id;";
         try {
             DBService.PreparedQuery(query);
             DBService.con.close();

@@ -1,13 +1,10 @@
 package Service;
 
 import Model.SaleRecord;
-import View.OrderMedicine;
-import View.ViewSales;
 import dao.ViewSales_Dao;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.View;
 import java.util.List;
 
 public class SalesRecord {
@@ -121,5 +118,22 @@ public class SalesRecord {
         }
         return totalAmount;
     }
+    public Double totalRevenue_ByName(){
+        Double totalAmount = 0.0;
+        int size =  filterByName().size();
+        for (int i = 0; i < size ; i++) {
+            totalAmount += filterByName().get(i).getProfit();
+        }
+        return totalAmount;
+    }
+    public Double totalRevenue_ByDate(){
+        Double totalAmount = 0.0;
+        int size =  filterByDate().size();
+        for (int i = 0; i < size ; i++) {
+            totalAmount += filterByDate().get(i).getProfit();
+        }
+        return totalAmount;
+    }
+
 
 }

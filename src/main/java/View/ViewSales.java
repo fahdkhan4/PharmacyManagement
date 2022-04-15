@@ -1,7 +1,6 @@
 package View;
 
 import Service.SalesRecord;
-import View.Admin.Admin_ShowSalesDetails;
 import dao.ViewSales_Dao;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -113,10 +112,14 @@ public class ViewSales {
                        filteringDetail_1.setText("Filtered by name : "+employeename.getText());
                        filteringDetail_1.setVisible(true);
 
+
                        emp_name = employeename.getText();
                        model = (DefaultTableModel)viewSales_table.getModel();
                        model.setRowCount(0);
                        sale.filterSales_ByName(model,viewSales_table);
+
+                       amountRevenue = sale.totalRevenue_ByName();
+                       totalAmount.setText("     Revenue : "+amountRevenue);
                    }
                }
                else if(s1.equalsIgnoreCase("Filter By Date")){
@@ -136,13 +139,17 @@ public class ViewSales {
                            filteringDetail_1.setVisible(true);
 
 
+                           model = (DefaultTableModel)viewSales_table.getModel();
+                           model.setRowCount(0);
+                           sale.filterSales_ByDate(model,viewSales_table);
+
+                           amountRevenue = sale.totalRevenue_ByDate();
+                           totalAmount.setText("     Revenue : "+amountRevenue);
+
                        }catch (Exception error){
                            System.out.println(error);
                        }
 
-                       model = (DefaultTableModel)viewSales_table.getModel();
-                       model.setRowCount(0);
-                       sale.filterSales_ByDate(model,viewSales_table);
                    }
                }
                else if (s1.equalsIgnoreCase("Filter By profit")){
@@ -150,12 +157,18 @@ public class ViewSales {
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
                    sale.SortingBy_Profit(model,viewSales_table);
+
+                   amountRevenue = sale.totalRevenue();
+                   totalAmount.setText("     Revenue : "+amountRevenue);
                }
                else{
                    filteringDetail_1.setVisible(false);
                    model = (DefaultTableModel)viewSales_table.getModel();
                    model.setRowCount(0);
                    sale.viewAllSaleRecord(model,viewSales_table);
+
+                   amountRevenue = sale.totalRevenue();
+                   totalAmount.setText("     Revenue : "+amountRevenue);
                }
            }
        });
