@@ -47,7 +47,7 @@ public class ViewSales {
         totalAmount = new JTextField();
         totalAmount.setEditable(false);
         amountRevenue = sale.totalRevenue();
-        totalAmount.setText("     Revenue : "+amountRevenue);
+        totalAmount.setText("Revenue : "+String.format("%.2f",amountRevenue));
         totalAmount.setFont(new Font("TimesRoman",Font.BOLD,15));
         totalAmount.setBackground(Color.ORANGE);
         totalAmount.setForeground(Color.BLACK);
@@ -119,7 +119,7 @@ public class ViewSales {
                        sale.filterSales_ByName(model,viewSales_table);
 
                        amountRevenue = sale.totalRevenue_ByName();
-                       totalAmount.setText("     Revenue : "+amountRevenue);
+                       totalAmount.setText("Revenue : "+String.format("%.2f",amountRevenue));
                    }
                }
                else if(s1.equalsIgnoreCase("Filter By Date")){
@@ -144,7 +144,7 @@ public class ViewSales {
                            sale.filterSales_ByDate(model,viewSales_table);
 
                            amountRevenue = sale.totalRevenue_ByDate();
-                           totalAmount.setText("     Revenue : "+amountRevenue);
+                           totalAmount.setText("Revenue : "+String.format("%.2f",amountRevenue));
 
                        }catch (Exception error){
                            System.out.println(error);
@@ -159,7 +159,8 @@ public class ViewSales {
                    sale.SortingBy_Profit(model,viewSales_table);
 
                    amountRevenue = sale.totalRevenue();
-                   totalAmount.setText("     Revenue : "+amountRevenue);
+//                   totalAmount.setText("     Revenue : "+amountRevenue);
+                   totalAmount.setText("Revenue : "+String.format("%.2f",amountRevenue));
                }
                else{
                    filteringDetail_1.setVisible(false);
@@ -168,7 +169,7 @@ public class ViewSales {
                    sale.viewAllSaleRecord(model,viewSales_table);
 
                    amountRevenue = sale.totalRevenue();
-                   totalAmount.setText("     Revenue : "+amountRevenue);
+                   totalAmount.setText("Revenue : "+String.format("%.2f",amountRevenue));
                }
            }
        });

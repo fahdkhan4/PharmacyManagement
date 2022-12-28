@@ -132,6 +132,7 @@ public class SalesRecord {
         for (int i = 0; i < size ; i++) {
             totalAmount += filterByDate().get(i).getProfit();
         }
+
         return totalAmount;
     }
 

@@ -37,7 +37,7 @@ public class View_Medicines {
         JScrollPane scroll = new JScrollPane(medicine);
         medicine.setFillsViewportHeight(true);
 
-        JLabel labelHead = new JLabel("com.pharmacymanagement.View Medicines",SwingConstants.CENTER);
+        JLabel labelHead = new JLabel("View Medicines",SwingConstants.CENTER);
         labelHead.setFont(new Font("Arial",Font.TRUETYPE_FONT,40));
 
 //

@@ -11,7 +11,6 @@ import java.util.List;
 
 public class ProductFunctionality_Dao implements Product_Dao {
 
-
     @Override
     public void insertProduct_ToDB(Product product)  {
         try {
@@ -22,7 +21,6 @@ public class ProductFunctionality_Dao implements Product_Dao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override

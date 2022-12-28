@@ -21,7 +21,7 @@ public class Receipt extends JFrame implements ActionListener {
 
     public Receipt() {
         super("Receipt");
-        WindowShow.setNativeLookAndFeel();
+//        WindowShow.setNativeLookAndFeel();
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowOpened(WindowEvent e) {
@@ -128,7 +128,7 @@ public class Receipt extends JFrame implements ActionListener {
             graph.drawString("*************************************",10,y);y+=yShift;
             graph.drawString("       THANK YOU COME AGAIN            ",10,y);y+=yShift;
             graph.drawString("*************************************",10,y);y+=yShift;
-            graph.drawString("          Fahd and Anus          ",10,y);y+=yShift;
+            graph.drawString("            Fahd          ",10,y);y+=yShift;
             graph.drawString("    CONTACT: fk1271543@gmail.com       ",10,y);y+=yShift;
 
             AffineTransform origTransform = graph.getTransform();
